@@ -24,13 +24,13 @@ public class Main {
         
         switch (algorithm) {
             case BRUTE_FORCE_BASIC:
-                solver = new BasicBruteForce();
+                solver = new BasicBruteForce(solution);
                 break;
             case BRUTE_FORCE_ADVANCED:
-                solver = new AdvancedBruteForce();
+                solver = new AdvancedBruteForce(solution);
                 break;
             case GENETIC:
-                solver = new GeneticAlgorithm();
+                solver = new GeneticAlgorithm(solution);
                 break;
         }
         
