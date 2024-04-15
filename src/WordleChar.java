@@ -1,7 +1,7 @@
 /**
  * A character in the solution word
  */
-public class Character {
+public class WordleChar {
 	// Index within the word (possibly not necessary)
 //	public int index;
 
@@ -12,7 +12,7 @@ public class Character {
 	public CharStatus status;
 
 	// Constructor without status
-	public Character(/*int index, */char wordChar) {
+	public WordleChar(/*int index, */char wordChar) {
 		super();
 //		this.index = index;
 		this.wordChar = wordChar;
@@ -20,7 +20,7 @@ public class Character {
 	}
 
 	// Constructor with status
-	public Character(/*int index, */char wordChar, CharStatus status) {
+	public WordleChar(/*int index, */char wordChar, CharStatus status) {
 		super();
 //		this.index = index;
 		this.wordChar = wordChar;
