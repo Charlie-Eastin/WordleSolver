@@ -23,27 +23,27 @@ public class Solver {
 		System.out.println("The chosen algorithm is " + algorithm.getDescription());
 		switch (algorithm) {
 		case GENETIC:
-			geneticAlg();
+			geneticAlg(solution);
 		case BRUTE_FORCE_BASIC:
-			bruteForceBasic();
+			bruteForceBasic(solution);
 		case BRUTE_FORCE_ADVANCED:
-			bruteForceAdvanced();
+			bruteForceAdvanced(solution);
 		}
 
 	}
 
 	// Solve Wordle using CSP / genetic algorithm
-	private static void geneticAlg() {
+	private static void geneticAlg(Word solution) {
 
 	}
 
 	// Solve Wordle using the basic brute force algorithm
-	private static void bruteForceBasic() {
+	private static void bruteForceBasic(Word solution) {
 
 	}
 
 	// Solve Wordle using the smarter brute force algorithm
-	private static void bruteForceAdvanced() {
+	private static void bruteForceAdvanced(Word solution) {
 
 	}
 
