@@ -1,5 +1,5 @@
 /**
- * Represents the methods of solving a Wordle.
+ * Represents the various approaches to solving a Wordle.
  */
 public enum Algorithm {
 	GENETIC("Genetic"),								// Genetic algorithm solved as a CSP
