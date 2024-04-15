@@ -7,5 +7,5 @@ public enum CharStatus {
 	YELLOW,	// Character is in the word, but not at this position.
 	ORANGE,	// Obscured observability.
 	RED,	// This position has had its value shifted.
-	BLACK,	// Character is NOT in the word.
+	GRAY,	// Character is NOT in the word.
 }
