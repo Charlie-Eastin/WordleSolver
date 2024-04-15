@@ -4,11 +4,11 @@ import edu.ncsu.github.wordle.Word;
 
 public class GeneticAlgorithm implements Solver {
 
-    private static Word solution;
+    private Word solution;
 
     // Constructor
     public GeneticAlgorithm(Word solution) {
-        GeneticAlgorithm.solution = solution;
+        this.solution = solution;
     }
 
     @Override
