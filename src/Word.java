@@ -5,6 +5,7 @@ public class Word {
     int       size;
     Character word[]; // Change Object to new Character
     List<Character> guessed = new ArrayList<Character>(); // Change Object to new Character
+
     public Word ( final int size ) {
         word = new Character[size];
         this.size = size;

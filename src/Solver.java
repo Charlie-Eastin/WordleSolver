@@ -1,5 +1,6 @@
 /**
- * The main Wordle-solver class, containing methods for each algorithm as well as thread management
+ * The main Wordle-solver class, containing methods for each algorithm as well
+ * as thread management.
  */
 public class Solver {
 

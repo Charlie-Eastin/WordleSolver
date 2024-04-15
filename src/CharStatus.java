@@ -1,4 +1,6 @@
-// Represents the status of a character in the word.
+/**
+ * Represents the status of a character in the word.
+ */
 public enum CharStatus {
 	WHITE,	// Status is unknown.
 	GREEN,	// Character is in the word and is in the correct position.
