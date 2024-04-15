@@ -9,7 +9,7 @@ public class BasicBruteForce implements Solver {
     private static Word solution;
     // List of letters that MAY be in the word. List shrinks with every gray letter found.
     private static char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    
+
     // Constructor
     public BasicBruteForce(Word solution) {
         BasicBruteForce.solution = solution;
@@ -105,7 +105,7 @@ public class BasicBruteForce implements Solver {
         for (int i = 0; i < alphabet.length; i++) {
             if (alphabet[i] == c && !found) {
                 found = true;
-                // Shift elements to the left to remove 'F'
+                // Shift elements to the left to remove c
                 for (int j = i; j < alphabet.length - 1; j++) {
                     alphabet[j] = alphabet[j + 1];
                 }
