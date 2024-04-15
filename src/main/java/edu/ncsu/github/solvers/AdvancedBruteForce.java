@@ -4,11 +4,11 @@ import edu.ncsu.github.wordle.Word;
 
 public class AdvancedBruteForce implements Solver{
 
-    Word solution;
+    private static Word solution;
 
     // Constructor
     public AdvancedBruteForce(Word solution) {
-        this.solution = solution;
+        AdvancedBruteForce.solution = solution;
     }
 
     @Override
