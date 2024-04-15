@@ -7,7 +7,7 @@ public class AdvancedBruteForce implements Solver{
     Word solution;
 
     // Constructor
-    AdvancedBruteForce(Word solution) {
+    public AdvancedBruteForce(Word solution) {
         this.solution = solution;
     }
 
