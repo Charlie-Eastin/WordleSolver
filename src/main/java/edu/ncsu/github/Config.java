@@ -28,14 +28,14 @@ public class Config {
         // Prompt user for choice until valid input is provided
         while (true) {
             System.out.print(
-                    "Do you want to enter a solution word or have one generated for you? (enter 'manual' or 'auto'): ");
+                    "Do you want to enter a solution word or have one generated for you? (enter 'man' or 'auto'): ");
             choice = scanner.nextLine().trim().toLowerCase();
 
-            if (choice.equals("manual") || choice.equals("auto")) {
-                isManualEntry = choice.equals("manual");
+            if (choice.equals("man") || choice.equals("auto")) {
+                isManualEntry = choice.equals("man");
                 break;
             } else {
-                System.out.println("Invalid choice! Please enter 'manual' or 'auto'.");
+                System.out.println("Invalid choice! Please enter 'man' or 'auto'.");
             }
         }
 
@@ -120,9 +120,9 @@ public class Config {
 
         while (true) {
             System.out.println("Choose the algorithm to solve Wordle:");
-            System.out.println("1. Genetic Algorithm (CSP)");
-            System.out.println("2. Basic Brute Force");
-            System.out.println("3. Advanced Brute Force");
+            System.out.println("1. Basic Brute Force");
+            System.out.println("2. Advanced Brute Force");
+            System.out.println("3. Genetic Algorithm (CSP)");
             System.out.print("Enter your choice (1, 2, or 3): ");
 
             algorithm = scanner.nextLine().trim();
@@ -136,11 +136,11 @@ public class Config {
 
         switch (algorithm) {
             case "1":
-                return Algorithm.GENETIC;
-            case "2":
                 return Algorithm.BRUTE_FORCE_BASIC;
-            case "3":
+            case "2":
                 return Algorithm.BRUTE_FORCE_ADVANCED;
+            case "3":
+                return Algorithm.GENETIC;
         }
 
         System.out.println("No algorithm chosen. This code should not be reached.");

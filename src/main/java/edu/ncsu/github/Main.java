@@ -19,7 +19,6 @@ public class Main {
         Algorithm algorithm = Config.chooseAlg(scanner);
         scanner.close();
         assert algorithm != null;
-
         Solver solver = null;
         
         switch (algorithm) {
