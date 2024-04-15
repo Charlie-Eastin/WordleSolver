@@ -6,15 +6,12 @@ import java.util.List;
 public class Word {
 
     private final Letter[] word;
-    private final List<Letter> guessed = new ArrayList<Letter>();
+    private final String asString;
+    private List<Letter> guessed = new ArrayList<Letter>();
 
-    // Constructor with just size
-    public Word(final int size) {
-        word = new Letter[size];
-    }
-
-    // Constructor defining word
+    // Constructor
     public Word(final String newWord) {
+        asString = newWord;
         int size = newWord.length();
         word = new Letter[size];
         for (int i = 0; i < size; i++) {
@@ -39,10 +36,6 @@ public class Word {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Letter letter : word) {
-            sb.append(letter.getCharacter());
-        }
-        return sb.toString();
+        return asString;
     }
 }

@@ -84,7 +84,6 @@ public class BasicBruteForce implements Solver {
                 return true;
             } else {
                 // If the solution is not found, print the guessed word and return false
-//                System.out.println("Trying word: " + candidateWord.toString());
                 return false;
             }
         } else {
