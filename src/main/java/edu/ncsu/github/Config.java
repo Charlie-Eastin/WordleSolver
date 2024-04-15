@@ -1,5 +1,8 @@
 package edu.ncsu.github;
 
+import edu.ncsu.github.solvers.Algorithm;
+import edu.ncsu.github.wordle.Word;
+
 import java.util.Scanner;
 
 /**

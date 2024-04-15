@@ -1,4 +1,4 @@
-package edu.ncsu.github;
+package edu.ncsu.github.wordle;
 
 /**
  * Represents the status of a letter in the word.

@@ -1,4 +1,4 @@
-package edu.ncsu.github;
+package edu.ncsu.github.solvers;
 
 /**
  * Represents the various approaches to solving Wordle.

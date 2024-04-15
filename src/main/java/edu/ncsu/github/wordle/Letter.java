@@ -1,4 +1,4 @@
-package edu.ncsu.github;
+package edu.ncsu.github.wordle;
 
 /**
  * A letter in the solution word

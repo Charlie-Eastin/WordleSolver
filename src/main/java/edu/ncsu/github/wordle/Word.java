@@ -1,4 +1,4 @@
-package edu.ncsu.github;
+package edu.ncsu.github.wordle;
 
 import java.util.ArrayList;
 import java.util.List;
