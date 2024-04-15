@@ -1,9 +1,21 @@
 import java.util.Scanner;
 
+/**
+ * Contains methods for initial setup of the Wordle.
+ */
 public class Config {
 
+	// Maximum length allowed for the solution word
 	final static int MAX_WORD_LENGTH = 8;
 
+	/**
+	 * Prompts the user to choose between entering a solution word manually or
+	 * generating one automatically, then creates a Word object representing the
+	 * solution word based on the chosen method.
+	 *
+	 * @param scanner Scanner object for user input
+	 * @return Word object representing the solution word
+	 */
 	static Word makeSolution(Scanner scanner) {
 		String choice;
 		boolean isManualEntry;
@@ -35,6 +47,12 @@ public class Config {
 		return solution;
 	}
 
+	/**
+	 * Prompts the user to enter a solution word manually and validates the input.
+	 *
+	 * @param scanner Scanner object for user input
+	 * @return String representing the manually entered solution word
+	 */
 	private static String enterManualWord(Scanner scanner) {
 		String solutionStr = null;
 		boolean isValidWord = false;
@@ -55,6 +73,12 @@ public class Config {
 		return solutionStr;
 	}
 
+	/**
+	 * Generates a random word of the specified length and returns it.
+	 *
+	 * @param scanner Scanner object for user input
+	 * @return String representing the randomly generated word
+	 */
 	private static String generateRandomWord(Scanner scanner) {
 		int length;
 		while (true) {
@@ -80,6 +104,13 @@ public class Config {
 		return generatedWord;
 	}
 
+	/**
+	 * Prompts the user to choose an algorithm for solving Wordle and returns the
+	 * chosen Algorithm enum value.
+	 *
+	 * @param scanner Scanner object for user input
+	 * @return Algorithm enum value representing the chosen algorithm
+	 */
 	static Algorithm chooseAlg(Scanner scanner) {
 		String algorithm;
 
@@ -107,8 +138,8 @@ public class Config {
 		case "3":
 			return Algorithm.BRUTE_FORCE_ADVANCED;
 		default:
+			System.out.println("Invalid choice of algorithm. This code should not be reached.");
 			return null; // This should not happen
 		}
 	}
-
 }
