@@ -12,40 +12,48 @@ public class Solver {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 
+		// Ask for solution
+		Word solution = makeSolution(scanner);
+
+		scanner.close();
+		// TODO Ask for algorithm
+	}
+
+	// Solve Wordle using CSP / genetic algorithm
+	private static void geneticAlg() {
+
+	}
+
+	// Solve Wordle using the basic brute force algorithm
+	private static void bruteForceBasic() {
+
+	}
+
+	// Solve Wordle using the smarter force algorithm
+	private static void bruteForceSmart() {
+
+	}
+
+	private static Word makeSolution(Scanner scanner) {
 		String solutionStr = "";
 		boolean isValidWord = false;
 
 		while (!isValidWord) {
-			System.out.print("Enter the solution word (only alphabetic characters allowed): ");
+			System.out.print("Enter the solution word (only letters allowed): ");
 			solutionStr = scanner.nextLine().trim();
 
 			// Check if the word contains only alphabetic characters
 			if (solutionStr.matches("[a-zA-Z]+")) {
 				isValidWord = true;
 			} else {
-				System.out.println("Invalid word! Please enter a word containing only alphabetic characters.");
+				System.out.println("Invalid word! Please enter a word containing only letters.");
 			}
 		}
-		scanner.close();
 
 		// Create a new Word object using the solution word
 		Word solution = new Word(solutionStr);
 		System.out.println("Word object created with the solution word: " + solution.toString());
-	}
-
-	// Solve Wordle using CSP / genetic algorithm
-	private static void GeneticAlg() {
-
-	}
-
-	// Solve Wordle using the basic brute force algorithm
-	private static void BruteForceBasic() {
-
-	}
-
-	// Solve Wordle using the smarter force algorithm
-	private static void BruteForceSmart() {
-
+		return solution;
 	}
 
 }
