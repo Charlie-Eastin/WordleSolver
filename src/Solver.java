@@ -6,6 +6,8 @@ import java.util.Scanner;
  */
 public class Solver {
 
+	final static int MAX_WORD_LENGTH = 8;
+
 	/**
 	 * @param args
 	 */
@@ -74,10 +76,12 @@ public class Solver {
 			solutionStr = scanner.nextLine().trim();
 
 			// Check if the word contains only alphabetic characters
-			if (solutionStr.matches("[a-zA-Z]+")) {
+			if (solutionStr.matches("[a-zA-Z]+") && solutionStr.length() > 0
+					&& solutionStr.length() <= MAX_WORD_LENGTH) {
 				isValidWord = true;
 			} else {
-				System.out.println("Invalid word! Please enter a word containing only letters.");
+				System.out.println("Invalid word! Please enter a word containing only letters with a maximum length of "
+						+ MAX_WORD_LENGTH + ".");
 			}
 		}
 		return solutionStr;
@@ -86,13 +90,13 @@ public class Solver {
 	private static String generateRandomWord(Scanner scanner) {
 		int length;
 		while (true) {
-			System.out.print("Enter the length of the word (maximum 8 letters): ");
+			System.out.print("Enter the length of the word (maximum " + MAX_WORD_LENGTH + " letters): ");
 			try {
 				length = Integer.parseInt(scanner.nextLine().trim());
-				if (length >= 1 && length <= 8) {
+				if (length >= 1 && length <= MAX_WORD_LENGTH) {
 					break;
 				} else {
-					System.out.println("Invalid length! Please enter a number between 1 and 8.");
+					System.out.println("Invalid length! Please enter a number between 1 and " + MAX_WORD_LENGTH + ".");
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Invalid input! Please enter a valid number.");
