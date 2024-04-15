@@ -18,7 +18,18 @@ public class Solver {
 		Word solution = makeSolution(scanner);
 
 		// TODO Ask for algorithm
+		Algorithm algorithm = chooseAlg(scanner);
 		scanner.close();
+		System.out.println("The chosen algorithm is " + algorithm.getDescription());
+		switch (algorithm) {
+		case GENETIC:
+			geneticAlg();
+		case BRUTE_FORCE_BASIC:
+			bruteForceBasic();
+		case BRUTE_FORCE_ADVANCED:
+			bruteForceAdvanced();
+		}
+
 	}
 
 	// Solve Wordle using CSP / genetic algorithm
@@ -32,7 +43,7 @@ public class Solver {
 	}
 
 	// Solve Wordle using the smarter brute force algorithm
-	private static void bruteForceSmart() {
+	private static void bruteForceAdvanced() {
 
 	}
 
@@ -112,4 +123,34 @@ public class Solver {
 		return generatedWord;
 	}
 
+	private static Algorithm chooseAlg(Scanner scanner) {
+		String algorithm;
+
+		while (true) {
+			System.out.println("Choose the algorithm to solve Wordle:");
+			System.out.println("1. Genetic Algorithm (CSP)");
+			System.out.println("2. Basic Brute Force");
+			System.out.println("3. Advanced Brute Force");
+			System.out.print("Enter your choice (1, 2, or 3): ");
+
+			algorithm = scanner.nextLine().trim();
+
+			if (algorithm.equals("1") || algorithm.equals("2") || algorithm.equals("3")) {
+				break; // Valid choice, exit the loop
+			} else {
+				System.out.println("Invalid choice! Please enter 1, 2, or 3.");
+			}
+		}
+
+		switch (algorithm) {
+		case "1":
+			return Algorithm.GENETIC;
+		case "2":
+			return Algorithm.BRUTE_FORCE_BASIC;
+		case "3":
+			return Algorithm.BRUTE_FORCE_ADVANCED;
+		default:
+			return null; // This should not happen
+		}
+	}
 }
