@@ -3,8 +3,8 @@ import java.util.List;
 
 public class Word {
     int       size;
-    WordleChar word[]; // Change Object to new Character
-    List<WordleChar> guessed = new ArrayList<WordleChar>(); // Change Object to new Character
+    WordleChar word[];
+    List<WordleChar> guessed = new ArrayList<WordleChar>();
 
     public Word ( final int size ) {
         word = new WordleChar[size];
@@ -13,9 +13,9 @@ public class Word {
 
     public Word ( final String newWord ) {
         this.size = newWord.length();
-        word = new WordleChar[size]; // Change Object to new Character
+        word = new WordleChar[size];
         for ( int i = 0; i < size; i++ ) {
-            word[i] = new WordleChar(Character.toUpperCase(newWord.charAt( i ))); // Change Object to new Character
+            word[i] = new WordleChar(Character.toUpperCase(newWord.charAt( i )));
         }
 
     }
