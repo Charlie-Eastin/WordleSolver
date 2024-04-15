@@ -35,73 +35,77 @@ public class Solver {
 	}
 
 	private static Word makeSolution(Scanner scanner) {
-		String choice = "";
-		boolean isValidChoice = false;
+		String choice;
+		boolean isManualEntry;
 
-		while (!isValidChoice) {
+		// Prompt user for choice until valid input is provided
+		while (true) {
 			System.out.print(
 					"Do you want to enter a solution word or have one generated for you? (enter 'manual' or 'auto'): ");
 			choice = scanner.nextLine().trim().toLowerCase();
 
 			if (choice.equals("manual") || choice.equals("auto")) {
-				isValidChoice = true;
+				isManualEntry = choice.equals("manual");
+				break;
 			} else {
 				System.out.println("Invalid choice! Please enter 'manual' or 'auto'.");
 			}
 		}
 
-		if (choice.equals("manual")) {
-			// Manual entry
-			String solutionStr = "";
-			boolean isValidWord = false;
+		String solutionStr;
 
-			while (!isValidWord) {
-				System.out.print("Enter the solution word (only letters allowed): ");
-				solutionStr = scanner.nextLine().trim();
-
-				// Check if the word contains only alphabetic characters
-				if (solutionStr.matches("[a-zA-Z]+")) {
-					isValidWord = true;
-				} else {
-					System.out.println("Invalid word! Please enter a word containing only letters.");
-				}
-			}
-
-			// Create a new Word object using the solution word
-			Word solution = new Word(solutionStr);
-			System.out.println("Word object created with the solution word: " + solution.toString());
-			return solution;
+		if (isManualEntry) {
+			solutionStr = enterManualWord(scanner);
 		} else {
-			// Automatic generation
-			int length = 0;
-			boolean isValidLength = false;
-
-			while (!isValidLength) {
-				System.out.print("Enter the length of the word (maximum 8 letters): ");
-				try {
-					length = Integer.parseInt(scanner.nextLine().trim());
-					if (length >= 1 && length <= 8) {
-						isValidLength = true;
-					} else {
-						System.out.println("Invalid length! Please enter a number between 1 and 8.");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid input! Please enter a valid number.");
-				}
-			}
-			String generatedWord = generateWord(length);
-			System.out.println("Generated word: " + generatedWord);
-			return new Word(generatedWord);
+			solutionStr = generateRandomWord(scanner);
 		}
+
+		Word solution = new Word(solutionStr);
+		System.out.println("Word object created with the solution word: " + solution.toString());
+		return solution;
 	}
 
-	private static String generateWord(int length) {
+	private static String enterManualWord(Scanner scanner) {
+		String solutionStr = null;
+		boolean isValidWord = false;
+
+		while (!isValidWord) {
+			System.out.print("Enter the solution word (only letters allowed): ");
+			solutionStr = scanner.nextLine().trim();
+
+			// Check if the word contains only alphabetic characters
+			if (solutionStr.matches("[a-zA-Z]+")) {
+				isValidWord = true;
+			} else {
+				System.out.println("Invalid word! Please enter a word containing only letters.");
+			}
+		}
+		return solutionStr;
+	}
+
+	private static String generateRandomWord(Scanner scanner) {
+		int length;
+		while (true) {
+			System.out.print("Enter the length of the word (maximum 8 letters): ");
+			try {
+				length = Integer.parseInt(scanner.nextLine().trim());
+				if (length >= 1 && length <= 8) {
+					break;
+				} else {
+					System.out.println("Invalid length! Please enter a number between 1 and 8.");
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid input! Please enter a valid number.");
+			}
+		}
+
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			char randomChar = (char) ('A' + Math.random() * ('Z' - 'A' + 1));
 			sb.append(randomChar);
 		}
-		return sb.toString();
+		String generatedWord = sb.toString();
+		return generatedWord;
 	}
 
 }
