@@ -1,5 +1,5 @@
 /**
- * Represents the various approaches to solving a Wordle.
+ * Represents the various approaches to solving Wordle.
  */
 public enum Algorithm {
 	BRUTE_FORCE_BASIC("Basic brute force"),			// Basic, dumb brute force algorithm

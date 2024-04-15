@@ -3,19 +3,19 @@ import java.util.List;
 
 public class Word {
     int       size;
-    WordleChar word[];
-    List<WordleChar> guessed = new ArrayList<WordleChar>();
+    Letter word[];
+    List<Letter> guessed = new ArrayList<Letter>();
 
     public Word ( final int size ) {
-        word = new WordleChar[size];
+        word = new Letter[size];
         this.size = size;
     }
 
     public Word ( final String newWord ) {
         this.size = newWord.length();
-        word = new WordleChar[size];
+        word = new Letter[size];
         for ( int i = 0; i < size; i++ ) {
-            word[i] = new WordleChar(Character.toUpperCase(newWord.charAt( i )));
+            word[i] = new Letter(Character.toUpperCase(newWord.charAt( i )));
         }
 
     }
@@ -23,8 +23,8 @@ public class Word {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (WordleChar character : word) {
-            sb.append(character.wordChar);
+        for (Letter letter : word) {
+            sb.append(letter.character);
         }
         return sb.toString();
     }
