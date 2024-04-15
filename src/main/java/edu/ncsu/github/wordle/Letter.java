@@ -5,12 +5,6 @@ package edu.ncsu.github.wordle;
  */
 public class Letter {
 
-    // Actual alphabetic character
-    public char character;
-
-    // Status of the character
-    public LetterStatus status;
-
     // Constructor without status
     public Letter(char character) {
         super();
@@ -22,6 +16,28 @@ public class Letter {
     public Letter(char character, LetterStatus status) {
         super();
         this.character = character;
+        this.status = status;
+    }
+
+    // Actual alphabetic character
+    private char character;
+
+    // Status of the Letter
+    private LetterStatus status;
+
+    public char getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(char character) {
+        this.character = character;
+    }
+
+    public LetterStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LetterStatus status) {
         this.status = status;
     }
 }

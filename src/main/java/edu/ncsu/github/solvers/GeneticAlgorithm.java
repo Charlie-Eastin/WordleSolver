@@ -1,6 +1,15 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.wordle.Word;
+
 public class GeneticAlgorithm implements Solver {
+
+    Word solution;
+
+    // Constructor
+    public GeneticAlgorithm(Word solution) {
+        this.solution = solution;
+    }
 
     @Override
     public void solve() {
