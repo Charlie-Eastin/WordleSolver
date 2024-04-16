@@ -38,7 +38,7 @@ public class BasicBruteForce implements Solver {
 			// Initialize a boolean flag to track if the solution is found
 			boolean solutionFound = true;
 
-			// Loop through each character in the candidate word and compare with the solution
+			// Print each letter in the guess and compare with the solution
 			for (int i = 0; i < solution.getLength(); i++) {
 				char candidateChar = guess.letterAt(i).getCharacter();
 
@@ -81,7 +81,6 @@ public class BasicBruteForce implements Solver {
 				if (notInWord.contains(c)) {
 					continue;
 				}
-
 				guess.setLetter(index, c);
 
 				if (generateCombinations(index + 1, guess)) {
