@@ -7,6 +7,7 @@ public class Letter {
 
 	// Actual alphabetic character
 	private char character;
+
 	// Status of the Letter
 	private LetterStatus status;
 
@@ -35,7 +36,8 @@ public class Letter {
 		return character;
 	}
 
-	public void setCharacter(char character) {
+	// Package access so only the Word can change it
+	void setCharacter(char character) {
 		this.character = character;
 	}
 
@@ -43,11 +45,13 @@ public class Letter {
 		return status;
 	}
 
-	public void setStatus(LetterStatus status) {
+	// Package access so only the Word can change it
+	void setStatus(LetterStatus status) {
 		this.status = status;
 	}
 
-	public void resetStatus() {
+	// Package access so only the Word can change it
+	void resetStatus() {
 		this.status = LetterStatus.WHITE;
 	}
 }

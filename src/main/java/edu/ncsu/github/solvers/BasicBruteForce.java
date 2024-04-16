@@ -34,7 +34,6 @@ public class BasicBruteForce implements Solver {
 		// Call the recursive function to generate combinations and check against the solution
 		boolean solutionFound = generateCombinations(guess);;
 
-		// If no match is found, print "Solution not found"
 		if (!solutionFound) {
 			System.out.println("Solution not found");
 		}
@@ -62,7 +61,9 @@ public class BasicBruteForce implements Solver {
 					alphabet.remove((Character) guessLetter.getCharacter());
 					// Don't break so exec flows into YELLOW case.
 				case YELLOW:
-					replaceLetter(guessLetter);
+					// Replace the letter at i with the next valid letter
+					Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
+					guess.setLetter(i, replacement);
 					break;
 				case WHITE:
 					throw new RuntimeException("Letter has not been evaluated.");
@@ -76,19 +77,18 @@ public class BasicBruteForce implements Solver {
 		return generateCombinations(guess);
 	}
 
-	private void replaceLetter(Letter letter) {
-		if (letter.getCharacter() == 'Z') {
+	private char nextValidChar(char original) {
+		if (original == 'Z') {
 			throw new RuntimeException("Cannot replace 'Z' with the next letter");
 		} else {
-			char nextChar = letter.getCharacter();
+			char nextChar = original;
 			// Increment the character to get the next letter
 			// TODO Prioritize letters we know are in the word (yellow)
 			do {
 				nextChar = (char) (nextChar + 1);
 			} while (!alphabet.contains(nextChar));
 
-			letter.setCharacter(nextChar);
-			letter.resetStatus();
+		return nextChar;
 		}
 	}
 }
