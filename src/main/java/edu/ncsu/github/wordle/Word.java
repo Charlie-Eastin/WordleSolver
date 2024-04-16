@@ -20,7 +20,7 @@ public class Word {
 
 	// Constructor with word
 	public Word(final String newWord) {
-		setLetters(newWord);
+		setLetters(newWord.toUpperCase());
 	}
 
 	public Letter[] getLetters() {
@@ -85,16 +85,20 @@ public class Word {
 			if (solution.letterAt(i).getCharacter() == guessLetter.getCharacter()) {
 				// Character is in the right position
 				this.letterAt(i).setStatus(LetterStatus.GREEN);
+				System.out.print("\u001B[32m" + this.letterAt(i).getCharacter());
 			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
 				// If the char is in the word but not in the right position
 				this.letterAt(i).setStatus(LetterStatus.YELLOW);
+				System.out.print("\u001B[33m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			} else {
 				// Character is not in word
 				this.letterAt(i).setStatus(LetterStatus.GRAY);
+				System.out.print("\u001B[37m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			}
 		}
+		System.out.println("\u001B[0m"); // Move to the next line after printing the word
 		return wordIsSolution;
 	}
 
