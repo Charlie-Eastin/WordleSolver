@@ -13,7 +13,7 @@ public class Letter {
 	// Default constructor
 	public Letter() {
 		super();
-		this.character = ' ';
+		this.character = 'A';
 		this.status = LetterStatus.WHITE; // Initialize with unknown status
 	}
 

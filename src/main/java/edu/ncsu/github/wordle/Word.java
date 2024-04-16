@@ -71,6 +71,33 @@ public class Word {
 		asString = sb.toString();
 	}
 
+	// Compare this Word against a solution and update this each Letter's status in this word
+	public boolean compareToSolution(Word solution) throws Exception {
+		if (null == solution || this.getLength() != solution.getLength()) {
+			throw new Exception("Word length must be equal to solution length");
+		}
+
+		boolean wordIsSolution = true;
+
+		for (int i = 0; i < solution.getLength(); i++) {
+			Letter guessLetter = this.letterAt(i);
+
+			if (solution.letterAt(i).getCharacter() == guessLetter.getCharacter()) {
+				// Character is in the right position
+				this.letterAt(i).setStatus(LetterStatus.GREEN);
+			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
+				// If the char is in the word but not in the right position
+				this.letterAt(i).setStatus(LetterStatus.YELLOW);
+				wordIsSolution = false;
+			} else {
+				// Character is not in word
+				this.letterAt(i).setStatus(LetterStatus.GRAY);
+				wordIsSolution = false;
+			}
+		}
+		return wordIsSolution;
+	}
+
 	@Override
 	public String toString() {
 		return asString;
