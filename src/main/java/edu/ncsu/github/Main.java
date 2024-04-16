@@ -10,7 +10,12 @@ import java.util.Scanner;
  */
 public class Main {
 
-	public static void main(String[] args) throws Exception {
+	/**
+	 * The entry point of the program.
+	 *
+	 * @param args The command line arguments.
+	 */
+	public static void main(String[] args) {
 		// For reading user input
 		Scanner scanner = new Scanner(System.in);
 		// Create a solution Word based on user input or generate a random one.
@@ -22,6 +27,7 @@ public class Main {
 		assert algorithm != null;
 		Solver solver = null;
 
+		// Instantiate the appropriate solver based on the chosen algorithm
 		switch (algorithm) {
 			case BRUTE_FORCE_BASIC:
 				solver = new BasicBruteForce();
@@ -34,6 +40,7 @@ public class Main {
 				break;
 		}
 
+		// Solve the Wordle problem using the selected solver
 		solver.solve(solutionLength);
 	}
 }

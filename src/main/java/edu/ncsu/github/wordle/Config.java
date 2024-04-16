@@ -20,6 +20,7 @@ public class Config {
 	 * solution word based on the chosen method.
 	 *
 	 * @param scanner Scanner object for user input
+	 * @return The length of the generated solution word.
 	 */
 	public static int makeSolution(Scanner scanner) {
 		String choice;

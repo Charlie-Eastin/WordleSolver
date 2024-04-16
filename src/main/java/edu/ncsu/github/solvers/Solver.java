@@ -6,6 +6,12 @@ package edu.ncsu.github.solvers;
  * in complexity and necessitate private helper methods.
  */
 public interface Solver {
-	default void solve(int solutionLength) throws Exception {
+
+	/**
+	 * Solve the problem using a specific strategy.
+	 *
+	 * @param solutionLength The length of the solution needed.
+	 */
+	default void solve(int solutionLength) {
 	}
 }

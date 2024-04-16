@@ -10,10 +10,16 @@ public enum Algorithm {
 
 	private final String name;
 
+	// Constructor to initialize the name of the algorithm
 	Algorithm(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Gets the name of the algorithm.
+	 *
+	 * @return The name of the algorithm.
+	 */
 	public String getName() {
 		return name;
 	}

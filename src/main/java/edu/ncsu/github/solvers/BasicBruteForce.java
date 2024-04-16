@@ -15,63 +15,86 @@ public class BasicBruteForce implements Solver {
 
 	// Instance-initialize alphabet
 	{
+		// Populate alphabet with all uppercase letters
 		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()) {
 			alphabet.add(c);
 		}
 	}
 
+	/**
+	 * Solve the Wordle puzzle.
+	 *
+	 * @param solutionLength The length of the solution word.
+	 */
 	@Override
-	public void solve(int solutionLength) throws Exception {
+	public void solve(int solutionLength) {
+		// Initialize the guess word with the given length
 		guess = new Word(solutionLength);
 
 		// Call the recursive function to generate combinations and check against the solution
 		boolean solutionFound = generateGuesses();
 
+		// If no solution is found, print a message
 		if (!solutionFound) {
 			System.out.println("Solution not found");
 		}
 	}
 
-	// Generate all combinations of words
-	private boolean generateGuesses() throws Exception {
-//		try {
-		if (guess.compareToSolution()) {
-			System.out.println("Solution found: " + guess);
-			return true;
+	/**
+	 * Generate all combinations of words to solve the puzzle.
+	 *
+	 * @return True if a solution is found, false otherwise.
+	 */
+	private boolean generateGuesses() {
+		try {
+			// Check if the current guess matches the solution
+			if (guess.compareToSolution()) {
+				System.out.println("Solution found: " + guess);
+				return true;
+			}
+		} catch (Exception e) {
+			// Propagate any exceptions that occur during comparison
+			throw new RuntimeException(e.getMessage());
 		}
-//		} catch (Exception e) {
-//			throw new RuntimeException(e.getMessage());
-//		}
 
+		// Iterate through each letter in the guess
 		for (int i = 0; i < guess.getLength(); i++) {
 			Letter guessLetter = guess.letterAt(i);
 
+			// Check the status of the current letter
 			switch (guessLetter.getStatus()) {
 				case GREEN:
 					break;
 				case GRAY:
-					// Cast to Character so char isn't treated as an int index
+					// Remove the letter from the alphabet since it's not in the solution
 					alphabet.remove((Character) guessLetter.getCharacter());
-					// Don't break so exec flows into YELLOW case.
+					// Don't break so execution flows into YELLOW case.
 				case YELLOW:
-					// Replace the letter at i with the next valid letter
+					// Replace the letter with the next valid character
 					Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
 					guess.setLetter(i, replacement);
 					break;
 				case WHITE:
+					// Throw an exception if the letter has not been evaluated
 					throw new RuntimeException("Letter has not been evaluated.");
-//					break;
 				default:
-					// TODO logic for RED and ORANGE
+					// Throw an exception for unsupported statuses
 					throw new RuntimeException("RED and ORANGE status not yet supported.");
-//					break;
 			}
 		}
+		// Recursive call to generate more guesses
 		return generateGuesses();
 	}
 
+	/**
+	 * Get the next valid character to replace the current one.
+	 *
+	 * @param original The original character.
+	 * @return The next valid character.
+	 */
 	private char nextValidChar(char original) {
 		if (original == 'Z') {
+			// Cannot replace 'Z' with the next letter
 			throw new RuntimeException("Cannot replace 'Z' with the next letter");
 		} else {
 			char nextChar = original;
