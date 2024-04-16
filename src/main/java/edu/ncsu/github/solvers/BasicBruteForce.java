@@ -1,6 +1,5 @@
 package edu.ncsu.github.solvers;
 
-import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 
@@ -9,48 +8,47 @@ import java.util.List;
 
 public class BasicBruteForce implements Solver {
 
-	private Word solution;
+	private final Word solution;
 	private final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-	private List<Character> notInWord = new ArrayList<Character>();
+	private final List<Character> notInWord = new ArrayList<Character>();
+	private final Word guess; // Tracks the current guess along with each letter's status
 
 	// Constructor
 	public BasicBruteForce(Word solution) {
 		this.solution = solution;
-//		guess = new Word(solution.getLength());
+		guess = new Word(solution.getLength());
 	}
 
 	@Override
 	public void solve() {
-		int wordLength = solution.getLength();
-		char[] combination = new char[wordLength];
-		Word guess = new Word(wordLength); // Tracks the current guess along with each letter's status
+		char[] combination = new char[solution.getLength()];
 
 		// Initialize guess with unknown status
-		for (int i = 0; i < wordLength; i++) {
+		for (int i = 0; i < solution.getLength(); i++) {
 			guess.setLetter(i, ' ');
 		}
 
-		// Call the recursive function to generate combinations and check against the
-		// solution
-		boolean solutionFound = generateCombinations(wordLength, combination, 0, guess);
+		// Call the recursive function to generate combinations and check against the solution
+		boolean solutionFound = generateCombinations(combination, 0);
 
 		// If no match is found, print "Solution not found"
-		if (!solutionFound)
+		if (!solutionFound) {
 			System.out.println("Solution not found");
+		}
 	}
 
 	// Private helper methods
 
 	// Recursive function to generate all combinations of words
-	private boolean generateCombinations(int length, char[] combination, int index, Word guess) {
-		if (index == length) {
+	private boolean generateCombinations(char[] combination, int index) {
+		if (index == solution.getLength()) {
 			// Check if the combination matches the solution
 			Word candidateWord = new Word(new String(combination));
 			// Initialize a boolean flag to track if the solution is found
 			boolean solutionFound = true;
 
 			// Loop through each character in the candidate word and compare with the solution
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < solution.getLength(); i++) {
 				char candidateChar = combination[i];
 
 				if (candidateChar == solution.getLetters()[i].getCharacter()) {
@@ -80,7 +78,7 @@ public class BasicBruteForce implements Solver {
 
 			if (solutionFound) {
 				// If a match is found, print the solution and return
-				System.out.println("Solution found: " + candidateWord.toString());
+				System.out.println("Solution found: " + candidateWord);
 				return true;
 			} else {
 				// If the solution is not found, print the guessed word and return false
@@ -94,7 +92,7 @@ public class BasicBruteForce implements Solver {
 				}
 
 				combination[index] = c;
-				if (generateCombinations(length, combination, index + 1, guess)) {
+				if (generateCombinations(combination, index + 1)) {
 					// If a match is found in the recursive call, return true
 					return true;
 				}
