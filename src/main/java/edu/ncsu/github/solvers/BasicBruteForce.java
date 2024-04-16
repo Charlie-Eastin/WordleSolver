@@ -6,7 +6,7 @@ import edu.ncsu.github.wordle.Word;
 
 public class BasicBruteForce implements Solver {
 
-	private Word solution;
+	private final Word solution;
 	// List of letters that MAY be in the word. List shrinks with every gray letter
 	// found.
 	private char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
@@ -41,8 +41,7 @@ public class BasicBruteForce implements Solver {
 		boolean solutionFound = generateCombinations(wordLength, combination, 0, guessedChars);
 
 		// If no match is found, print "Solution not found"
-		if (!solutionFound)
-			System.out.println("Solution not found");
+		if (!solutionFound) System.out.println("Solution not found");
 	}
 
 	// Private helper methods
@@ -62,8 +61,7 @@ public class BasicBruteForce implements Solver {
 					// If the character is in the word and in the right position
 					System.out.print("\u001B[32m" + candidateWord.getWord()[i].getCharacter() + "\u001B[0m");
 					guessedChars[i].setStatus(LetterStatus.GREEN);
-				} else if (solution.toString()
-						.contains(Character.toString(candidateWord.getWord()[i].getCharacter()))) {
+				} else if (solution.toString().contains(Character.toString(candidateWord.getWord()[i].getCharacter()))) {
 					// If the character is in the word but not in the right position
 					System.out.print("\u001B[33m" + candidateWord.getWord()[i].getCharacter() + "\u001B[0m");
 					guessedChars[i].setStatus(LetterStatus.YELLOW);
@@ -83,7 +81,7 @@ public class BasicBruteForce implements Solver {
 
 			if (solutionFound) {
 				// If a match is found, print the solution and return
-				System.out.println("Solution found: " + candidateWord.toString());
+				System.out.println("Solution found: " + candidateWord);
 				return true;
 			} else {
 				// If the solution is not found, print the guessed word and return false

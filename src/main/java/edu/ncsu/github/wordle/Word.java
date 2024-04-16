@@ -7,7 +7,7 @@ public class Word {
 
 	private final Letter[] word;
 	private final String asString;
-	private List<Letter> guessed = new ArrayList<Letter>();
+	private final List<Letter> guessed = new ArrayList<Letter>();
 
 	// Constructor
 	public Word(final String newWord) {

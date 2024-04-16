@@ -6,6 +6,6 @@ package edu.ncsu.github.solvers;
  * in complexity and necessitate private helper methods.
  */
 public interface Solver {
-    default void solve() {
-    }
+	default void solve() {
+	}
 }

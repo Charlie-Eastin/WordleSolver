@@ -4,7 +4,7 @@ import edu.ncsu.github.wordle.Word;
 
 public class AdvancedBruteForce implements Solver {
 
-	private Word solution;
+	private final Word solution;
 
 	// Constructor
 	public AdvancedBruteForce(Word solution) {
