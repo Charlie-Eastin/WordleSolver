@@ -102,15 +102,22 @@ public class Word {
 			Letter guessLetter = this.letterAt(i);
 
 			if (solution.letterAt(i).getCharacter() == guessLetter.getCharacter()) {
-				this.letterAt(i).setStatus(LetterStatus.GREEN); // Character is in the right position
+				// Character is in the right position
+				this.letterAt(i).setStatus(LetterStatus.GREEN);
+				System.out.print("\u001B[32m" + this.letterAt(i).getCharacter());
 			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
-				this.letterAt(i).setStatus(LetterStatus.YELLOW); // Character is in the word but not in the right position
+				// If the char is in the word but not in the right position
+				this.letterAt(i).setStatus(LetterStatus.YELLOW);
+				System.out.print("\u001B[33m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			} else {
-				this.letterAt(i).setStatus(LetterStatus.GRAY); // Character is not in the word
+				// Character is not in word
+				this.letterAt(i).setStatus(LetterStatus.GRAY);
+				System.out.print("\u001B[37m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			}
 		}
+		System.out.println("\u001B[0m"); // Move to the next line after printing the word
 		return wordIsSolution;
 	}
 
