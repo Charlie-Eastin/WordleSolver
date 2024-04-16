@@ -46,4 +46,8 @@ public class Letter {
 	public void setStatus(LetterStatus status) {
 		this.status = status;
 	}
+
+	public void resetStatus() {
+		this.status = LetterStatus.WHITE;
+	}
 }
