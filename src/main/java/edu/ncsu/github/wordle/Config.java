@@ -1,7 +1,6 @@
-package edu.ncsu.github;
+package edu.ncsu.github.wordle;
 
 import edu.ncsu.github.solvers.Algorithm;
-import edu.ncsu.github.wordle.Word;
 
 import java.util.Scanner;
 
@@ -12,6 +11,8 @@ public class Config {
 
 	// Maximum length allowed for the solution word
 	final static int MAX_WORD_LENGTH = 8;
+	// Package access so Solvers can't see it
+	static Word solution;
 
 	/**
 	 * Prompts the user to choose between entering a solution word manually or
@@ -19,9 +20,8 @@ public class Config {
 	 * solution word based on the chosen method.
 	 *
 	 * @param scanner Scanner object for user input
-	 * @return Word object representing the solution word
 	 */
-	static Word makeSolution(Scanner scanner) {
+	public static int makeSolution(Scanner scanner) {
 		String choice;
 		boolean isManualEntry;
 
@@ -46,9 +46,9 @@ public class Config {
 			solutionStr = generateRandomWord(scanner);
 		}
 
-		Word solution = new Word(solutionStr);
+		solution = new Word(solutionStr);
 		System.out.println("Word object created with the solution word: " + solution);
-		return solution;
+		return solution.getLength();
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class Config {
 	 * @param scanner Scanner object for user input
 	 * @return Algorithm enum value representing the chosen algorithm
 	 */
-	static Algorithm chooseAlg(Scanner scanner) {
+	public static Algorithm chooseAlg(Scanner scanner) {
 		String algorithm;
 
 		while (true) {

@@ -8,13 +8,10 @@ import java.util.List;
 
 public class BasicBruteForce implements Solver {
 
-	private final Word solution;
-
-	// Tracks the current guess along with each letter's status
-	private Word guess;
-
 	// All letters that have not been eliminated as possibly being in the solution
 	private final List<Character> alphabet = new ArrayList<>();
+	// Tracks the current guess along with each letter's status
+	private Word guess;
 
 	// Instance-initialize alphabet
 	{
@@ -23,16 +20,12 @@ public class BasicBruteForce implements Solver {
 		}
 	}
 
-	// Constructor
-	public BasicBruteForce(Word solution) {
-		this.solution = solution;
-		guess = new Word(solution.getLength());
-	}
-
 	@Override
-	public void solve() {
+	public void solve(int solutionLength) throws Exception {
+		guess = new Word(solutionLength);
+
 		// Call the recursive function to generate combinations and check against the solution
-		boolean solutionFound = generateGuesses();;
+		boolean solutionFound = generateGuesses();
 
 		if (!solutionFound) {
 			System.out.println("Solution not found");
@@ -40,15 +33,15 @@ public class BasicBruteForce implements Solver {
 	}
 
 	// Generate all combinations of words
-	private boolean generateGuesses() {
-		try {
-			if (guess.compareToSolution(solution)) {
-				System.out.println("Solution found: " + guess);
-				return true;
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	private boolean generateGuesses() throws Exception {
+//		try {
+		if (guess.compareToSolution()) {
+			System.out.println("Solution found: " + guess);
+			return true;
 		}
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage());
+//		}
 
 		for (int i = 0; i < guess.getLength(); i++) {
 			Letter guessLetter = guess.letterAt(i);
@@ -88,7 +81,7 @@ public class BasicBruteForce implements Solver {
 				nextChar = (char) (nextChar + 1);
 			} while (!alphabet.contains(nextChar));
 
-		return nextChar;
+			return nextChar;
 		}
 	}
 }

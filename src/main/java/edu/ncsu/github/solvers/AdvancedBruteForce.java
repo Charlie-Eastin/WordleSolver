@@ -4,19 +4,16 @@ import edu.ncsu.github.wordle.Word;
 
 public class AdvancedBruteForce implements Solver {
 
-	private final Word solution;
-
-	// Constructor
-	public AdvancedBruteForce(Word solution) {
-		this.solution = solution;
-	}
+	// Tracks the current guess along with each letter's status
+	private Word guess;
 
 	@Override
-	public void solve() {
-		System.out.println("Advanced brute force algorithm not yet implemented");
+	public void solve(int solutionLength) {
+		guess = new Word(solutionLength);
 
+		System.out.println("Advanced brute force algorithm not yet implemented");
 		// TODO: Implement smarter brute force algorithm to solve Wordle
 	}
 
-	// Private helper methods
+	// TODO Add private helper methods below
 }

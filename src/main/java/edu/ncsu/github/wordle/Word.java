@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Word {
 
-	private final List<Letter> guessed = new ArrayList<Letter>();
 	private Letter[] letters;
 	private String asString;
 
@@ -49,13 +48,6 @@ public class Word {
 		return letters.length;
 	}
 
-//    private void addGuess(String newGuess) {
-//    }
-
-	public List<Letter> getGuessed() {
-		return guessed;
-	}
-
 	// Set the letter at a specific index
 	public void setLetter(final int index, char newChar) {
 		newChar = Character.toUpperCase(newChar);
@@ -75,7 +67,9 @@ public class Word {
 	}
 
 	// Compare this Word against a solution and update this each Letter's status in this word
-	public boolean compareToSolution(Word solution) throws Exception {
+	public boolean compareToSolution() throws Exception {
+		Word solution = Config.solution;
+
 		if (null == solution || this.getLength() != solution.getLength()) {
 			throw new Exception("Word length must be equal to solution length");
 		}
