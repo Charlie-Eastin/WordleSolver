@@ -4,12 +4,14 @@ import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasicBruteForce implements Solver {
 
-	private final Word solution;
-	// List of letters that MAY be in the word. List shrinks with every gray letter
-	// found.
+	private Word solution;
 	private char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	private List<Character> notInWord = new ArrayList<Character>();
 
 	// Constructor
 	public BasicBruteForce(Word solution) {
@@ -41,7 +43,8 @@ public class BasicBruteForce implements Solver {
 		boolean solutionFound = generateCombinations(wordLength, combination, 0, guessedChars);
 
 		// If no match is found, print "Solution not found"
-		if (!solutionFound) System.out.println("Solution not found");
+		if (!solutionFound)
+			System.out.println("Solution not found");
 	}
 
 	// Private helper methods
@@ -57,21 +60,26 @@ public class BasicBruteForce implements Solver {
 			// Loop through each character in the candidate word and compare with the
 			// solution
 			for (int i = 0; i < length; i++) {
-				if (candidateWord.getWord()[i].getCharacter() == solution.getWord()[i].getCharacter()) {
+				char candidateChar = combination[i];
+
+				if (candidateChar == solution.getWord()[i].getCharacter()) {
 					// If the character is in the word and in the right position
-					System.out.print("\u001B[32m" + candidateWord.getWord()[i].getCharacter() + "\u001B[0m");
+					System.out.print("\u001B[32m" + candidateChar + "\u001B[0m");
 					guessedChars[i].setStatus(LetterStatus.GREEN);
-				} else if (solution.toString().contains(Character.toString(candidateWord.getWord()[i].getCharacter()))) {
+				} else if (solution.toString().contains(Character.toString(candidateChar))) {
 					// If the character is in the word but not in the right position
-					System.out.print("\u001B[33m" + candidateWord.getWord()[i].getCharacter() + "\u001B[0m");
+					System.out.print("\u001B[33m" + candidateChar + "\u001B[0m");
 					guessedChars[i].setStatus(LetterStatus.YELLOW);
 					// Update the flag indicating the solution is not found
 					solutionFound = false;
 				} else {
 					// If the character is not in the word at all
-					System.out.print("\u001B[37m" + candidateWord.getWord()[i].getCharacter() + "\u001B[0m");
+					System.out.print("\u001B[37m" + candidateChar + "\u001B[0m");
 					guessedChars[i].setStatus(LetterStatus.GRAY);
-					removeFromAlphabet(candidateWord.getWord()[i].getCharacter());
+
+					if (!notInWord.contains(candidateChar)) {
+						notInWord.add(candidateChar);
+					}
 					// Update the flag indicating the solution is not found
 					solutionFound = false;
 				}
@@ -81,7 +89,7 @@ public class BasicBruteForce implements Solver {
 
 			if (solutionFound) {
 				// If a match is found, print the solution and return
-				System.out.println("Solution found: " + candidateWord);
+				System.out.println("Solution found: " + candidateWord.toString());
 				return true;
 			} else {
 				// If the solution is not found, print the guessed word and return false
@@ -90,6 +98,10 @@ public class BasicBruteForce implements Solver {
 		} else {
 			// Generate combinations recursively
 			for (char c : alphabet) {
+				if (notInWord.contains(c)) {
+					continue;
+				}
+
 				combination[index] = c;
 				if (generateCombinations(length, combination, index + 1, guessedChars)) {
 					// If a match is found in the recursive call, return true
@@ -98,29 +110,6 @@ public class BasicBruteForce implements Solver {
 			}
 		}
 		return false;
-	}
-
-	private void removeFromAlphabet(char c) {
-		boolean found = false;
-		for (int i = 0; i < alphabet.length; i++) {
-			if (alphabet[i] == c && !found) {
-				found = true;
-				// Shift elements to the left to remove c
-				for (int j = i; j < alphabet.length - 1; j++) {
-					alphabet[j] = alphabet[j + 1];
-				}
-			}
-		}
-
-		// If c was found, resize the array
-		if (found) {
-			char[] newArray = new char[alphabet.length - 1];
-			System.arraycopy(alphabet, 0, newArray, 0, alphabet.length - 1);
-			alphabet = newArray;
-		} else {
-//            System.out.println("Character '" + c + "' not found in the array.");
-		}
-
 	}
 
 }
