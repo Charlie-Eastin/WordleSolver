@@ -10,6 +10,12 @@ public class Letter {
 	// Status of the Letter
 	private LetterStatus status;
 
+	// Default constructor
+	public Letter() {
+		super();
+		this.status = LetterStatus.WHITE; // Initialize with unknown status
+	}
+
 	// Constructor without status
 	public Letter(char character) {
 		super();
