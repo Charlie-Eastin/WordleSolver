@@ -11,25 +11,20 @@ public class BasicBruteForce implements Solver {
 	private final Word solution;
 	private final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 	private final List<Character> notInWord = new ArrayList<Character>();
-	private final Word guess; // Tracks the current guess along with each letter's status
 
 	// Constructor
 	public BasicBruteForce(Word solution) {
 		this.solution = solution;
-		guess = new Word(solution.getLength());
+//		guess = new Word(solution.getLength());
 	}
 
 	@Override
 	public void solve() {
-		char[] combination = new char[solution.getLength()];
-
-		// Initialize guess with unknown status
-		for (int i = 0; i < solution.getLength(); i++) {
-			guess.setLetter(i, ' ');
-		}
+		// Tracks the current guess along with each letter's status
+		Word guess = new Word(solution.getLength());
 
 		// Call the recursive function to generate combinations and check against the solution
-		boolean solutionFound = generateCombinations(combination, 0);
+		boolean solutionFound = generateCombinations(0, guess);
 
 		// If no match is found, print "Solution not found"
 		if (!solutionFound) {
@@ -37,19 +32,15 @@ public class BasicBruteForce implements Solver {
 		}
 	}
 
-	// Private helper methods
-
 	// Recursive function to generate all combinations of words
-	private boolean generateCombinations(char[] combination, int index) {
-		if (index == solution.getLength()) {
-			// Check if the combination matches the solution
-			Word candidateWord = new Word(new String(combination));
+	private boolean generateCombinations(int index, Word guess) {
+		if (index == solution.getLength()) { // If we have a full-length guess prepared
 			// Initialize a boolean flag to track if the solution is found
 			boolean solutionFound = true;
 
 			// Loop through each character in the candidate word and compare with the solution
 			for (int i = 0; i < solution.getLength(); i++) {
-				char candidateChar = combination[i];
+				char candidateChar = guess.letterAt(i).getCharacter();
 
 				if (candidateChar == solution.getLetters()[i].getCharacter()) {
 					// If the character is in the word and in the right position
@@ -66,6 +57,7 @@ public class BasicBruteForce implements Solver {
 					System.out.print("\u001B[37m" + candidateChar + "\u001B[0m");
 					guess.letterAt(i).setStatus(LetterStatus.GRAY);
 
+					// Add to eliminated letters list
 					if (!notInWord.contains(candidateChar)) {
 						notInWord.add(candidateChar);
 					}
@@ -73,12 +65,11 @@ public class BasicBruteForce implements Solver {
 					solutionFound = false;
 				}
 			}
-
 			System.out.println(); // Move to the next line after printing the word
 
 			if (solutionFound) {
 				// If a match is found, print the solution and return
-				System.out.println("Solution found: " + candidateWord);
+				System.out.println("Solution found: " + guess);
 				return true;
 			} else {
 				// If the solution is not found, print the guessed word and return false
@@ -91,8 +82,9 @@ public class BasicBruteForce implements Solver {
 					continue;
 				}
 
-				combination[index] = c;
-				if (generateCombinations(combination, index + 1)) {
+				guess.setLetter(index, c);
+
+				if (generateCombinations(index + 1, guess)) {
 					// If a match is found in the recursive call, return true
 					return true;
 				}

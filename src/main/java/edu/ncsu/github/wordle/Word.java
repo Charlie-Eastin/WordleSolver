@@ -54,8 +54,8 @@ public class Word {
 	}
 
 	// Set the letter at a specific index
-	public void setLetter(final int index, final char newChar) {
-		// TODO Make sure newChar is uppercase
+	public void setLetter(final int index, char newChar) {
+		newChar = Character.toUpperCase(newChar);
 		Letter newLetter = new Letter(newChar);
 		setLetter(index, newLetter);
 	}
@@ -66,7 +66,7 @@ public class Word {
 
 		StringBuilder sb = new StringBuilder();
 		for (Letter letter : letters) {
-			sb.append(letter);
+			sb.append(letter.getCharacter());
 		}
 		asString = sb.toString();
 	}
