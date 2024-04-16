@@ -10,6 +10,9 @@ public class BasicBruteForce implements Solver {
 
 	private final Word solution;
 
+	// Tracks the current guess along with each letter's status
+	private Word guess;
+
 	// All letters that have not been eliminated as possibly being in the solution
 	private final List<Character> alphabet = new ArrayList<>();
 
@@ -23,16 +26,13 @@ public class BasicBruteForce implements Solver {
 	// Constructor
 	public BasicBruteForce(Word solution) {
 		this.solution = solution;
-//		guess = new Word(solution.getLength());
+		guess = new Word(solution.getLength());
 	}
 
 	@Override
 	public void solve() {
-		// Tracks the current guess along with each letter's status
-		Word guess = new Word(solution.getLength());
-
 		// Call the recursive function to generate combinations and check against the solution
-		boolean solutionFound = generateCombinations(guess);;
+		boolean solutionFound = generateGuesses();;
 
 		if (!solutionFound) {
 			System.out.println("Solution not found");
@@ -40,7 +40,7 @@ public class BasicBruteForce implements Solver {
 	}
 
 	// Generate all combinations of words
-	private boolean generateCombinations(Word guess) {
+	private boolean generateGuesses() {
 		try {
 			if (guess.compareToSolution(solution)) {
 				System.out.println("Solution found: " + guess);
@@ -74,7 +74,7 @@ public class BasicBruteForce implements Solver {
 //					break;
 			}
 		}
-		return generateCombinations(guess);
+		return generateGuesses();
 	}
 
 	private char nextValidChar(char original) {
