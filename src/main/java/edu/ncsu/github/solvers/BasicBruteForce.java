@@ -1,6 +1,6 @@
 package edu.ncsu.github.solvers;
 
-import edu.ncsu.github.wordle.LetterStatus;
+import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.Word;
 
 import java.util.ArrayList;
@@ -9,8 +9,16 @@ import java.util.List;
 public class BasicBruteForce implements Solver {
 
 	private final Word solution;
-	private final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-	private final List<Character> notInWord = new ArrayList<Character>();
+
+	// All letters that have not been eliminated as possibly being in the solution
+	private final List<Character> alphabet = new ArrayList<>();
+
+	// Instance-initialize alphabet
+	{
+		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()) {
+			alphabet.add(c);
+		}
+	}
 
 	// Constructor
 	public BasicBruteForce(Word solution) {
@@ -24,7 +32,7 @@ public class BasicBruteForce implements Solver {
 		Word guess = new Word(solution.getLength());
 
 		// Call the recursive function to generate combinations and check against the solution
-		boolean solutionFound = generateCombinations(0, guess);
+		boolean solutionFound = generateCombinations(guess);;
 
 		// If no match is found, print "Solution not found"
 		if (!solutionFound) {
@@ -32,64 +40,55 @@ public class BasicBruteForce implements Solver {
 		}
 	}
 
-	// Recursive function to generate all combinations of words
-	private boolean generateCombinations(int index, Word guess) {
-		if (index == solution.getLength()) { // If we have a full-length guess prepared
-			// Initialize a boolean flag to track if the solution is found
-			boolean solutionFound = true;
-
-			// Print each letter in the guess and compare with the solution
-			for (int i = 0; i < solution.getLength(); i++) {
-				char candidateChar = guess.letterAt(i).getCharacter();
-
-				if (candidateChar == solution.getLetters()[i].getCharacter()) {
-					// If the character is in the word and in the right position
-					System.out.print("\u001B[32m" + candidateChar + "\u001B[0m");
-					guess.letterAt(i).setStatus(LetterStatus.GREEN);
-				} else if (solution.toString().contains(Character.toString(candidateChar))) {
-					// If the character is in the word but not in the right position
-					System.out.print("\u001B[33m" + candidateChar + "\u001B[0m");
-					guess.letterAt(i).setStatus(LetterStatus.YELLOW);
-					// Update the flag indicating the solution is not found
-					solutionFound = false;
-				} else {
-					// If the character is not in the word at all
-					System.out.print("\u001B[37m" + candidateChar + "\u001B[0m");
-					guess.letterAt(i).setStatus(LetterStatus.GRAY);
-
-					// Add to eliminated letters list
-					if (!notInWord.contains(candidateChar)) {
-						notInWord.add(candidateChar);
-					}
-					// Update the flag indicating the solution is not found
-					solutionFound = false;
-				}
-			}
-			System.out.println(); // Move to the next line after printing the word
-
-			if (solutionFound) {
-				// If a match is found, print the solution and return
+	// Generate all combinations of words
+	private boolean generateCombinations(Word guess) {
+		try {
+			if (guess.compareToSolution(solution)) {
 				System.out.println("Solution found: " + guess);
 				return true;
-			} else {
-				// If the solution is not found, print the guessed word and return false
-				return false;
 			}
-		} else {
-			// Generate combinations recursively
-			for (char c : alphabet) {
-				if (notInWord.contains(c)) {
-					continue;
-				}
-				guess.setLetter(index, c);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
-				if (generateCombinations(index + 1, guess)) {
-					// If a match is found in the recursive call, return true
-					return true;
-				}
+		for (int i = 0; i < guess.getLength(); i++) {
+			Letter guessLetter = guess.letterAt(i);
+
+			switch (guessLetter.getStatus()) {
+				case GREEN:
+					break;
+				case GRAY:
+					// Cast to Character so char isn't treated as an int index
+					alphabet.remove((Character) guessLetter.getCharacter());
+					// Don't break so exec flows into YELLOW case.
+				case YELLOW:
+					replaceLetter(guessLetter);
+					break;
+				case WHITE:
+					throw new RuntimeException("Letter has not been evaluated.");
+//					break;
+				default:
+					// TODO logic for RED and ORANGE
+					throw new RuntimeException("RED and ORANGE status not yet supported.");
+//					break;
 			}
 		}
-		return false;
+		return generateCombinations(guess);
 	}
 
+	private void replaceLetter(Letter letter) {
+		if (letter.getCharacter() == 'Z') {
+			throw new RuntimeException("Cannot replace 'Z' with the next letter");
+		} else {
+			char nextChar = letter.getCharacter();
+			// Increment the character to get the next letter
+			// TODO Prioritize letters we know are in the word (yellow)
+			do {
+				nextChar = (char) (nextChar + 1);
+			} while (!alphabet.contains(nextChar));
+
+			letter.setCharacter(nextChar);
+			letter.resetStatus();
+		}
+	}
 }

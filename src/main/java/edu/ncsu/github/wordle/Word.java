@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Word {
 
+	private final List<Letter> guessed = new ArrayList<Letter>();
 	private Letter[] letters;
 	private String asString;
-	private final List<Letter> guessed = new ArrayList<Letter>();
 
 	// Constructor with empty letters
 	public Word(final int wordLength) {
@@ -30,21 +30,6 @@ public class Word {
 		return letters;
 	}
 
-	public Letter letterAt(final int index) {
-		return letters[index];
-	}
-
-	public int getLength() {
-		return letters.length;
-	}
-
-	public List<Letter> getGuessed() {
-		return guessed;
-	}
-
-//    private void addGuess(String newGuess) {
-//    }
-
 	public void setLetters(final String newWord) {
 		asString = newWord.toUpperCase();
 		int size = newWord.length();
@@ -54,6 +39,21 @@ public class Word {
 			// Use newWord so Letters are in caps
 			letters[i] = new Letter((newWord.charAt(i)));
 		}
+	}
+
+	public Letter letterAt(final int index) {
+		return letters[index];
+	}
+
+	public int getLength() {
+		return letters.length;
+	}
+
+//    private void addGuess(String newGuess) {
+//    }
+
+	public List<Letter> getGuessed() {
+		return guessed;
 	}
 
 	// Set the letter at a specific index
