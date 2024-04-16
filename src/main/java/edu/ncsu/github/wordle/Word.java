@@ -13,9 +13,12 @@ public class Word {
 	public Word(final int wordLength) {
 		letters = new Letter[wordLength];
 
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < wordLength; i++) {
 			letters[i] = new Letter();
+			sb.append("A");
 		}
+		setLetters(sb.toString());
 	}
 
 	// Constructor with word
