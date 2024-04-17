@@ -2,6 +2,7 @@ package edu.ncsu.github.solvers;
 
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.Word;
+import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class BasicBruteForce implements Solver {
 	 * @param solutionLength The length of the solution word.
 	 */
 	@Override
-	public void solve(int solutionLength) {
+	public void solve(int solutionLength) throws WordLengthMismatchException {
 		// Initialize the guess word with the given length
 		guess = new Word(solutionLength);
 
@@ -45,21 +46,16 @@ public class BasicBruteForce implements Solver {
 	 *
 	 * @return True if a solution is found, false otherwise.
 	 */
-	private boolean generateGuesses() {
-		try {
-			// Check if the current guess matches the solution
-			if (guess.compareToSolution()) {
-				System.out.println("Solution found: " + guess);
-				return true;
-			}
-		} catch (Exception e) {
-			// Propagate any exceptions that occur during comparison
-			throw new RuntimeException(e.getMessage());
+	private boolean generateGuesses() throws WordLengthMismatchException {
+		// Check if the current guess matches the solution
+		if (guess.compareToSolution()) {
+			System.out.println("Solution found: " + guess);
+			return true;
 		}
 
 		// Iterate through each letter in the guess
 		for (int i = 0; i < guess.getLength(); i++) {
-			Letter guessLetter = guess.letterAt(i);
+			Letter guessLetter = guess.getLetterAt(i);
 
 			// Check the status of the current letter
 			switch (guessLetter.getStatus()) {

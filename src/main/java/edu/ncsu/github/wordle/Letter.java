@@ -1,7 +1,7 @@
 package edu.ncsu.github.wordle;
 
 /**
- * A letter in the solution word.
+ * Represents a letter in a Word.
  */
 public class Letter {
 
@@ -19,14 +19,14 @@ public class Letter {
 	}
 
 	// Constructor without status
-	public Letter(char character) {
+	public Letter(final char character) {
 		super();
 		this.character = character; // Initialize character with provided value
 		this.status = LetterStatus.WHITE_UNKNOWN; // Initialize with unknown status
 	}
 
 	// Constructor with status
-	public Letter(char character, LetterStatus status) {
+	public Letter(final char character, final LetterStatus status) {
 		super();
 		this.character = character; // Initialize character with provided value
 		this.status = status; // Initialize status with provided value
@@ -42,7 +42,7 @@ public class Letter {
 	}
 
 	// Package access so only the Word can change it
-	void setCharacter(char character) {
+	void setCharacter(final char character) {
 		this.character = character;
 	}
 
@@ -56,7 +56,7 @@ public class Letter {
 	}
 
 	// Package access so only the Word can change it
-	void setStatus(LetterStatus status) {
+	void setStatus(final LetterStatus status) {
 		this.status = status;
 	}
 

@@ -2,6 +2,7 @@ package edu.ncsu.github;
 
 import edu.ncsu.github.solvers.*;
 import edu.ncsu.github.wordle.Config;
+import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Main {
 	 *
 	 * @param args The command line arguments.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws WordLengthMismatchException {
 		// For reading user input
 		Scanner scanner = new Scanner(System.in);
 		// Create a solution Word based on user input or generate a random one.

@@ -42,7 +42,7 @@ public class Word {
 		letters = new Letter[size]; // Resize the array to match the length of the new word
 
 		for (int i = 0; i < size; i++) {
-			letters[i] = new Letter((newWord.charAt(i))); // Initialize each letter with the corresponding character in the new word
+			letters[i] = new Letter(newWord.charAt(i)); // Initialize each letter with the corresponding character in the new word
 		}
 	}
 
@@ -52,7 +52,7 @@ public class Word {
 	 * @param index The index of the letter.
 	 * @return The letter at the specified index.
 	 */
-	public Letter letterAt(final int index) {
+	public Letter getLetterAt(final int index) {
 		return letters[index];
 	}
 
@@ -87,33 +87,33 @@ public class Word {
 	 * Compare this Word against a solution and update each Letter's status in this word.
 	 *
 	 * @return True if the word matches the solution, false otherwise.
-	 * @throws Exception If the word length is not equal to the solution length.
+	 * @throws WordLengthMismatchException If the word length is not equal to the solution length.
 	 */
-	public boolean compareToSolution() throws Exception {
+	public boolean compareToSolution() throws WordLengthMismatchException {
 		Word solution = Config.solution;
 
 		if (null == solution || this.getLength() != solution.getLength()) {
-			throw new Exception("Word length must be equal to solution length");
+			throw new WordLengthMismatchException("Word length must be equal to solution length");
 		}
 
 		boolean wordIsSolution = true;
 
 		for (int i = 0; i < solution.getLength(); i++) {
-			Letter guessLetter = this.letterAt(i);
+			Letter guessLetter = this.getLetterAt(i);
 
-			if (solution.letterAt(i).getCharacter() == guessLetter.getCharacter()) {
+			if (solution.getLetterAt(i).getCharacter() == guessLetter.getCharacter()) {
 				// Character is in the right position
-				this.letterAt(i).setStatus(LetterStatus.GREEN_CORRECT);
-				System.out.print("\u001B[32m" + this.letterAt(i).getCharacter());
+				guessLetter.setStatus(LetterStatus.GREEN_CORRECT);
+				System.out.print("\u001B[32m" + guessLetter.getCharacter());
 			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
 				// If the char is in the word but not in the right position
-				this.letterAt(i).setStatus(LetterStatus.YELLOW_MISPLACED);
-				System.out.print("\u001B[33m" + this.letterAt(i).getCharacter());
+				guessLetter.setStatus(LetterStatus.YELLOW_MISPLACED);
+				System.out.print("\u001B[33m" + guessLetter.getCharacter());
 				wordIsSolution = false;
 			} else {
 				// Character is not in word
-				this.letterAt(i).setStatus(LetterStatus.GRAY_NONEXISTENT);
-				System.out.print("\u001B[37m" + this.letterAt(i).getCharacter());
+				guessLetter.setStatus(LetterStatus.GRAY_NONEXISTENT);
+				System.out.print("\u001B[37m" + guessLetter.getCharacter());
 				wordIsSolution = false;
 			}
 		}
