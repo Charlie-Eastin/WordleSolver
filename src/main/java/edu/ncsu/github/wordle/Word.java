@@ -103,16 +103,16 @@ public class Word {
 
 			if (solution.letterAt(i).getCharacter() == guessLetter.getCharacter()) {
 				// Character is in the right position
-				this.letterAt(i).setStatus(LetterStatus.GREEN);
+				this.letterAt(i).setStatus(LetterStatus.GREEN_CORRECT);
 				System.out.print("\u001B[32m" + this.letterAt(i).getCharacter());
 			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
 				// If the char is in the word but not in the right position
-				this.letterAt(i).setStatus(LetterStatus.YELLOW);
+				this.letterAt(i).setStatus(LetterStatus.YELLOW_MISPLACED);
 				System.out.print("\u001B[33m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			} else {
 				// Character is not in word
-				this.letterAt(i).setStatus(LetterStatus.GRAY);
+				this.letterAt(i).setStatus(LetterStatus.GRAY_NONEXISTENT);
 				System.out.print("\u001B[37m" + this.letterAt(i).getCharacter());
 				wordIsSolution = false;
 			}

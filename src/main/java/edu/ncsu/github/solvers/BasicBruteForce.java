@@ -63,18 +63,18 @@ public class BasicBruteForce implements Solver {
 
 			// Check the status of the current letter
 			switch (guessLetter.getStatus()) {
-				case GREEN:
+				case GREEN_CORRECT:
 					break;
-				case GRAY:
+				case GRAY_NONEXISTENT:
 					// Remove the letter from the alphabet since it's not in the solution
 					alphabet.remove((Character) guessLetter.getCharacter());
 					// Don't break so execution flows into YELLOW case.
-				case YELLOW:
+				case YELLOW_MISPLACED:
 					// Replace the letter with the next valid character
 					Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
 					guess.setLetter(i, replacement);
 					break;
-				case WHITE:
+				case WHITE_UNKNOWN:
 					// Throw an exception if the letter has not been evaluated
 					throw new RuntimeException("Letter has not been evaluated.");
 				default:

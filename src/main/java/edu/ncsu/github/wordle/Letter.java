@@ -15,14 +15,14 @@ public class Letter {
 	public Letter() {
 		super();
 		this.character = 'A'; // Initialize character to 'A'
-		this.status = LetterStatus.WHITE; // Initialize with unknown status
+		this.status = LetterStatus.WHITE_UNKNOWN; // Initialize with unknown status
 	}
 
 	// Constructor without status
 	public Letter(char character) {
 		super();
 		this.character = character; // Initialize character with provided value
-		this.status = LetterStatus.WHITE; // Initialize with unknown status
+		this.status = LetterStatus.WHITE_UNKNOWN; // Initialize with unknown status
 	}
 
 	// Constructor with status
@@ -62,6 +62,6 @@ public class Letter {
 
 	// Package access so only the Word can change it
 	void resetStatus() {
-		this.status = LetterStatus.WHITE; // Reset the status to WHITE
+		this.status = LetterStatus.WHITE_UNKNOWN; // Reset the status to WHITE
 	}
 }
