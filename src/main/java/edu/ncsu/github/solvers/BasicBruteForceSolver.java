@@ -7,7 +7,8 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicBruteForce implements Solver {
+// Solver implementing the basic brute force algorithm
+public class BasicBruteForceSolver implements Solver {
 
 	// All letters that have not been eliminated as possibly being in the solution
 	private final List<Character> alphabet = new ArrayList<>();

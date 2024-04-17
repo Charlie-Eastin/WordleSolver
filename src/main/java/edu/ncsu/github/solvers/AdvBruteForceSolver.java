@@ -2,7 +2,8 @@ package edu.ncsu.github.solvers;
 
 import edu.ncsu.github.wordle.Word;
 
-public class AdvancedBruteForce implements Solver {
+// Solver implementing the advanced brute force algorithm
+public class AdvBruteForceSolver implements Solver {
 
 	// Tracks the current guess along with each letter's status
 	private Word guess;
