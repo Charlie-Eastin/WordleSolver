@@ -8,20 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Solver implementing the advanced brute force algorithm, described as "Mass Brute Force" in the project proposal
-public class AdvBruteForceSolver implements Solver {
-
-	// All letters that have not been eliminated as possibly being in the solution
-	private final List<Character> alphabet = new ArrayList<>();
-	// Tracks the current guess along with each letter's status
-	private Word guess;
-
-	// Instance-initialize alphabet
-	{
-		// Populate alphabet with all uppercase letters
-		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()) {
-			alphabet.add(c);
-		}
-	}
+// NOTE: Any logic that is shared by this class and the basic version should appear in the abstract parent class.
+public class AdvBruteForceSolver extends BruteForceSolver {
 
 	/**
 	 * Solve the Wordle puzzle.
@@ -81,27 +69,5 @@ public class AdvBruteForceSolver implements Solver {
 		}
 		// Recursive call to generate more guesses
 		return generateGuesses();
-	}
-
-	/**
-	 * Get the next valid character to replace the current one.
-	 *
-	 * @param original The original character.
-	 * @return The next valid character.
-	 */
-	private char nextValidChar(char original) {
-		if (original == 'Z') {
-			// Cannot replace 'Z' with the next letter
-			throw new RuntimeException("Cannot replace 'Z' with the next letter");
-		} else {
-			char nextChar = original;
-			// Increment the character to get the next letter
-			// TODO Prioritize letters we know are in the word (yellow)
-			do {
-				nextChar = (char) (nextChar + 1);
-			} while (!alphabet.contains(nextChar));
-
-			return nextChar;
-		}
 	}
 }
