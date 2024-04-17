@@ -16,32 +16,37 @@ public class Main {
 	 *
 	 * @param args The command line arguments.
 	 */
-	public static void main(String[] args) throws WordLengthMismatchException {
-		// For reading user input
-		Scanner scanner = new Scanner(System.in);
-		// Create a solution Word based on user input or generate a random one.
-		int solutionLength = Config.makeSolution(scanner);
+	public static void main(String[] args) {
+		try (Scanner scanner = new Scanner(System.in)) {
+			// Create a solution Word based on user input or generate a random one
+			int solutionLength = Config.makeSolution(scanner);
 
-		// Ask the user what algorithm they want to be used.
-		Algorithm algorithm = Config.chooseAlg(scanner);
-		scanner.close();
-		assert algorithm != null;
-		Solver solver = null;
+			// Ask the user which algorithm they want to use
+			Algorithm algorithm = Config.chooseAlg(scanner);
 
-		// Instantiate the appropriate solver based on the chosen algorithm
-		switch (algorithm) {
-			case BRUTE_FORCE_BASIC:
-				solver = new BasicBruteForceSolver();
-				break;
-			case BRUTE_FORCE_ADVANCED:
-				solver = new AdvBruteForceSolver();
-				break;
-			case GENETIC:
-				solver = new GeneticAlgSolver();
-				break;
+			Solver solver = null;
+
+			// Instantiate the appropriate solver based on the chosen algorithm
+			switch (algorithm) {
+				case BRUTE_FORCE_BASIC:
+					solver = new BasicBruteForceSolver();
+					break;
+				case BRUTE_FORCE_ADVANCED:
+					solver = new AdvBruteForceSolver();
+					break;
+				case GENETIC:
+					solver = new GeneticAlgSolver();
+					break;
+			}
+
+			// Solve the Wordle problem using the selected solver
+			solver.solve(solutionLength);
+		} catch (WordLengthMismatchException e) {
+			System.err.println("Error: Word length mismatch.");
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			System.err.println("Error: Illegal argument.");
+			e.printStackTrace();
 		}
-
-		// Solve the Wordle problem using the selected solver
-		solver.solve(solutionLength);
 	}
 }

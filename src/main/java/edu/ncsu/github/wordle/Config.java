@@ -139,9 +139,8 @@ public class Config {
 				return Algorithm.BRUTE_FORCE_ADVANCED;
 			case "3":
 				return Algorithm.GENETIC;
+			default:
+				throw new IllegalArgumentException("Invalid algorithm!");
 		}
-
-		System.out.println("No algorithm chosen. This code should not be reached.");
-		return null; // This should not happen
 	}
 }
