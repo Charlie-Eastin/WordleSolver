@@ -4,9 +4,6 @@ import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // Solver implementing the advanced brute force algorithm, described as "Mass Brute Force" in the project proposal
 // NOTE: Any logic that is shared by this class and the basic version should appear in the abstract parent class.
 public class AdvBruteForceSolver extends BruteForceSolver {

@@ -25,10 +25,7 @@ public abstract class BruteForceSolver implements Solver {
 
 	@Override
 	public void solve(int solutionLength) throws WordLengthMismatchException {
-		guess = new Word(solutionLength);
-
-		System.out.println("Advanced brute force algorithm not yet implemented");
-		// TODO: Implement smarter brute force algorithm to solve Wordle
+		throw new RuntimeException("This method should never be called. You probably meant to call it on one of this class' children.");
 	}
 
 	/**
@@ -44,7 +41,6 @@ public abstract class BruteForceSolver implements Solver {
 		} else {
 			char nextChar = original;
 			// Increment the character to get the next letter
-			// TODO Prioritize letters we know are in the word (yellow)
 			do {
 				nextChar = (char) (nextChar + 1);
 			} while (!alphabet.contains(nextChar));
