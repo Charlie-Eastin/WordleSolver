@@ -15,6 +15,8 @@ public abstract class BruteForceSolver implements Solver {
 
 	// Tracks the current guess along with each letter's status
 	protected Word guess;
+	// Number of guesses made
+	int guessCount = 0;
 
 	// Instance-initialize alphabet
 	{
@@ -24,11 +26,33 @@ public abstract class BruteForceSolver implements Solver {
 		}
 	}
 
+	/**
+	 * Solve the Wordle puzzle.
+	 *
+	 * @param solutionLength The length of the solution word.
+	 */
 	@Override
 	public void solve(int solutionLength) throws WordLengthMismatchException {
-		throw new RuntimeException("This method should never be called. You probably meant to call it on one of this class' children.");
+		// Initialize the guess word with the given length
+		guess = new Word(solutionLength);
+		// Call the function to generate combinations and check against the solution
+		boolean solutionFound = generateGuesses();
+
+		// If no solution is found, print a message
+		if (!solutionFound) {
+			System.out.println("Solution not found");
+		}
 	}
 
+	/**
+	 * Generate all combinations of words to solve the puzzle.
+	 *
+	 * @return True if a solution is found, false otherwise.
+	 */
+	abstract boolean generateGuesses() throws WordLengthMismatchException;
+
+	// TODO Add comment
+	// Handle a letter based on its status
 	protected void handleLetterAt(int letterIndex) {
 		Letter guessLetter = guess.getLetterAt(letterIndex);
 
