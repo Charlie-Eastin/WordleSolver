@@ -90,35 +90,59 @@ public class Word {
 	 * @throws WordLengthMismatchException If the word length is not equal to the solution length.
 	 */
 	public boolean compareToSolution() throws WordLengthMismatchException {
-		Word solution = Config.solution;
-
-		if (null == solution || this.getLength() != solution.getLength()) {
+		if (null == Config.solution || this.getLength() != Config.solution.getLength()) {
 			throw new WordLengthMismatchException("Word length must be equal to solution length");
 		}
-
 		boolean wordIsSolution = true;
 
-		for (int i = 0; i < solution.getLength(); i++) {
-			Letter guessLetter = this.getLetterAt(i);
-
-			if (solution.getLetterAt(i).getCharacter() == guessLetter.getCharacter()) {
-				// Character is in the right position
-				guessLetter.setStatus(LetterStatus.GREEN_CORRECT);
-				System.out.print("\u001B[32m" + guessLetter.getCharacter());
-			} else if (solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
-				// If the char is in the word but not in the right position
-				guessLetter.setStatus(LetterStatus.YELLOW_MISPLACED);
-				System.out.print("\u001B[33m" + guessLetter.getCharacter());
-				wordIsSolution = false;
-			} else {
-				// Character is not in word
-				guessLetter.setStatus(LetterStatus.GRAY_NONEXISTENT);
-				System.out.print("\u001B[37m" + guessLetter.getCharacter());
+		for (int i = 0; i < Config.solution.getLength(); i++) {
+			if (!compareLetterToSolution(i, -1)) {
 				wordIsSolution = false;
 			}
 		}
 		System.out.println("\u001B[0m"); // Move to the next line after printing the word
 		return wordIsSolution;
+	}
+
+	// TODO Add comment
+	// If guessCount is negative, just this letter will be printed. to print the whole word, pass the guessCount from the solver
+	public boolean compareLetterToSolution(int letterIndex, int guessCount) {
+		if (guessCount > 0) {
+			// Print the right-aligned guess number
+			String formatted = String.format("%5d", guessCount);
+			System.out.print(formatted + ": ");
+
+			for (int i = 0; i < letterIndex; i++) {
+				getLetterAt(i).printInColor();
+			}
+		}
+
+		Letter guessLetter = this.getLetterAt(letterIndex);
+		boolean letterIsCorrect = true;
+
+		if (Config.solution.getLetterAt(letterIndex).getCharacter() == guessLetter.getCharacter()) {
+			// Character is in the right position
+			guessLetter.setStatus(LetterStatus.GREEN_CORRECT);
+		} else if (Config.solution.toString().contains(Character.toString(guessLetter.getCharacter()))) {
+			// If the char is in the word but not in the right position
+			guessLetter.setStatus(LetterStatus.YELLOW_MISPLACED);
+			letterIsCorrect = false;
+		} else {
+			// Character is not in word
+			guessLetter.setStatus(LetterStatus.GRAY_NONEXISTENT);
+			letterIsCorrect = false;
+		}
+
+		guessLetter.printInColor();
+
+		if (guessCount > 0) {
+			for (int i = letterIndex + 1; i < this.getLength(); i++) {
+				getLetterAt(i).printInColor();
+			}
+			System.out.println();
+		}
+
+		return letterIsCorrect;
 	}
 
 	/**
