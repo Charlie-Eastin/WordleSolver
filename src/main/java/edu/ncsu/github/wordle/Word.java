@@ -121,6 +121,31 @@ public class Word {
 		return wordIsSolution;
 	}
 
+	/**
+	 * Find the index of the first occurrence of a character in the Word.
+	 *
+	 * @param c The character to search for.
+	 * @return The index of the character if found, otherwise -1.
+	 */
+	public int indexOf(char c) {
+		for (int i = 0; i < letters.length; i++) {
+			if (letters[i].getCharacter() == c) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Check if the Word contains a specific character.
+	 *
+	 * @param c The character to check for.
+	 * @return True if the character is found in the word, otherwise false.
+	 */
+	public boolean contains(char c) {
+		return indexOf(c) != -1;
+	}
+
 	@Override
 	public String toString() {
 		return asString;
