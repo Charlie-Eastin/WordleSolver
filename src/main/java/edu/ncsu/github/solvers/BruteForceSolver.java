@@ -30,6 +30,7 @@ public abstract class BruteForceSolver implements Solver {
 	 * Solve the Wordle puzzle.
 	 *
 	 * @param solutionLength The length of the solution word.
+	 * @throws WordLengthMismatchException if the provided solution length does not match the length of the solution word.
 	 */
 	@Override
 	public void solve(int solutionLength) throws WordLengthMismatchException {
@@ -48,11 +49,16 @@ public abstract class BruteForceSolver implements Solver {
 	 * Generate all combinations of words to solve the puzzle.
 	 *
 	 * @return True if a solution is found, false otherwise.
+	 * @throws WordLengthMismatchException if the length of the guess word does not match the length of the solution word.
 	 */
 	abstract boolean generateGuesses() throws WordLengthMismatchException;
 
-	// TODO Add comment
-	// Handle a letter based on its status
+	/**
+	 * Handle a letter based on its status.
+	 *
+	 * @param letterIndex The index of the letter in the guess word.
+	 * @throws RuntimeException if the letter has not been evaluated or if the status is not supported.
+	 */
 	protected void handleLetterAt(int letterIndex) {
 		Letter guessLetter = guess.getLetterAt(letterIndex);
 
@@ -83,6 +89,7 @@ public abstract class BruteForceSolver implements Solver {
 	 *
 	 * @param original The original character.
 	 * @return The next valid character.
+	 * @throws RuntimeException if the original character is 'Z' and cannot be replaced.
 	 */
 	protected char nextValidChar(char original) {
 		if (original == 'Z') {

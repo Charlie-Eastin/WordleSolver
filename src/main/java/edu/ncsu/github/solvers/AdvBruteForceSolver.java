@@ -10,6 +10,7 @@ public class AdvBruteForceSolver extends BruteForceSolver {
 	 * Generate all combinations of words to solve the puzzle.
 	 *
 	 * @return True if a solution is found, false otherwise.
+	 * @throws WordLengthMismatchException if the length of the guess does not match the length of the solution.
 	 */
 	boolean generateGuesses() throws WordLengthMismatchException {
 		// Print the right-aligned guess number

@@ -15,7 +15,6 @@ public class Letter {
 	public static final String TEXT_RED = "\u001B[31m";
 	public static final String TEXT_GRAY = "\u001B[37;1m"; //  escape code for gray with bold text
 
-
 	// Actual alphabetic character
 	private char character;
 
@@ -76,6 +75,7 @@ public class Letter {
 		this.status = LetterStatus.WHITE_UNKNOWN; // Reset the status to WHITE
 	}
 
+	// Print the character of the letter in its associated color.
 	void printInColor() {
 		System.out.print(BG_BLACK);
 

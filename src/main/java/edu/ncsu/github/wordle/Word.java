@@ -5,7 +5,11 @@ public class Word {
 	private Letter[] letters; // Array to store the letters of the word
 	private String asString; // String representation of the word
 
-	// Constructor with empty letters
+	/**
+	 * Constructor for creating a Word object with a specified length.
+	 *
+	 * @param wordLength The length of the word.
+	 */
 	public Word(final int wordLength) {
 		letters = new Letter[wordLength]; // Initialize the array to the specified length
 
@@ -17,7 +21,11 @@ public class Word {
 		setLetters(sb.toString());
 	}
 
-	// Constructor with word
+	/**
+	 * Constructor for creating a Word object with a specified word.
+	 *
+	 * @param newWord The word to initialize the Word object with.
+	 */
 	public Word(final String newWord) {
 		setLetters(newWord.toUpperCase()); // Initialize the word with the provided string
 	}
@@ -34,7 +42,7 @@ public class Word {
 	/**
 	 * Set the letters of the word.
 	 *
-	 * @param newWord The new word.
+	 * @param newWord The new word to set.
 	 */
 	public void setLetters(final String newWord) {
 		asString = newWord.toUpperCase(); // Update the string representation to the uppercase of the provided word
@@ -42,15 +50,15 @@ public class Word {
 		letters = new Letter[size]; // Resize the array to match the length of the new word
 
 		for (int i = 0; i < size; i++) {
-			letters[i] = new Letter(newWord.charAt(i)); // Initialize each letter with the corresponding character in the new word
+			letters[i] = new Letter(newWord.charAt(i)); // Initialize each Letter with the corresponding character in the new word
 		}
 	}
 
 	/**
-	 * Get the letter at a specific index.
+	 * Get the Letter at a specific index.
 	 *
 	 * @param index The index of the letter.
-	 * @return The letter at the specified index.
+	 * @return The Letter at the specified index.
 	 */
 	public Letter getLetterAt(final int index) {
 		return letters[index];
@@ -65,14 +73,24 @@ public class Word {
 		return letters.length;
 	}
 
-	// Set the letter at a specific index
+	/**
+	 * Set the Letter at a specific index.
+	 *
+	 * @param index    The index of the Letter to set.
+	 * @param newChar  The new character to set at the specified index.
+	 */
 	public void setLetter(final int index, char newChar) {
 		newChar = Character.toUpperCase(newChar);
 		Letter newLetter = new Letter(newChar);
 		setLetter(index, newLetter);
 	}
 
-	// Set the letter at a specific index
+	/**
+	 * Set the Letter at a specific index.
+	 *
+	 * @param index      The index of the Letter to set.
+	 * @param newLetter  The new Letter to set at the specified index.
+	 */
 	public void setLetter(final int index, final Letter newLetter) {
 		letters[index] = newLetter;
 
@@ -104,8 +122,13 @@ public class Word {
 		return wordIsSolution;
 	}
 
-	// TODO Add comment
-	// If guessCount is negative, just this letter will be printed. to print the whole word, pass the guessCount from the solver
+	/**
+	 * Compare a Letter of this Word against the corresponding Letter of the solution.
+	 *
+	 * @param letterIndex The index of the Letter to compare.
+	 * @param guessCount  The count of guesses made so far, or -1 if only the Letter should be printed.
+	 * @return True if the Letter matches the solution, false otherwise.
+	 */
 	public boolean compareLetterToSolution(int letterIndex, int guessCount) {
 		if (guessCount > 0) {
 			// Print the right-aligned guess number
