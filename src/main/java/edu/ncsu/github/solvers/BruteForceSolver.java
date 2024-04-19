@@ -116,11 +116,11 @@ public abstract class BruteForceSolver implements Solver {
 				nextChar++;
 			} while (!alphabet.contains(nextChar));
 
-			System.out.print("Alphabet: ");
-			for (char c : alphabet) {
-				System.out.print(c);
-			}
-			System.out.println();
+//			System.out.print("Alphabet: ");
+//			for (char c : alphabet) {
+//				System.out.print(c);
+//			}
+//			System.out.println();
 
 			return nextChar;
 		}
