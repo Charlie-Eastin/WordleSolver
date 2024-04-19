@@ -6,6 +6,7 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 // Parent class of the 2 brute force solvers. Any logic common to both of them should be here.
 public abstract class BruteForceSolver implements Solver {
@@ -21,7 +22,7 @@ public abstract class BruteForceSolver implements Solver {
 	// Instance-initialize alphabet
 	{
 		// Populate alphabet with all uppercase letters
-		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()) {
+		for (char c = 'A'; c <= 'Z'; c++) {
 			alphabet.add(c);
 		}
 	}
@@ -51,7 +52,7 @@ public abstract class BruteForceSolver implements Solver {
 	 * @return True if a solution is found, false otherwise.
 	 * @throws WordLengthMismatchException if the length of the guess word does not match the length of the solution word.
 	 */
-	abstract boolean generateGuesses() throws WordLengthMismatchException;
+	protected abstract boolean generateGuesses() throws WordLengthMismatchException;
 
 	/**
 	 * Handle a letter based on its status.
@@ -59,7 +60,10 @@ public abstract class BruteForceSolver implements Solver {
 	 * @param letterIndex The index of the letter in the guess word.
 	 * @throws RuntimeException if the letter has not been evaluated or if the status is not supported.
 	 */
-	protected void handleLetterAt(int letterIndex) {
+	protected abstract void handleLetterAt(int letterIndex);
+
+	// Shared method for common logic
+	protected void handleCommonLetterLogic(int letterIndex) {
 		Letter guessLetter = guess.getLetterAt(letterIndex);
 
 		// Check the status of the current letter
@@ -67,13 +71,12 @@ public abstract class BruteForceSolver implements Solver {
 			case GREEN_CORRECT:
 				break;
 			case GRAY_NONEXISTENT:
-				// Remove the letter from the alphabet since it's not in the solution
-				alphabet.remove((Character) guessLetter.getCharacter());
-				// Don't break so execution flows into YELLOW case.
+				// Common logic for GRAY_NONEXISTENT status
+				handleGrayNonExistent(guessLetter, letterIndex);
+				break;
 			case YELLOW_MISPLACED:
-				// Replace the letter with the next valid character
-				Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
-				guess.setLetter(letterIndex, replacement);
+				// Common logic for YELLOW_MISPLACED status
+				replaceLetter(guessLetter, letterIndex);
 				break;
 			case WHITE_UNKNOWN:
 				// Throw an exception if the letter has not been evaluated
@@ -82,6 +85,17 @@ public abstract class BruteForceSolver implements Solver {
 				// Throw an exception for unsupported statuses
 				throw new RuntimeException("RED and ORANGE status not yet supported.");
 		}
+	}
+
+	// Shared logic for GRAY_NONEXISTENT status
+	protected void handleGrayNonExistent(Letter guessLetter, int letterIndex) {
+		replaceLetter(guessLetter, letterIndex);
+	}
+
+	// Replace the letter with the next valid character
+	protected void replaceLetter(Letter guessLetter, int letterIndex) {
+		Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
+		guess.setLetter(letterIndex, replacement);
 	}
 
 	/**
@@ -99,8 +113,14 @@ public abstract class BruteForceSolver implements Solver {
 			char nextChar = original;
 			// Increment the character to get the next letter
 			do {
-				nextChar = (char) (nextChar + 1);
+				nextChar++;
 			} while (!alphabet.contains(nextChar));
+
+			System.out.print("Alphabet: ");
+			for (char c : alphabet) {
+				System.out.print(c);
+			}
+			System.out.println();
 
 			return nextChar;
 		}

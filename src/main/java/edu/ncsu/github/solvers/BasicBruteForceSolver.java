@@ -1,5 +1,6 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 // Solver implementing the basic brute force algorithm, described as "Isolated Brute Force" in the project proposal
@@ -13,7 +14,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
 	 * @throws WordLengthMismatchException if the length of the guess does not match the length of the solution
 	 */
 	@Override
-	boolean generateGuesses() throws WordLengthMismatchException {
+	protected boolean generateGuesses() throws WordLengthMismatchException {
 		// Iterate through each letter in the guess
 		for (int i = 0; i < guess.getLength(); i++) {
 			boolean letterIsCorrect;
@@ -23,5 +24,11 @@ public class BasicBruteForceSolver extends BruteForceSolver {
 			} while (!letterIsCorrect);
 		}
 		return true;
+	}
+
+	@Override
+	protected void handleLetterAt(int letterIndex) {
+		// Call the shared method for common logic
+		handleCommonLetterLogic(letterIndex);
 	}
 }

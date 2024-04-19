@@ -1,5 +1,6 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 // Solver implementing the advanced brute force algorithm, described as "Mass Brute Force" in the project proposal
@@ -12,7 +13,7 @@ public class AdvBruteForceSolver extends BruteForceSolver {
 	 * @return True if a solution is found, false otherwise.
 	 * @throws WordLengthMismatchException if the length of the guess does not match the length of the solution.
 	 */
-	boolean generateGuesses() throws WordLengthMismatchException {
+	protected boolean generateGuesses() throws WordLengthMismatchException {
 		// Print the right-aligned guess number
 		String formatted = String.format("%5d", ++guessCount);
 		System.out.print(formatted + ": ");
@@ -29,5 +30,20 @@ public class AdvBruteForceSolver extends BruteForceSolver {
 		}
 		// Recursive call to generate more guesses
 		return generateGuesses();
+	}
+
+	@Override
+	protected void handleLetterAt(int letterIndex) {
+		// Call the shared method for common logic
+		handleCommonLetterLogic(letterIndex);
+	}
+
+	// Implement specific logic for GRAY_NONEXISTENT status
+	@Override
+	protected void handleGrayNonExistent(Letter guessLetter, int letterIndex) {
+		// Remove the letter from the alphabet since it's not in the solution
+		alphabet.remove((Character) guessLetter.getCharacter());
+		// After shrinking alphabet, call common logic
+		super.handleGrayNonExistent(guessLetter, letterIndex);
 	}
 }
