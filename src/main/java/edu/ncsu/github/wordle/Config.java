@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Config {
 
 	// Maximum length allowed for the solution word
-	final static int MAX_WORD_LENGTH = 8;
+	final static int MAX_WORD_LENGTH = 20;
 	// Package access so Solvers can't see it
 	static Word solution;
 
