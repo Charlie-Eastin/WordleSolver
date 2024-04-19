@@ -8,12 +8,12 @@ public class Letter {
 	// ANSI escape codes for colors
 	public static final String BG_BLACK = "\u001B[40m";
 	public static final String TEXT_RESET = "\u001B[0m";
-	public static final String TEXT_WHITE = "\u001B[37m";
+	public static final String TEXT_WHITE = "\u001B[97m";
 	public static final String TEXT_GREEN = "\u001B[32m";
 	public static final String TEXT_YELLOW = "\u001B[33m";
-	public static final String TEXT_ORANGE = "\u001B[38;5;208m"; //  escape code for orange
+	public static final String TEXT_ORANGE = "\u001B[38;5;208m";
 	public static final String TEXT_RED = "\u001B[31m";
-	public static final String TEXT_GRAY = "\u001B[37;1m"; //  escape code for gray with bold text
+	public static final String TEXT_GRAY = "\u001B[37m";
 
 	// Actual alphabetic character
 	private char character;
@@ -25,14 +25,14 @@ public class Letter {
 	public Letter() {
 		super();
 		this.character = 'A'; // Initialize character to 'A'
-		this.status = LetterStatus.WHITE_UNKNOWN; // Initialize with unknown status
+		this.status = LetterStatus.UNKNOWN; // Initialize with unknown status
 	}
 
 	// Constructor without status
 	public Letter(final char character) {
 		super();
 		this.character = character; // Initialize character with provided value
-		this.status = LetterStatus.WHITE_UNKNOWN; // Initialize with unknown status
+		this.status = LetterStatus.UNKNOWN; // Initialize with unknown status
 	}
 
 	// Constructor with status
@@ -72,7 +72,7 @@ public class Letter {
 
 	// Package access so only the Word can change it
 	void resetStatus() {
-		this.status = LetterStatus.WHITE_UNKNOWN; // Reset the status to WHITE
+		this.status = LetterStatus.UNKNOWN; // Reset the status to WHITE
 	}
 
 	// Print the character of the letter in its associated color.
@@ -80,7 +80,8 @@ public class Letter {
 		System.out.print(BG_BLACK);
 
 		switch (this.status) {
-			case WHITE_UNKNOWN:
+			case UNKNOWN:
+				// This shouldn't happen because guesses should be evaluated before printing.
 				System.out.print(TEXT_WHITE);
 				break;
 			case GREEN_CORRECT:

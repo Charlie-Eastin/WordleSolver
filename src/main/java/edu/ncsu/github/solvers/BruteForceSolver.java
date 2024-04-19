@@ -6,7 +6,6 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 // Parent class of the 2 brute force solvers. Any logic common to both of them should be here.
 public abstract class BruteForceSolver implements Solver {
@@ -78,7 +77,7 @@ public abstract class BruteForceSolver implements Solver {
 				// Common logic for YELLOW_MISPLACED status
 				replaceLetter(guessLetter, letterIndex);
 				break;
-			case WHITE_UNKNOWN:
+			case UNKNOWN:
 				// Throw an exception if the letter has not been evaluated
 				throw new RuntimeException("Letter has not been evaluated.");
 			default:
