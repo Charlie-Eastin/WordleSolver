@@ -5,8 +5,13 @@
 ## Project Description
 Originating as a single-player game, the New York Times Wordle challenges participants to discern a predetermined word composed of uppercase letters within a limited number of attempts. Each guess provides feedback, highlighting correctly positioned letters in green, misplaced ones in yellow, and absent ones in grey. This project extends the Wordle paradigm by introducing novel complexities and avenues for AI-driven solutions.
 
-This project aims to enhance the classic Wordle puzzle game by implementing artificial intelligence-based algorithms for precise and efficient puzzle-solving. Our modified Wordle game allows users to select a randomized sequence of alphabetic letters as the target word, while an AI agent attempts to deduce this word with unlimited guesses. Notably, the AI has the flexibility to submit arbitrary sequences of alphabetic characters as guesses, regardless of their status as valid dictionary words. 
+This project aims to enhance the classic Wordle puzzle game by implementing artificial intelligence-based algorithms for precise and efficient puzzle-solving. Our modified Wordle game allows users to select a randomized sequence of alphabetic letters as the target word, while an AI agent attempts to deduce this word with unlimited guesses. Notably, the AI has the flexibility to submit arbitrary sequences of alphabetic characters as guesses, regardless of their status as valid dictionary words.
 
+---
+## Running the Application
+Follow the prompts displayed in the console to interact with the Wordle solver.
+
+---
 ## Task Environment Description
 - **Single Agent:** This project operates within a singular agent framework, devoid of interactions with external entities.
 - **Sequential:** The agent's decision-making process unfolds iteratively, with prior experiences serving as foundational pillars for subsequent conjectures.
