@@ -13,8 +13,7 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 public class GeneticAlgSolver implements Solver {
 
     // Represents the List of characters for each section of the words
-
-    // TODO URGENT I think this needs to be changed to be a triple list, I think every index of every word needs one of these for the constraint modeling
+    
     protected List<List<Letter>> constraints     = new ArrayList<>();
     // Tracks the current guess along with each letter's status
     protected Word               guess;
@@ -200,7 +199,35 @@ public class GeneticAlgSolver implements Solver {
      * @return the index of a correct guess if one exists, or -1 if one does not
      */
     private int mutate() {
-
+        // This is the baseline for all future guesses
+        Word baseline = guess;
+        population = new ArrayList<Word>();
+        for(int i = 0; i < POPULATION_SIZE; i++) {
+            Word nextGen = new Word(baseline.getLength());
+            Random rand = new Random();
+            for(int j = 0; j < baseline.getLength(); j++) {
+                Letter oldLetter = baseline.getLetterAt(j);
+                if(oldLetter.getStatus() == LetterStatus.GREEN_CORRECT) {
+                    nextGen.setLetter(j, oldLetter);
+                } else {
+                    nextGen.setLetter(j, constraints.get(j).get(rand.nextInt(constraints.get(j).size())));
+                }
+            }
+            try {
+                // This guess is correct and we can stop
+                if(nextGen.compareToSolution()) {
+                    population.add(nextGen);
+                    return i;
+                }
+                // We should constrain the domains after each guess (will make subsequent guesses more reliable although it will slow down the guess process)
+                constrainDomainOneWord(nextGen, i);
+            }
+            catch ( final WordLengthMismatchException e ) {
+                e.printStackTrace();
+            }
+            // Add the guess to the population
+            population.add(nextGen);
+        }
 
         return -1;
     }
@@ -220,7 +247,7 @@ public class GeneticAlgSolver implements Solver {
                     break;
                 case LetterStatus.GRAY_NONEXISTENT: // if the letter is gray, remove from
                                            // all domains
-                    for ( int k = 0; k < wordSize; k++ ) {
+                    for ( int k = 0; k < w.getLength(); k++ ) {
                         constraints.get( k ).remove( currentLetter );
                     }
                     break;
