@@ -29,7 +29,7 @@ public class GeneticAlgSolver implements Solver {
     List<Word>                   population;
 
     @Override
-    public void solve ( final int solutionLength ) {
+    public void solve ( final int solutionLength ) throws WordLengthMismatchException {
         guess = new Word( solutionLength );
 
         // TODO: Implement genetic algorithm to solve Wordle as a Constraint
@@ -150,19 +150,19 @@ public class GeneticAlgSolver implements Solver {
                 final LetterStatus status = currentLetter.getStatus();
 
                 switch ( status ) {
-                    case LetterStatus.GREEN_CORRECT: // if the letter is green, do nothing
+                    case GREEN_CORRECT: // if the letter is green, do nothing
                         break;
-                    case LetterStatus.GRAY_NONEXISTENT: // if the letter is gray, remove from
+                    case GRAY_NONEXISTENT: // if the letter is gray, remove from
                                            // all domains
                         for ( int k = 0; k < wordSize; k++ ) {
                             constraints.get( k ).remove( currentLetter );
                         }
                         break;
-                    case LetterStatus.YELLOW_MISPLACED: // if the letter is yellow, remove
+                    case YELLOW_MISPLACED: // if the letter is yellow, remove
                                            // from current domain
                         constraints.get( j ).remove( currentLetter );
                         break;
-                    case LetterStatus.UNKNOWN: // Throw an exception if the letter has not
+                    case UNKNOWN: // Throw an exception if the letter has not
                                   // been evaluated
                         throw new RuntimeException( "Letter has not been evaluated." );
                     default: // Throw an exception for unsupported statuses
@@ -243,19 +243,19 @@ public class GeneticAlgSolver implements Solver {
             final LetterStatus status = currentLetter.getStatus();
 
             switch ( status ) {
-                case LetterStatus.GREEN_CORRECT: // if the letter is green, do nothing
+                case GREEN_CORRECT: // if the letter is green, do nothing
                     break;
-                case LetterStatus.GRAY_NONEXISTENT: // if the letter is gray, remove from
+                case GRAY_NONEXISTENT: // if the letter is gray, remove from
                                            // all domains
                     for ( int k = 0; k < w.getLength(); k++ ) {
                         constraints.get( k ).remove( currentLetter );
                     }
                     break;
-                case LetterStatus.YELLOW_MISPLACED: // if the letter is yellow, remove
+                case YELLOW_MISPLACED: // if the letter is yellow, remove
                                            // from current domain
                     constraints.get( idx ).remove( currentLetter );
                     break;
-                case LetterStatus.UNKNOWN: // Throw an exception if the letter has not
+                case UNKNOWN: // Throw an exception if the letter has not
                                   // been evaluated
                     throw new RuntimeException( "Letter has not been evaluated." );
                 default: // Throw an exception for unsupported statuses

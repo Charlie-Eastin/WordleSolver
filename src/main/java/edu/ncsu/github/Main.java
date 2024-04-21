@@ -28,13 +28,13 @@ public class Main {
 
 			// Instantiate the appropriate solver based on the chosen algorithm
 			switch (algorithm) {
-				case Algorithm.BRUTE_FORCE_BASIC:
+				case BRUTE_FORCE_BASIC:
 					solver = new BasicBruteForceSolver();
 					break;
-				case Algorithm.BRUTE_FORCE_ADVANCED:
+				case BRUTE_FORCE_ADVANCED:
 					solver = new AdvBruteForceSolver();
 					break;
-				case Algorithm.GENETIC:
+				case GENETIC:
 					solver = new GeneticAlgSolver();
 					break;
 			}
