@@ -2,6 +2,7 @@ package edu.ncsu.github.wordle;
 
 import edu.ncsu.github.solvers.Algorithm;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -13,6 +14,12 @@ public class Config {
 	final static int MAX_WORD_LENGTH = 20;
 	// Package access so Solvers can't see it
 	static Word solution;
+
+	// The next orange index of the word to be hidden.
+	private static int nextOrangeIdx = 0;
+
+	// instance of Random object for environment changes.
+	private static final Random r = new Random();
 
 	/**
 	 * Prompts the user to choose between entering a solution word manually or
@@ -141,6 +148,57 @@ public class Config {
 				return Algorithm.GENETIC;
 			default:
 				throw new IllegalArgumentException("Invalid algorithm!");
+		}
+	}
+
+	/**
+	 * Might hide a letter of the word from view of the player, if the letter is not already red or orange.
+	 */
+	public static void hideLetter() {
+		double randProb = r.nextDouble();
+		double probability = 0.7;
+		// do nothing if the probability is less than or equal to the probability
+		if (randProb > probability) {
+			return;
+		}
+		if (nextOrangeIdx < solution.getLength()
+				&& solution.getLetterAt(nextOrangeIdx).getStatus() != LetterStatus.RED_SHIFTED) {
+			solution.getLetterAt(nextOrangeIdx++).setStatus(LetterStatus.ORANGE_OBSCURED);
+		}
+	}
+
+	public static boolean compareToSolution(Word guess) throws WordLengthMismatchException {
+		boolean result = guess.compareToSolution();
+		if (!result) {
+			mutateSolution();
+		}
+		return result;
+    }
+
+	/**
+	 * Mutates the solution based on a randomly generated number being greater than the probability. Only mutates a
+	 * letter if it is black, yellow, or grey. Mutation means making the letter a random letter from the alphabet.
+	 */
+	private static void mutateSolution() {
+		// get a random probability and check if it is greater/less than the chance to mutate.
+		double probability = 0.2828;
+		double randProb = r.nextDouble();
+		// if it is, mutate a state that is grey, black, or yellow only, and change the status to red.
+		// if it is not, or the status is not grey, black, or yellow, do nothing.
+		if (randProb > probability) {
+			int randIdx = r.nextInt(solution.getLength());
+			Letter l = solution.getLetterAt(randIdx);
+			switch (l.getStatus()) {
+				case UNKNOWN:
+				case YELLOW_MISPLACED:
+				case GRAY_NONEXISTENT:
+					int randLetter = r.nextInt(26);
+					l.setCharacter((char)(randLetter + 64));
+					l.setStatus(LetterStatus.RED_SHIFTED);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }

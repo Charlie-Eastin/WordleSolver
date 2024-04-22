@@ -39,8 +39,16 @@ public class Main {
 					break;
 			}
 
+			// start the timer for the stochastic mutation
+			Timer t = new Timer(new MyRunnable(), 5);
+			t.start();
+
 			// Solve the Wordle problem using the selected solver
 			solver.solve(solutionLength);
+
+			// print time taken to solve and stop the timer
+			System.out.println("Time taken: " + t.getTime() + "ms");
+			t.stop();
 		} catch (WordLengthMismatchException e) {
 			System.err.println("Error: Word length mismatch.");
 			e.printStackTrace();
@@ -49,4 +57,13 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
+
+	private static class MyRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			Config.hideLetter();
+		}
+	}
+
 }
