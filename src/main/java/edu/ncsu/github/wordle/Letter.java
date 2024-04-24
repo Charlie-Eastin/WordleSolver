@@ -105,8 +105,9 @@ public class Letter {
         System.out.print( getCharacter() + TEXT_RESET );
     }
 
-    public boolean equals ( final Letter o ) {
-        if ( o.getCharacter() == this.character ) {
+    @Override
+    public boolean equals ( final Object o ) {
+        if ( ( (Letter) o ).getCharacter() == this.character ) {
             return true;
         }
         return false;

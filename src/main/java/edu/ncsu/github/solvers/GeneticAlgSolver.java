@@ -20,18 +20,21 @@ public class GeneticAlgSolver implements Solver {
     // Number of guesses made
     int                          guessCount      = 0;
 
-    static final int             POPULATION_SIZE = 4;
+    static final int             POPULATION_SIZE = 10;
 
     static final double          MUTATION_RATE   = 0.01;
 
     static final Random          random          = new Random();
 
-    List<Word>                   population;
+    public List<Word>            population;
+
+    Letter[]                     correctLetters;
 
     @Override
     public void solve ( final int solutionLength ) throws WordLengthMismatchException {
         guess = new Word( solutionLength );
         int popCount = 2;
+        correctLetters = new Letter[solutionLength];
         // TODO: Implement genetic algorithm to solve Wordle as a Constraint
         // Satisfaction Problem (CSP).
         // Steps:
@@ -46,6 +49,8 @@ public class GeneticAlgSolver implements Solver {
         System.out.println( "Population 1" );
         initializePopulation( POPULATION_SIZE, solutionLength );
 
+        // print();
+
         // CONSTRAIN DOMAIN AT THIS POINT (this is now handled within
         // initializePopulation())
         // constrainDomain( POPULATION_SIZE, solutionLength );
@@ -54,6 +59,9 @@ public class GeneticAlgSolver implements Solver {
         // domains, propogate correct letters into one last best guess for the
         // generation.
         guess = prop();
+        guess.compareToSolution();
+
+        // print();
 
         // 6. Now that we have out best guess from the components of the prior
         // generation we will mutate a new population and repeat until we are
@@ -62,11 +70,14 @@ public class GeneticAlgSolver implements Solver {
         // to worry about constraining the domains of variables again when
         // checking the guess solution
         do {
+            constrainDomainOneWord( guess );
             // The mutate method will constrain the domains of variables as it
             // goes and makes intermediate guesses
             System.out.println( "Population " + popCount );
             final int check = mutate();
-
+            if ( popCount == 50 ) {
+                break;
+            }
             popCount++;
             // If an intermediate guess is correct we will stop and be done, no
             // need to constrain domain or propogate
@@ -76,11 +87,22 @@ public class GeneticAlgSolver implements Solver {
             }
             // constrainDomain();
             guess = prop();
+            // print();
+
         }
         while ( !guess.compareToSolution() );
         // After this do/while loop guess should be correct and the search can
         // conclude propogation.
 
+    }
+
+    void print () {
+        for ( int i = 0; i < constraints.size(); i++ ) {
+            for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
+                System.out.print( constraints.get( i ).get( j ).getCharacter() + "," );
+            }
+            System.out.print( "\n" );
+        }
     }
 
     /**
@@ -126,10 +148,16 @@ public class GeneticAlgSolver implements Solver {
             for ( int j = 0; j < wordSize; j++ ) {
                 // Gets the upper bound for the randomCharacters of the
                 // constraint
-                final int randomCharBound = random.nextInt( constraints.get( j ).size() );
-                // Sets the letter to a random letter in the constraints from 0
-                // to the bound
-                tempWord.setLetter( j, constraints.get( j ).get( randomCharBound ).getCharacter() );
+                if ( constraints.get( j ).isEmpty() ) {
+                    tempWord.setLetter( j, correctLetters[j] );
+                }
+                else {
+                    final int randomCharBound = random.nextInt( constraints.get( j ).size() );
+                    // Sets the letter to a random letter in the constraints
+                    // from 0
+                    // to the bound
+                    tempWord.setLetter( j, constraints.get( j ).get( randomCharBound ).getCharacter() );
+                }
 
             }
             // Currently, this counts as a guess. I believe this should be
@@ -207,7 +235,18 @@ public class GeneticAlgSolver implements Solver {
                 if ( let.getStatus() == LetterStatus.GREEN_CORRECT ) {
                     temp.setLetter( j, let );
                 }
+                else {
+                    if ( !constraints.get( j ).isEmpty() ) {
+                        final int randomCharBound = random.nextInt( constraints.get( j ).size() );
+                        temp.setLetter( j, constraints.get( j ).get( randomCharBound ) );
+                    }
+                    else {
+                        temp.setLetter( j, correctLetters[j] );
+                    }
+
+                }
             }
+
         }
         return temp;
     }
@@ -233,7 +272,7 @@ public class GeneticAlgSolver implements Solver {
                 }
                 else {
                     if ( constraints.get( j ).isEmpty() ) {
-                        nextGen.setLetter( j, oldLetter );
+                        nextGen.setLetter( j, correctLetters[j] );
                     }
                     else {
                         nextGen.setLetter( j, constraints.get( j ).get( rand.nextInt( constraints.get( j ).size() ) ) );
@@ -276,8 +315,9 @@ public class GeneticAlgSolver implements Solver {
             final LetterStatus status = currentLetter.getStatus();
 
             switch ( status ) {
-                case GREEN_CORRECT: // TODO REMOVE ALL OTHER LETTERS FROM THIS
-                                    // DOMAIN
+                case GREEN_CORRECT:
+                    correctLetters[i] = currentLetter;
+                    constraints.get( i ).clear();
                     break;
                 case GRAY_NONEXISTENT: // if the letter is gray, remove from
                                        // all domains
@@ -303,15 +343,16 @@ public class GeneticAlgSolver implements Solver {
                     break;
                 case YELLOW_MISPLACED: // if the letter is yellow, remove
                                        // from current domain
-                    // constraints.get( i ).remove( currentLetter );
-                    final int constraintSize = constraints.get( i ).size();
-                    for ( int j = 0; j < constraintSize; j++ ) {
-                        if ( constraints.get( i ).get( j ).equals( currentLetter ) ) {
-                            constraints.get( i ).remove( j );
-                            break;
-                        }
-
-                    }
+                    constraints.get( i ).remove( currentLetter );
+                    // final int constraintSize = constraints.get( i ).size();
+                    // for ( int j = 0; j < constraintSize; j++ ) {
+                    // if ( constraints.get( i ).get( j ).equals( currentLetter
+                    // ) ) {
+                    // constraints.get( i ).remove( j );
+                    // break;
+                    // }
+                    //
+                    // }
                     break;
                 case UNKNOWN: // Throw an exception if the letter has not
                               // been evaluated
