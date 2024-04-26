@@ -11,9 +11,11 @@ import edu.ncsu.github.solvers.Algorithm;
 public class Config {
 
     // Maximum length allowed for the solution word
-    final static int MAX_WORD_LENGTH = 100;
+    final static int    MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
-    static Word      solution;
+    static Word         solution;
+
+    final static double ORANGE_WORD_SPAN = 5;
 
     /**
      * Prompts the user to choose between entering a solution word manually or
@@ -57,13 +59,30 @@ public class Config {
         return solution.getLength();
     }
 
+    // public static void randomOrangeIndex () {
+    // final Random random = new Random();
+    // final int index = random.nextInt( solution.getLength() );
+    //
+    // final Letter l = solution.getLetterAt( index );
+    // l.setStatus( LetterStatus.ORANGE_OBSCURED );
+    // solution.setLetter( index, l );
+    //
+    // }
+
+    /**
+     * Generates obscured indexes in the solution
+     */
     public static void randomOrangeIndex () {
         final Random random = new Random();
-        final int index = random.nextInt( solution.getLength() );
-
-        final Letter l = solution.getLetterAt( index );
-        l.setStatus( LetterStatus.ORANGE_OBSCURED );
-        solution.setLetter( index, l );
+        final int count = (int) Math.round( solution.getLength() / ORANGE_WORD_SPAN );
+        int i = 0;
+        while ( i < count ) {
+            final int index = random.nextInt( solution.getLength() );
+            final Letter l = solution.getLetterAt( index );
+            l.setStatus( LetterStatus.ORANGE_OBSCURED );
+            solution.setLetter( index, l );
+            i++;
+        }
 
     }
 
