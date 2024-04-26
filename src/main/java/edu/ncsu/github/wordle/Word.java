@@ -137,6 +137,21 @@ public class Word {
                 wordIsSolution = false;
             }
         }
+
+        if ( wordIsSolution ) {
+            for ( int i = 0; i < Config.solution.getLength(); i++ ) {
+                final Letter l = this.getLetterAt( i );
+                l.setStatus( LetterStatus.GREEN_CORRECT );
+                l.printInColor();
+            }
+        }
+        else {
+            for ( int i = 0; i < Config.solution.getLength(); i++ ) {
+                final Letter l = this.getLetterAt( i );
+                l.printInColor();
+            }
+        }
+
         System.out.println( "\u001B[0m" ); // Move to the next line after
                                            // printing the word
         return wordIsSolution;
@@ -168,7 +183,15 @@ public class Word {
         boolean letterIsCorrect = true;
         final String solution = Config.solution.toString();
 
-        if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
+        if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED
+                && Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
+            guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
+            letterIsCorrect = true;
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED ) {
+            guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
             // Character is in the right position
             guessLetter.setStatus( LetterStatus.GREEN_CORRECT );
             // } else if
@@ -197,14 +220,14 @@ public class Word {
             letterIsCorrect = false;
         }
 
-        guessLetter.printInColor();
+        // guessLetter.printInColor();
 
-        if ( guessCount > 0 ) {
-            for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
-                getLetterAt( i ).printInColor();
-            }
-            System.out.println();
-        }
+        // if ( guessCount > 0 ) {
+        // for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
+        // getLetterAt( i ).printInColor();
+        // }
+        // System.out.println();
+        // }
 
         return letterIsCorrect;
     }

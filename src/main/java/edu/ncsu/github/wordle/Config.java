@@ -1,5 +1,6 @@
 package edu.ncsu.github.wordle;
 
+import java.util.Random;
 import java.util.Scanner;
 
 import edu.ncsu.github.solvers.Algorithm;
@@ -54,6 +55,16 @@ public class Config {
         solution = new Word( solutionStr );
         System.out.println( "Word object created with the solution word: " + solution );
         return solution.getLength();
+    }
+
+    public static void randomOrangeIndex () {
+        final Random random = new Random();
+        final int index = random.nextInt( solution.getLength() );
+
+        final Letter l = solution.getLetterAt( index );
+        l.setStatus( LetterStatus.ORANGE_OBSCURED );
+        solution.setLetter( index, l );
+
     }
 
     /**
