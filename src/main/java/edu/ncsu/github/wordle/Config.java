@@ -1,21 +1,52 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.solvers.Algorithm;
+
 import java.util.Random;
 import java.util.Scanner;
 
-import edu.ncsu.github.solvers.Algorithm;
-
 /**
- * Contains methods for initial setup of the Wordle.
+ * Contains methods for initial setup of the Wordle game.
  */
 public class Config {
 
+  	// Flag indicating whether the GUI is being used
+    final static boolean USING_GUI = true;
+  
     // Maximum length allowed for the solution word
     final static int    MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
     static Word         solution;
 
     final static double ORANGE_WORD_SPAN = 5;
+  
+  	/**
+	 * Retrieves the flag indicating whether the GUI is being used.
+	 *
+	 * @return True if the GUI is being used, false otherwise.
+	 */
+	public static boolean getUsingGUI() {
+		return USING_GUI;
+	}
+
+	/**
+	 * Retrieves the maximum length allowed for the solution word.
+	 *
+	 * @return The maximum length allowed for the solution word.
+	 */
+	public static int getMaxWordLength() {
+		return MAX_WORD_LENGTH;
+	}
+
+	/**
+	 * Sets the solution word for the game.
+	 *
+	 * @param solutionStr The solution word to set.
+	 */
+	public static void setSolution(String solutionStr) {
+		solutionStr = solutionStr.trim().toUpperCase();
+		solution = new Word(solutionStr);
+	}
 
     /**
      * Prompts the user to choose between entering a solution word manually or
@@ -54,7 +85,7 @@ public class Config {
             solutionStr = generateRandomWord( scanner );
         }
 
-        solution = new Word( solutionStr );
+        setSolution(solutionStr);
         System.out.println( "Word object created with the solution word: " + solution );
         return solution.getLength();
     }
@@ -149,6 +180,26 @@ public class Config {
         }
         return sb.toString();
     }
+  
+  	/**
+	 * Generates a random word of the specified length.
+	 *
+	 * @param length The length of the word to generate.
+	 * @return String representing the randomly generated word.
+	 */
+	public static String generateRandomWord(final int length) {
+		if (length > MAX_WORD_LENGTH) {
+			System.out.println("Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + " letters.");
+			return null;
+		}
+
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			final char randomChar = (char) ('A' + Math.random() * ('Z' - 'A' + 1));
+			sb.append(randomChar);
+		}
+		return sb.toString();
+	}
 
     /**
      * Prompts the user to choose an algorithm for solving Wordle and returns
@@ -189,4 +240,5 @@ public class Config {
                 throw new IllegalArgumentException( "Invalid algorithm!" );
         }
     }
+
 }

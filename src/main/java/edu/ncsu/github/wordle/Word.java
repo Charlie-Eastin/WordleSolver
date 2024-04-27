@@ -1,5 +1,9 @@
 package edu.ncsu.github.wordle;
 
+/**
+ * Represents a word in the Wordle game, consisting of an array of letters.
+ * This class provides methods to manipulate and compare words.
+ */
 public class Word {
 
     private Letter[]  letters;    // Array to store the letters of the word
@@ -287,4 +291,5 @@ public class Word {
     public String toString () {
         return asString;
     }
+
 }

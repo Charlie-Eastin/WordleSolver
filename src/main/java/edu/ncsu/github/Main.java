@@ -15,6 +15,7 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
  */
 public class Main {
 
+
     /**
      * The entry point of the program.
      *
@@ -60,4 +61,5 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,13 +1,13 @@
 package edu.ncsu.github.solvers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 // Solver implementing the genetic algorithm treating the problem as a CSP
 public class GeneticAlgSolver implements Solver {
@@ -41,28 +41,14 @@ public class GeneticAlgSolver implements Solver {
         allButOrange = false;
         int popCount = 2;
 
-        // Steps:
-        // 1. Define variables representing character positions in the solution
-        // word.
-
-        // 2. Define domains as all possible letters, restricted by feedback.
         initializeConstraints( solutionLength );
-        // 3. Define constraints enforcing Wordle rules, e.g., unique letters.
 
-        // 4. Initialize population with diverse candidate solutions.
         System.out.println( "Population 1" );
         initializePopulation( POPULATION_SIZE, solutionLength );
         if ( done ) {
             return;
         }
 
-        // CONSTRAIN DOMAIN AT THIS POINT (this is now handled within
-        // initializePopulation())
-        // constrainDomain( POPULATION_SIZE, solutionLength );
-
-        // 5. Evaluate the fitness of the population after constraining the
-        // domains, propogate correct letters into one last best guess for the
-        // generation.
         System.out.println( "Propogation 1" );
         guess = prop();
         done = guess.compareToSolution();
@@ -70,12 +56,6 @@ public class GeneticAlgSolver implements Solver {
             return;
         }
 
-        // 6. Now that we have out best guess from the components of the prior
-        // generation we will mutate a new population and repeat until we are
-        // correct from this guess
-        // The domain will not shrink at all with propogation so we do not need
-        // to worry about constraining the domains of variables again when
-        // checking the guess solution
         do {
             constrainDomainOneWord( guess );
             // The mutate method will constrain the domains of variables as it
@@ -339,14 +319,16 @@ public class GeneticAlgSolver implements Solver {
         return true;
     }
 
-    /**
-     * Constrain the domain of the given word i
-     *
-     * @param w
-     *            the word being used to constrain the domain
-     * @param idx
-     *            the index of this word in the population
-     */
+	/**
+	 * Constrain the domain of the given word.
+	 * This method updates the domain constraints based on the status of each letter in the word.
+	 * If a letter is correctly placed (GREEN_CORRECT), it updates the correct letters array and clears the constraints for that position.
+	 * If a letter is marked as non-existent (GRAY_NONEXISTENT), it removes the letter from all domain constraints.
+	 * If a letter is misplaced (YELLOW_MISPLACED), it removes the letter from the domain constraint of its position.
+	 * Throws a RuntimeException if the letter status is UNKNOWN, indicating it has not been evaluated, or if the status is unsupported (RED or ORANGE).
+	 *
+	 * @param w the word whose domain is being constrained
+   */
     private void constrainDomainOneWord ( final Word w ) {
         for ( int i = 0; i < w.getLength(); i++ ) {
             final Letter currentLetter = w.getLetterAt( i );
