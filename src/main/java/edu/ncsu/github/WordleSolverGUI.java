@@ -3,6 +3,8 @@ package edu.ncsu.github;
 import edu.ncsu.github.wordle.Config;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -43,17 +45,16 @@ public class WordleSolverGUI {
 		generateCheckBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// Enable/disable text fields based on check box selection
+				// Enable/disable text field editing based on check box selection
 				switch (e.getStateChange()) {
 					case ItemEvent.SELECTED:
-						lengthTextField.setEnabled(true);
-						solutionTextField.setEnabled(false);
-						String solution = Config.generateRandomWord(Integer.parseInt(lengthTextField.getText()));
-						solutionTextField.setText(solution);
+						lengthTextField.setEditable(true);
+						solutionTextField.setEditable(false);
+						updateSolution();
 						break;
 					case ItemEvent.DESELECTED:
-						lengthTextField.setEnabled(false);
-						solutionTextField.setEnabled(true);
+						lengthTextField.setEditable(false);
+						solutionTextField.setEditable(true);
 						break;
 				}
 			}
@@ -66,14 +67,44 @@ public class WordleSolverGUI {
 				// Enable/disable interval text field based on check box selection
 				switch (e.getStateChange()) {
 					case ItemEvent.SELECTED:
-						intervalTextField.setEnabled(true);
+						intervalTextField.setEditable(true);
 						break;
 					case ItemEvent.DESELECTED:
-						intervalTextField.setEnabled(false);
+						intervalTextField.setEditable(false);
 						break;
 				}
 			}
 		});
+
+		// Add document listener to the lengthTextField
+		lengthTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSolution();
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSolution();
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateSolution();
+			}
+		});
+	}
+
+	// Helper method to update the solution text field
+	private void updateSolution() {
+		int length = 0;
+		try {
+			length = Integer.parseInt(lengthTextField.getText());
+		} catch (NumberFormatException e) {
+			solutionTextField.setText("");
+			return;
+		}
+		System.out.println(length);
+		String solution = Config.generateRandomWord(length);
+		solutionTextField.setText(solution);
 	}
 
 	/**

@@ -48,7 +48,8 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <enabled value="false"/>
+                  <editable value="false"/>
+                  <enabled value="true"/>
                   <horizontalAlignment value="11"/>
                   <text value="8"/>
                 </properties>
@@ -74,6 +75,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <editable value="false"/>
                   <text value="AAAAAAAA"/>
                 </properties>
               </component>
@@ -151,8 +153,8 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <editable value="true"/>
-                  <enabled value="false"/>
+                  <editable value="false"/>
+                  <enabled value="true"/>
                   <horizontalAlignment value="11"/>
                   <text value="500"/>
                 </properties>
