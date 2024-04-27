@@ -9,10 +9,22 @@ import java.util.Scanner;
  */
 public class Config {
 
+	// Flag indicating whether the GUI is being used
+	final static boolean USING_GUI = true;
+
 	// Maximum length allowed for the solution word
 	final static int MAX_WORD_LENGTH = 100;
 	// Package access so Solvers can't see it
 	static Word solution;
+
+	/**
+	 * Retrieves the flag indicating whether the GUI is being used.
+	 *
+	 * @return True if the GUI is being used, false otherwise.
+	 */
+	public static boolean getUsingGUI() {
+		return USING_GUI;
+	}
 
 	/**
 	 * Retrieves the maximum length allowed for the solution word.

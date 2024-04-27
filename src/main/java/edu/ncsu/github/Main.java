@@ -18,7 +18,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		WordleSolverGUI.display();
+		if (Config.getUsingGUI()) {
+			WordleSolverGUI.display();
+			return;
+		}
 
 		try (Scanner scanner = new Scanner(System.in)) {
 			// Create a solution Word based on user input or generate a random one
