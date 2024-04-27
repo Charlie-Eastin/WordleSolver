@@ -35,9 +35,11 @@ public class Main {
             // Instantiate the appropriate solver based on the chosen algorithm
             switch ( algorithm ) {
                 case BRUTE_FORCE_BASIC:
+                    Config.randomOrangeIndex();
                     solver = new BasicBruteForceSolver();
                     break;
                 case BRUTE_FORCE_ADVANCED:
+                    Config.randomOrangeIndex();
                     solver = new AdvBruteForceSolver();
                     break;
                 case GENETIC:

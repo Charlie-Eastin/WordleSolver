@@ -130,15 +130,15 @@ public class Word {
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
-        boolean wordIsSolution = true;
+        // boolean wordIsSolution = true;
 
         for ( int i = 0; i < Config.solution.getLength(); i++ ) {
             if ( !compareLetterToSolution( i, -1 ) ) {
-                wordIsSolution = false;
+                // wordIsSolution = false;
             }
         }
 
-        if ( wordIsSolution ) {
+        if ( Config.solution.toString().equals( asString ) ) {
             for ( int i = 0; i < Config.solution.getLength(); i++ ) {
                 final Letter l = this.getLetterAt( i );
                 l.setStatus( LetterStatus.GREEN_CORRECT );
@@ -154,7 +154,7 @@ public class Word {
 
         System.out.println( "\u001B[0m" ); // Move to the next line after
                                            // printing the word
-        return wordIsSolution;
+        return Config.solution.toString().equals( asString );
     }
 
     /**
