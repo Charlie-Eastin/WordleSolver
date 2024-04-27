@@ -5,7 +5,7 @@ import edu.ncsu.github.solvers.Algorithm;
 import java.util.Scanner;
 
 /**
- * Contains methods for initial setup of the Wordle.
+ * Contains methods for initial setup of the Wordle game.
  */
 public class Config {
 
@@ -13,6 +13,15 @@ public class Config {
 	final static int MAX_WORD_LENGTH = 100;
 	// Package access so Solvers can't see it
 	static Word solution;
+
+	/**
+	 * Retrieves the maximum length allowed for the solution word.
+	 *
+	 * @return The maximum length allowed for the solution word.
+	 */
+	public static int getMaxWordLength() {
+		return MAX_WORD_LENGTH;
+	}
 
 	/**
 	 * Sets the solution word for the game.
