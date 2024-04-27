@@ -1,5 +1,7 @@
 package edu.ncsu.github;
 
+import edu.ncsu.github.wordle.Config;
+
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -16,7 +18,7 @@ public class WordleSolverGUI {
 	private JRadioButton advBruteRadio;
 	private JRadioButton geneticRadio;
 	private JCheckBox generateCheckBox;
-	private JTextField lettersTextField;
+	private JTextField lengthTextField;
 	private JTextField solutionTextField;
 	private JPanel mainPanel;
 	private JPanel solutionPanel;
@@ -44,11 +46,13 @@ public class WordleSolverGUI {
 				// Enable/disable text fields based on check box selection
 				switch (e.getStateChange()) {
 					case ItemEvent.SELECTED:
-						lettersTextField.setEnabled(true);
+						lengthTextField.setEnabled(true);
 						solutionTextField.setEnabled(false);
+						String solution = Config.generateRandomWord(Integer.parseInt(lengthTextField.getText()));
+						solutionTextField.setText(solution);
 						break;
 					case ItemEvent.DESELECTED:
-						lettersTextField.setEnabled(false);
+						lengthTextField.setEnabled(false);
 						solutionTextField.setEnabled(true);
 						break;
 				}

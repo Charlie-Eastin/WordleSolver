@@ -107,9 +107,9 @@ public class Config {
 		return generateRandomWord(length);
 	}
 
-	private static String generateRandomWord(final int length) {
+	public static String generateRandomWord(final int length) {
 		if (length > MAX_WORD_LENGTH) {
-			System.out.println("Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + "letters.");
+			System.out.println("Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + " letters.");
 			return null;
 		}
 
