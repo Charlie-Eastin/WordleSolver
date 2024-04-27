@@ -17,6 +17,9 @@ public class Main {
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {
+
+		WordleSolverGUI.display();
+
 		try (Scanner scanner = new Scanner(System.in)) {
 			// Create a solution Word based on user input or generate a random one
 			int solutionLength = Config.makeSolution(scanner);
