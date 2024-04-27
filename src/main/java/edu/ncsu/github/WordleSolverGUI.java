@@ -88,19 +88,19 @@ public class WordleSolverGUI {
 			}
 		});
 
-// Add document filter to the lengthTextField to allow only numbers
+		// Add document filter to the lengthTextField to allow only numbers
 		((AbstractDocument) lengthTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
 			@Override
 			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
 				// Keep only numeric characters
-				String newText = text.replaceAll("[^\\d]", "");
+				String newText = text.replaceAll("\\D", "");
 				super.replace(fb, offset, length, newText, attrs);
 			}
 
 			@Override
 			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
 				// Keep only numeric characters
-				String newText = string.replaceAll("[^\\d]", "");
+				String newText = string.replaceAll("\\D", "");
 				super.insertString(fb, offset, newText, attr);
 			}
 		});
