@@ -44,12 +44,8 @@ public class Main {
 
 			// Solve the Wordle problem using the selected solver
 			solver.solve(solutionLength);
-		} catch (WordLengthMismatchException e) {
-			System.err.println("Error: Word length mismatch.");
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			System.err.println("Error: Illegal argument.");
-			e.printStackTrace();
+		} catch (WordLengthMismatchException | IllegalArgumentException e) {
+			System.err.println("Error: " + e);
 		}
 	}
 }
