@@ -17,6 +17,9 @@ public class Main {
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {
+
+		WordleSolverGUI.display();
+
 		try (Scanner scanner = new Scanner(System.in)) {
 			// Create a solution Word based on user input or generate a random one
 			int solutionLength = Config.makeSolution(scanner);
@@ -41,12 +44,8 @@ public class Main {
 
 			// Solve the Wordle problem using the selected solver
 			solver.solve(solutionLength);
-		} catch (WordLengthMismatchException e) {
-			System.err.println("Error: Word length mismatch.");
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			System.err.println("Error: Illegal argument.");
-			e.printStackTrace();
+		} catch (WordLengthMismatchException | IllegalArgumentException e) {
+			System.err.println("Error: " + e);
 		}
 	}
 }
