@@ -37,7 +37,6 @@ public class WordleSolverGUI {
 	private JPanel solutionPanel;
 	private JPanel algPanel;
 	private JPanel mutationsPanel;
-	private JPanel centerPanel;
 
 	/**
 	 * Constructor for WordleSolverGUI class.

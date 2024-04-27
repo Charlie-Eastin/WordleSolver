@@ -173,12 +173,7 @@ public class Config {
             }
         }
 
-        final StringBuilder sb = new StringBuilder();
-        for ( int i = 0; i < length; i++ ) {
-            final char randomChar = (char) ( 'A' + Math.random() * ( 'Z' - 'A' + 1 ) );
-            sb.append( randomChar );
-        }
-        return sb.toString();
+		return generateRandomWord(length);
     }
   
   	/**
