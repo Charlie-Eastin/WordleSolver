@@ -14,6 +14,11 @@ public class Config {
 	// Package access so Solvers can't see it
 	static Word solution;
 
+	public static void setSolution(String solutionStr) {
+		solutionStr = solutionStr.trim().toUpperCase();
+		solution = new Word(solutionStr);
+	}
+
 	/**
 	 * Prompts the user to choose between entering a solution word manually or
 	 * generating one automatically, then creates a Word object representing the
@@ -48,7 +53,7 @@ public class Config {
 			solutionStr = generateRandomWord(scanner);
 		}
 
-		solution = new Word(solutionStr);
+		setSolution(solutionStr);
 		System.out.println("Word object created with the solution word: " + solution);
 		return solution.getLength();
 	}
