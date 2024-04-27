@@ -10,6 +10,10 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -99,6 +103,23 @@ public class WordleSolverGUI {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateSolution();
+			}
+		});
+
+		// Add document filter to the solutionTextField to allow only letters and convert lowercase letters to uppercase
+		((AbstractDocument) solutionTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				// Convert lowercase letters to uppercase
+				String newText = text.replaceAll("[^a-zA-Z]", "").toUpperCase();
+				super.replace(fb, offset, length, newText, attrs);
+			}
+
+			@Override
+			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+				// Convert lowercase letters to uppercase
+				String newText = string.replaceAll("[^a-zA-Z]", "").toUpperCase();
+				super.insertString(fb, offset, newText, attr);
 			}
 		});
 
