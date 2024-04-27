@@ -28,12 +28,19 @@ public class GeneticAlgSolver implements Solver {
 
     public List<Word>            population;
 
+    boolean[]                    orangeLetters;
+
+    boolean                      allButOrange;
+
+    boolean                      done            = false;
+
     @Override
     public void solve ( final int solutionLength ) throws WordLengthMismatchException {
         guess = new Word( solutionLength );
+        orangeLetters = new boolean[solutionLength];
+        allButOrange = false;
         int popCount = 2;
-        // TODO: Implement genetic algorithm to solve Wordle as a Constraint
-        // Satisfaction Problem (CSP).
+
         // Steps:
         // 1. Define variables representing character positions in the solution
         // word.
@@ -45,6 +52,9 @@ public class GeneticAlgSolver implements Solver {
         // 4. Initialize population with diverse candidate solutions.
         System.out.println( "Population 1" );
         initializePopulation( POPULATION_SIZE, solutionLength );
+        if ( done ) {
+            return;
+        }
 
         // CONSTRAIN DOMAIN AT THIS POINT (this is now handled within
         // initializePopulation())
@@ -55,7 +65,10 @@ public class GeneticAlgSolver implements Solver {
         // generation.
         System.out.println( "Propogation 1" );
         guess = prop();
-        guess.compareToSolution();
+        done = guess.compareToSolution();
+        if ( done ) {
+            return;
+        }
 
         // 6. Now that we have out best guess from the components of the prior
         // generation we will mutate a new population and repeat until we are
@@ -83,11 +96,75 @@ public class GeneticAlgSolver implements Solver {
             System.out.println( "Propogation " + popCount );
             guess = prop();
             // print();
+            done = guess.compareToSolution();
+            allButOrange = onlyOrange( guess );
 
         }
-        while ( !guess.compareToSolution() );
-        // After this do/while loop guess should be correct and the search can
-        // conclude propogation.
+        while ( !done && !allButOrange );
+
+        // By this point all that will be left will be the orange indexes
+        if ( onlyOrange( guess ) && !done ) {
+            System.out.println( "Concluded intial search portion: still looking for orange letters " + !done );
+            handleOrange( guess );
+        }
+        System.out.println( Word.guesses );
+
+    }
+
+    private void handleOrange ( final Word w ) throws WordLengthMismatchException {
+        final int idx = locateNextUnknown( 0 );
+        final int nextIdx = locateNextUnknown( idx + 1 );
+        for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
+            if ( nextIdx != -1 && orangeHelper( w, nextIdx ) ) {
+                return;
+            }
+            w.setLetter( idx, constraints.get( idx ).get( i ) );
+            if ( w.compareToSolution() ) {
+                return;
+            }
+
+        }
+
+    }
+
+    private boolean orangeHelper ( final Word w, final int idx ) throws WordLengthMismatchException {
+        final int nextIdx = locateNextUnknown( idx + 1 );
+        for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
+            if ( nextIdx != -1 && orangeHelper( w, nextIdx ) ) {
+                return true;
+            }
+            w.setLetter( idx, constraints.get( idx ).get( i ) );
+            if ( w.compareToSolution() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Locates the next orange index from idx to the end of the array
+     *
+     * @param idx
+     *            the starting index of search
+     * @return the index of the orangeIdx array containing true;
+     */
+    private int locateNextUnknown ( final int idx ) {
+        for ( int i = idx; i < orangeLetters.length; i++ ) {
+            if ( orangeLetters[i] ) {
+
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Initializes the orangeIndexes
+     */
+    private void locateOrangeIdx () {
+        for ( int i = 0; i < guess.getLength(); i++ ) {
+            orangeLetters[i] = guess.getLetterAt( i ).getStatus() == LetterStatus.ORANGE_OBSCURED;
+        }
 
     }
 
@@ -159,10 +236,17 @@ public class GeneticAlgSolver implements Solver {
             // intended since each generation
             // would be counted as a guess to the total, but it is worth noting
             try {
-                tempWord.compareToSolution();
+                done = tempWord.compareToSolution();
                 // We should constrain the domains after each guess (will make
                 // subsequent guesses more reliable although it will slow down
                 // the guess process)
+                if ( i == 0 ) {
+                    guess = tempWord;
+                    locateOrangeIdx();
+                }
+                if ( done ) {
+                    return;
+                }
                 constrainDomainOneWord( tempWord );
             }
             catch ( final WordLengthMismatchException e ) {
@@ -227,7 +311,7 @@ public class GeneticAlgSolver implements Solver {
             }
             try {
                 // This guess is correct and we can stop
-                if ( nextGen.compareToSolution() ) {
+                if ( nextGen.compareToSolution() || onlyOrange( nextGen ) ) {
                     population.add( nextGen );
                     return i;
                 }
@@ -244,6 +328,15 @@ public class GeneticAlgSolver implements Solver {
         }
 
         return -1;
+    }
+
+    private boolean onlyOrange ( final Word w ) {
+        for ( int i = 0; i < w.getLength(); i++ ) {
+            if ( w.getLetterAt( i ).getStatus() != LetterStatus.GREEN_CORRECT && !orangeLetters[i] ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

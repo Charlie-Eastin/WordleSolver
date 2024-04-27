@@ -24,6 +24,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
 
         final Word temp = new Word( solutionLength );
         if ( temp.compareToSolution() ) {
+            System.out.println( Word.guesses );
             return true;
         }
         locateOrangeIdx( temp );
@@ -41,6 +42,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
                 temp.setLetter( i, c );
                 if ( temp.compareToSolution() ) {
                     // System.out.println( "Exits here" );
+                    System.out.println( Word.guesses );
                     return true;
                 }
 
@@ -57,6 +59,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
          * guess.compareLetterToSolution( i, ++guessCount ); handleLetterAt( i
          * ); } while ( !letterIsCorrect ); }
          */
+        System.out.println( Word.guesses );
         return true;
     }
 

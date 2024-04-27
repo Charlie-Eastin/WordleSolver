@@ -2,8 +2,10 @@ package edu.ncsu.github.wordle;
 
 public class Word {
 
-    private Letter[] letters;  // Array to store the letters of the word
-    private String   asString; // String representation of the word
+    private Letter[]  letters;    // Array to store the letters of the word
+    private String    asString;   // String representation of the word
+
+    public static int guesses = 0;
 
     /**
      * Constructor for creating a Word object with a specified length.
@@ -130,6 +132,7 @@ public class Word {
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
+        guesses++;
         // boolean wordIsSolution = true;
 
         for ( int i = 0; i < Config.solution.getLength(); i++ ) {
