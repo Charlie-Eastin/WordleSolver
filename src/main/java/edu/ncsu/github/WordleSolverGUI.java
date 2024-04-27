@@ -91,6 +91,22 @@ public class WordleSolverGUI {
 				updateSolution();
 			}
 		});
+
+		// Add document listener to the lengthTextField
+		solutionTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+		});
 	}
 
 	// Helper method to update the solution text field
@@ -105,6 +121,10 @@ public class WordleSolverGUI {
 		System.out.println(length);
 		String solution = Config.generateRandomWord(length);
 		solutionTextField.setText(solution);
+	}
+
+	private void updateSolveButton() {
+		solveButton.setEnabled(!solutionTextField.getText().trim().isEmpty());
 	}
 
 	/**
