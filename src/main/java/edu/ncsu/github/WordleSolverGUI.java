@@ -45,6 +45,7 @@ public class WordleSolverGUI {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
 				 UnsupportedLookAndFeelException e) {
+			// Print error message if look and feel setting fails
 			System.out.println("Error while setting GUI look and feel: " + e);
 		}
 
@@ -89,77 +90,43 @@ public class WordleSolverGUI {
 			public void insertUpdate(DocumentEvent e) {
 				updateSolution();
 			}
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				updateSolution();
 			}
+
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateSolution();
 			}
 		});
 
-		// Add document listener to the lengthTextField
+		// Add document listener to the solutionTextField
 		solutionTextField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				updateSolveButton();
 			}
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				updateSolveButton();
 			}
+
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				updateSolveButton();
 			}
 		});
+
+		// Add action listener to the solveButton
 		solveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				solve();
 			}
 		});
-	}
-
-	// Helper method to update the solution text field
-	private void updateSolution() {
-		int length = 0;
-		try {
-			length = Integer.parseInt(lengthTextField.getText());
-		} catch (NumberFormatException e) {
-			solutionTextField.setText("");
-			return;
-		}
-		System.out.println(length);
-		String solution = Config.generateRandomWord(length);
-		solutionTextField.setText(solution);
-	}
-
-	private void updateSolveButton() {
-		solveButton.setEnabled(!solutionTextField.getText().trim().isEmpty());
-	}
-
-	private void solve() {
-		Solver solver = null;
-
-		if (basicBruteRadio.isSelected()) {
-			solver = new BasicBruteForceSolver();
-		} else if (advBruteRadio.isSelected()) {
-			solver = new AdvBruteForceSolver();
-		} else if (geneticRadio.isSelected()) {
-			solver = new GeneticAlgSolver();
-		} else {
-			throw new RuntimeException("No algorithm selected. Can't solver Wordle.");
-		}
-
-		String solutionStr = solutionTextField.getText();
-		Config.setSolution(solutionStr);
-		try {
-			solver.solve(solutionStr.length());
-		} catch (WordLengthMismatchException e) {
-			System.err.println("Word length mismatch: " + e);
-		}
 	}
 
 	/**
@@ -173,5 +140,46 @@ public class WordleSolverGUI {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+	}
+
+	// Helper method to update the solution text field
+	private void updateSolution() {
+		int length = 0;
+		try {
+			length = Integer.parseInt(lengthTextField.getText());
+		} catch (NumberFormatException e) {
+			solutionTextField.setText("");
+			return;
+		}
+		String solution = Config.generateRandomWord(length);
+		solutionTextField.setText(solution);
+	}
+
+	// Helper method to update the solve button state
+	private void updateSolveButton() {
+		solveButton.setEnabled(!solutionTextField.getText().trim().isEmpty());
+	}
+
+	// Method to solve the Wordle
+	private void solve() {
+		Solver solver = null;
+
+		if (basicBruteRadio.isSelected()) {
+			solver = new BasicBruteForceSolver();
+		} else if (advBruteRadio.isSelected()) {
+			solver = new AdvBruteForceSolver();
+		} else if (geneticRadio.isSelected()) {
+			solver = new GeneticAlgSolver();
+		} else {
+			throw new RuntimeException("No algorithm selected. Can't solve Wordle.");
+		}
+
+		String solutionStr = solutionTextField.getText();
+		Config.setSolution(solutionStr);
+		try {
+			solver.solve(solutionStr.length());
+		} catch (WordLengthMismatchException e) {
+			System.err.println("Word length mismatch: " + e);
+		}
 	}
 }

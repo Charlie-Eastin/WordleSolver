@@ -14,6 +14,11 @@ public class Config {
 	// Package access so Solvers can't see it
 	static Word solution;
 
+	/**
+	 * Sets the solution word for the game.
+	 *
+	 * @param solutionStr The solution word to set.
+	 */
 	public static void setSolution(String solutionStr) {
 		solutionStr = solutionStr.trim().toUpperCase();
 		solution = new Word(solutionStr);
@@ -24,7 +29,7 @@ public class Config {
 	 * generating one automatically, then creates a Word object representing the
 	 * solution word based on the chosen method.
 	 *
-	 * @param scanner Scanner object for user input
+	 * @param scanner Scanner object for user input.
 	 * @return The length of the generated solution word.
 	 */
 	public static int makeSolution(final Scanner scanner) {
@@ -62,8 +67,8 @@ public class Config {
 	 * Prompts the user to enter a solution word manually and validates the
 	 * input.
 	 *
-	 * @param scanner Scanner object for user input
-	 * @return String representing the manually entered solution word
+	 * @param scanner Scanner object for user input.
+	 * @return String representing the manually entered solution word.
 	 */
 	private static String enterManualWord(final Scanner scanner) {
 		String solutionStr = null;
@@ -78,9 +83,8 @@ public class Config {
 					&& solutionStr.length() <= MAX_WORD_LENGTH) {
 				isValidWord = true;
 			} else {
-				System.out
-						.println("Invalid word! Please enter a word containing only letters with a maximum length of "
-								+ MAX_WORD_LENGTH + ".");
+				System.out.println("Invalid word! Please enter a word containing only letters with a maximum length of "
+						+ MAX_WORD_LENGTH + ".");
 			}
 		}
 		return solutionStr;
@@ -89,8 +93,8 @@ public class Config {
 	/**
 	 * Generates a random word of the specified length and returns it.
 	 *
-	 * @param scanner Scanner object for user input
-	 * @return String representing the randomly generated word
+	 * @param scanner Scanner object for user input.
+	 * @return String representing the randomly generated word.
 	 */
 	private static String generateRandomWord(final Scanner scanner) {
 		int length;
@@ -101,8 +105,7 @@ public class Config {
 				if (length >= 1 && length <= MAX_WORD_LENGTH) {
 					break;
 				} else {
-					System.out
-							.println("Invalid length! Please enter a number between 1 and " + MAX_WORD_LENGTH + ".");
+					System.out.println("Invalid length! Please enter a number between 1 and " + MAX_WORD_LENGTH + ".");
 				}
 			} catch (final NumberFormatException e) {
 				System.out.println("Invalid input! Please enter a valid number.");
@@ -112,6 +115,12 @@ public class Config {
 		return generateRandomWord(length);
 	}
 
+	/**
+	 * Generates a random word of the specified length.
+	 *
+	 * @param length The length of the word to generate.
+	 * @return String representing the randomly generated word.
+	 */
 	public static String generateRandomWord(final int length) {
 		if (length > MAX_WORD_LENGTH) {
 			System.out.println("Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + " letters.");
@@ -130,8 +139,8 @@ public class Config {
 	 * Prompts the user to choose an algorithm for solving Wordle and returns
 	 * the chosen Algorithm enum value.
 	 *
-	 * @param scanner Scanner object for user input
-	 * @return Algorithm enum value representing the chosen algorithm
+	 * @param scanner Scanner object for user input.
+	 * @return Algorithm enum value representing the chosen algorithm.
 	 */
 	public static Algorithm chooseAlg(final Scanner scanner) {
 		String algorithm;
