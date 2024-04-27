@@ -75,7 +75,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <editable value="false"/>
+                  <editable value="true"/>
                   <text value="AAAAAAAA"/>
                 </properties>
               </component>
