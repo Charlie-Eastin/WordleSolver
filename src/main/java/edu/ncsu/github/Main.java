@@ -15,7 +15,6 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
  */
 public class Main {
 
-
     /**
      * The entry point of the program.
      *
@@ -23,6 +22,11 @@ public class Main {
      *            The command line arguments.
      */
     public static void main ( final String[] args ) {
+        if (Config.getUsingGUI()) {
+            WordleSolverGUI.display();
+            return;
+        }
+
         try ( Scanner scanner = new Scanner( System.in ) ) {
             // Create a solution Word based on user input or generate a random
             // one
