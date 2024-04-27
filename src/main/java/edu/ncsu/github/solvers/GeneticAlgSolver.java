@@ -1,369 +1,324 @@
 package edu.ncsu.github.solvers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 // Solver implementing the genetic algorithm treating the problem as a CSP
 public class GeneticAlgSolver implements Solver {
 
-    // Represents the List of characters for each section of the words
+	// Represents the List of characters for each section of the words
 
-    protected List<List<Letter>> constraints     = new ArrayList<>();
-    // Tracks the current guess along with each letter's status
-    protected Word               guess;
-    // Number of guesses made
-    int                          guessCount      = 0;
+	static final int POPULATION_SIZE = 10;
+	static final double MUTATION_RATE = 0.01;
+	static final Random random = new Random();
+	public List<Word> population;
+	protected List<List<Letter>> constraints = new ArrayList<>();
+	// Tracks the current guess along with each letter's status
+	protected Word guess;
+	// Number of guesses made
+	int guessCount = 0;
+	Letter[] correctLetters;
 
-    static final int             POPULATION_SIZE = 10;
+	/**
+	 * Solves the Wordle puzzle using a genetic algorithm approach.
+	 *
+	 * @param solutionLength the length of the solution word
+	 * @throws WordLengthMismatchException if there is a mismatch in word length
+	 */
+	@Override
+	public void solve(final int solutionLength) throws WordLengthMismatchException {
+		guess = new Word(solutionLength);
+		int popCount = 2;
+		correctLetters = new Letter[solutionLength];
 
-    static final double          MUTATION_RATE   = 0.01;
+		initializeConstraints(solutionLength);
 
-    static final Random          random          = new Random();
+		System.out.println("Population 1");
+		initializePopulation(POPULATION_SIZE, solutionLength);
 
-    public List<Word>            population;
+		guess = prop();
+		guess.compareToSolution();
 
-    Letter[]                     correctLetters;
+		do {
+			constrainDomainOneWord(guess);
+			// The mutate method will constrain the domains of variables as it
+			// goes and makes intermediate guesses
+			System.out.println("Population " + popCount);
+			final int check = mutate();
+			if (popCount == 50) {
+				break;
+			}
+			popCount++;
+			// If an intermediate guess is correct we will stop and be done, no
+			// need to constrain domain or propagate
+			if (check != -1) {
+				guess = population.get(check);
+				break;
+			}
+			// constrainDomain();
+			guess = prop();
+		} while (!guess.compareToSolution());
+		// After this do/while loop guess should be correct and the search can
+		// conclude propagation.
+	}
 
-    @Override
-    public void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        guess = new Word( solutionLength );
-        int popCount = 2;
-        correctLetters = new Letter[solutionLength];
-        // TODO: Implement genetic algorithm to solve Wordle as a Constraint
-        // Satisfaction Problem (CSP).
-        // Steps:
-        // 1. Define variables representing character positions in the solution
-        // word.
+	/**
+	 * Prints the constraints for debugging purposes.
+	 */
+	void print() {
+		for (int i = 0; i < constraints.size(); i++) {
+			for (int j = 0; j < constraints.get(i).size(); j++) {
+				System.out.print(constraints.get(i).get(j).getCharacter() + ",");
+			}
+			System.out.print("\n");
+		}
+	}
 
-        // 2. Define domains as all possible letters, restricted by feedback.
-        initializeConstraints( solutionLength );
-        // 3. Define constraints enforcing Wordle rules, e.g., unique letters.
+	/**
+	 * Adds each possible character to the List constraints using ASCII values for simplicity.
+	 *
+	 * @param size the size of the word
+	 */
+	protected void initializeConstraints(final int size) {
+		for (int i = 0; i < size; i++) {
+			// For now, we are only considering uppercase letters
+			final List<Letter> letterConstraint = new ArrayList<>();
+			/*
+			 * for ( int j = 0; j < 26; j++ ) { letterConstraint.add( new
+			 * Letter( (char) ( j + 97 ) ) ); }
+			 */
+			for (int j = 0; j < 26; j++) {
+				letterConstraint.add(new Letter((char) (j + 65)));
+			}
+			// For now we are only considering uppercase letters
+			/*
+			 * for ( int j = 0; j < 10; j++ ) { letterConstraint.add( new
+			 * Letter( (char) ( j + 48 ) ) ); }
+			 */
+			constraints.add(letterConstraint);
+		}
+	}
 
-        // 4. Initialize population with diverse candidate solutions.
-        System.out.println( "Population 1" );
-        initializePopulation( POPULATION_SIZE, solutionLength );
+	/**
+	 * Initializes the current population with random strings.
+	 *
+	 * @param populationSize Size of the total population.
+	 * @param wordSize       Size of each word in the population.
+	 */
+	protected void initializePopulation(final int populationSize, final int wordSize) {
+		// Initialize the population list
+		population = new ArrayList<>();
 
-        // print();
+		// Populate the population with random words
+		for (int i = 0; i < populationSize; i++) {
+			// Create a new Word object with the specified wordSize
+			final Word tempWord = new Word(wordSize);
 
-        // CONSTRAIN DOMAIN AT THIS POINT (this is now handled within
-        // initializePopulation())
-        // constrainDomain( POPULATION_SIZE, solutionLength );
+			// Populate the Word object with random characters based on constraints
+			for (int j = 0; j < wordSize; j++) {
+				// Check if there are constraints for this position
+				if (constraints.get(j).isEmpty()) {
+					// If no constraints, set the letter to a correct letter
+					tempWord.setLetter(j, correctLetters[j]);
+				} else {
+					// If constraints exist, select a random character from the constraints
+					final int randomCharBound = random.nextInt(constraints.get(j).size());
+					tempWord.setLetter(j, constraints.get(j).get(randomCharBound).getCharacter());
+				}
+			}
 
-        // 5. Evaluate the fitness of the population after constraining the
-        // domains, propogate correct letters into one last best guess for the
-        // generation.
-        guess = prop();
-        guess.compareToSolution();
+			// Compare the word to the solution and constrain domains
+			try {
+				tempWord.compareToSolution();
+				constrainDomainOneWord(tempWord);
+			} catch (final WordLengthMismatchException e) {
+				// Handle exception
+				e.printStackTrace();
+			}
 
-        // print();
+			// Add the Word object to the population
+			population.add(tempWord);
+		}
+	}
 
-        // 6. Now that we have out best guess from the components of the prior
-        // generation we will mutate a new population and repeat until we are
-        // correct from this guess
-        // The domain will not shrink at all with propogation so we do not need
-        // to worry about constraining the domains of variables again when
-        // checking the guess solution
-        do {
-            constrainDomainOneWord( guess );
-            // The mutate method will constrain the domains of variables as it
-            // goes and makes intermediate guesses
-            System.out.println( "Population " + popCount );
-            final int check = mutate();
-            if ( popCount == 50 ) {
-                break;
-            }
-            popCount++;
-            // If an intermediate guess is correct we will stop and be done, no
-            // need to constrain domain or propogate
-            if ( check != -1 ) {
-                guess = population.get( check );
-                break;
-            }
-            // constrainDomain();
-            guess = prop();
-            // print();
+//	/**
+//	 * Constrains the domain for the current population
+//	 *
+//	 * @param populationSize size of the total population
+//	 * @param wordSize       size of the word
+//	 */
+//	protected void constrainDomain(final int populationSize, final int wordSize) {
+//		for (int i = 0; i < populationSize; i++) {
+//			final Word temp = population.get(i);
+//			for (int j = 0; j < wordSize; j++) {
+//				final Letter currentLetter = temp.getLetterAt(j);
+//				final LetterStatus status = currentLetter.getStatus();
+//
+//				switch (status) {
+//					case GREEN_CORRECT: // if the letter is green, do nothing
+//						break;
+//					case GRAY_NONEXISTENT: // if the letter is gray, remove from
+//						// all domains
+//						for (int k = 0; k < wordSize; k++) {
+//							constraints.get(k).remove(currentLetter);
+//						}
+//						break;
+//					case YELLOW_MISPLACED: // if the letter is yellow, remove
+//						// from current domain
+//						constraints.get(j).remove(currentLetter);
+//						break;
+//					case UNKNOWN: // Throw an exception if the letter has not
+//						// been evaluated
+//						throw new RuntimeException("Letter has not been evaluated.");
+//					default: // Throw an exception for unsupported statuses
+//						throw new RuntimeException("RED and ORANGE status not yet supported.");
+//
+//				}
+//			}
+//		}
+//	}
 
-        }
-        while ( !guess.compareToSolution() );
-        // After this do/while loop guess should be correct and the search can
-        // conclude propogation.
+	/**
+	 * Propagate all correct letters from the previous population into a new
+	 * Word. This word will become the basis of the next generation.
+	 *
+	 * @return The propagated word choice.
+	 */
+	private Word prop() {
+		final Word temp = new Word(population.get(0).getLength());
+		for (int i = 0; i < population.size(); i++) {
+			final Word check = population.get(i);
+			for (int j = 0; j < check.getLength(); j++) {
+				final Letter let = check.getLetterAt(j);
+				if (let.getStatus() == LetterStatus.GREEN_CORRECT) {
+					temp.setLetter(j, let);
+				} else {
+					if (!constraints.get(j).isEmpty()) {
+						final int randomCharBound = random.nextInt(constraints.get(j).size());
+						temp.setLetter(j, constraints.get(j).get(randomCharBound));
+					} else {
+						temp.setLetter(j, correctLetters[j]);
+					}
+				}
+			}
+		}
+		return temp;
+	}
 
-    }
+	/**
+	 * Mutates the guess word into a new population which will then be
+	 * propagated, and have the domain.
+	 *
+	 * @return The index of a correct guess if one exists, or -1 if one does not.
+	 */
+	private int mutate() {
+		// This is the baseline for all future guesses
 
-    void print () {
-        for ( int i = 0; i < constraints.size(); i++ ) {
-            for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
-                System.out.print( constraints.get( i ).get( j ).getCharacter() + "," );
-            }
-            System.out.print( "\n" );
-        }
-    }
+		final Word baseline = guess;
+		population = new ArrayList<Word>();
+		for (int i = 0; i < POPULATION_SIZE; i++) {
+			final Word nextGen = new Word(baseline.getLength());
+			final Random rand = new Random();
+			for (int j = 0; j < baseline.getLength(); j++) {
+				final Letter oldLetter = baseline.getLetterAt(j);
+				if (oldLetter.getStatus() == LetterStatus.GREEN_CORRECT) {
+					nextGen.setLetter(j, oldLetter);
+				} else {
+					if (constraints.get(j).isEmpty()) {
+						nextGen.setLetter(j, correctLetters[j]);
+					} else {
+						nextGen.setLetter(j, constraints.get(j).get(rand.nextInt(constraints.get(j).size())));
+					}
 
-    /**
-     * Adds in each possible character to the List constraints using ascii
-     * values for simplicity
-     *
-     * @param size
-     *            the size of the word
-     */
-    protected void initializeConstraints ( final int size ) {
-        for ( int i = 0; i < size; i++ ) {
-            // For now we are only considering uppercase letters
-            final List<Letter> letterConstraint = new ArrayList<>();
-            /*
-             * for ( int j = 0; j < 26; j++ ) { letterConstraint.add( new
-             * Letter( (char) ( j + 97 ) ) ); }
-             */
-            for ( int j = 0; j < 26; j++ ) {
-                letterConstraint.add( new Letter( (char) ( j + 65 ) ) );
-            }
-            // For now we are only considering uppercase letters
-            /*
-             * for ( int j = 0; j < 10; j++ ) { letterConstraint.add( new
-             * Letter( (char) ( j + 48 ) ) ); }
-             */
-            constraints.add( letterConstraint );
-        }
-    }
+				}
+			}
+			try {
+				// This guess is correct and we can stop
+				if (nextGen.compareToSolution()) {
+					population.add(nextGen);
+					return i;
+				}
+				// We should constrain the domains after each guess (will make
+				// subsequent guesses more reliable, although it will slow down
+				// the guess process)
+				constrainDomainOneWord(nextGen);
+			} catch (final WordLengthMismatchException e) {
+				e.printStackTrace();
+			}
+			// Add the guess to the population
+			population.add(nextGen);
+		}
+		return -1;
+	}
 
-    /**
-     * initializes the current population with random strings
-     *
-     * @param populationSize
-     *            size of the total population
-     * @param wordSize
-     *            size of the word
-     */
-    protected void initializePopulation ( final int populationSize, final int wordSize ) {
+	/**
+	 * Constrain the domain of the given word.
+	 * This method updates the domain constraints based on the status of each letter in the word.
+	 * If a letter is correctly placed (GREEN_CORRECT), it updates the correct letters array and clears the constraints for that position.
+	 * If a letter is marked as non-existent (GRAY_NONEXISTENT), it removes the letter from all domain constraints.
+	 * If a letter is misplaced (YELLOW_MISPLACED), it removes the letter from the domain constraint of its position.
+	 * Throws a RuntimeException if the letter status is UNKNOWN, indicating it has not been evaluated, or if the status is unsupported (RED or ORANGE).
+	 *
+	 * @param w the word whose domain is being constrained
+	 */
+	private void constrainDomainOneWord(final Word w) {
+		for (int i = 0; i < w.getLength(); i++) {
+			final Letter currentLetter = w.getLetterAt(i);
+			final LetterStatus status = currentLetter.getStatus();
 
-        population = new ArrayList<Word>();
-        for ( int i = 0; i < populationSize; i++ ) {
-            final Word tempWord = new Word( wordSize );
-            for ( int j = 0; j < wordSize; j++ ) {
-                // Gets the upper bound for the randomCharacters of the
-                // constraint
-                if ( constraints.get( j ).isEmpty() ) {
-                    tempWord.setLetter( j, correctLetters[j] );
-                }
-                else {
-                    final int randomCharBound = random.nextInt( constraints.get( j ).size() );
-                    // Sets the letter to a random letter in the constraints
-                    // from 0
-                    // to the bound
-                    tempWord.setLetter( j, constraints.get( j ).get( randomCharBound ).getCharacter() );
-                }
+			switch (status) {
+				case GREEN_CORRECT:
+					correctLetters[i] = currentLetter;
+					constraints.get(i).clear();
+					break;
+				case GRAY_NONEXISTENT: // if the letter is gray, remove from
+					// all domains
+					// TODO UPDATE TO BE CORRECT
+					final int size = w.getLetters().length;
+					for (int k = 0; k < size; k++) { //
+						final int constraintSize = constraints.get(k).size();
+						/**
+						 * THIS COULD BE AN ISSUE. FOR EXAMPLE IF THERE WAS
+						 * ALREADY A GREEN T in PLACE 1, THEN IT GUESSES A T FOR
+						 * POSITION 4 IT WILL REMOVE THE T FROM ALL INDEXES,
+						 * INCLUDING THIS CORRECT INDEX.
+						 */
+						for (int j = 0; j < constraintSize; j++) {
+							if (constraints.get(k).get(j).equals(currentLetter)) {
+								constraints.get(k).remove(j);
+								break;
+							}
 
-            }
-            // Currently, this counts as a guess. I believe this should be
-            // intended since each generation
-            // would be counted as a guess to the total, but it is worth noting
-            try {
-                tempWord.compareToSolution();
-                // We should constrain the domains after each guess (will make
-                // subsequent guesses more reliable although it will slow down
-                // the guess process)
-                constrainDomainOneWord( tempWord );
-            }
-            catch ( final WordLengthMismatchException e ) {
-                e.printStackTrace();
-            }
-            population.add( tempWord );
-        }
+						}
 
-    }
-
-    // /**
-    // * Constrains the domain for the current population
-    // *
-    // * @param populationSize
-    // * size of the total population
-    // * @param wordSize
-    // * size of the word
-    // */
-    // protected void constrainDomain ( final int populationSize, final int
-    // wordSize ) {
-    // for ( int i = 0; i < populationSize; i++ ) {
-    // final Word temp = population.get( i );
-    // for ( int j = 0; j < wordSize; j++ ) {
-    // final Letter currentLetter = temp.getLetterAt( j );
-    // final LetterStatus status = currentLetter.getStatus();
-    //
-    // switch ( status ) {
-    // case GREEN_CORRECT: // if the letter is green, do nothing
-    // break;
-    // case GRAY_NONEXISTENT: // if the letter is gray, remove from
-    // // all domains
-    // for ( int k = 0; k < wordSize; k++ ) {
-    // constraints.get( k ).remove( currentLetter );
-    // }
-    // break;
-    // case YELLOW_MISPLACED: // if the letter is yellow, remove
-    // // from current domain
-    // constraints.get( j ).remove( currentLetter );
-    // break;
-    // case UNKNOWN: // Throw an exception if the letter has not
-    // // been evaluated
-    // throw new RuntimeException( "Letter has not been evaluated." );
-    // default: // Throw an exception for unsupported statuses
-    // throw new RuntimeException( "RED and ORANGE status not yet supported." );
-    //
-    // }
-    // }
-    // }
-    // }
-
-    // TODO Add private helper methods below
-
-    /**
-     * Propogate all correct letters from the previous population into a new
-     * Word, this word will become the basis of the next generation
-     *
-     * @return the propogated word choice
-     */
-    private Word prop () {
-        final Word temp = new Word( population.get( 0 ).getLength() );
-        for ( int i = 0; i < population.size(); i++ ) {
-            final Word check = population.get( i );
-            for ( int j = 0; j < check.getLength(); j++ ) {
-                final Letter let = check.getLetterAt( j );
-                if ( let.getStatus() == LetterStatus.GREEN_CORRECT ) {
-                    temp.setLetter( j, let );
-                }
-                else {
-                    if ( !constraints.get( j ).isEmpty() ) {
-                        final int randomCharBound = random.nextInt( constraints.get( j ).size() );
-                        temp.setLetter( j, constraints.get( j ).get( randomCharBound ) );
-                    }
-                    else {
-                        temp.setLetter( j, correctLetters[j] );
-                    }
-
-                }
-            }
-
-        }
-        return temp;
-    }
-
-    /**
-     * Mutates the guess word into a new population which will then be
-     * propogated, and have the domain
-     *
-     * @return the index of a correct guess if one exists, or -1 if one does not
-     */
-    private int mutate () {
-        // This is the baseline for all future guesses
-
-        final Word baseline = guess;
-        population = new ArrayList<Word>();
-        for ( int i = 0; i < POPULATION_SIZE; i++ ) {
-            final Word nextGen = new Word( baseline.getLength() );
-            final Random rand = new Random();
-            for ( int j = 0; j < baseline.getLength(); j++ ) {
-                final Letter oldLetter = baseline.getLetterAt( j );
-                if ( oldLetter.getStatus() == LetterStatus.GREEN_CORRECT ) {
-                    nextGen.setLetter( j, oldLetter );
-                }
-                else {
-                    if ( constraints.get( j ).isEmpty() ) {
-                        nextGen.setLetter( j, correctLetters[j] );
-                    }
-                    else {
-                        nextGen.setLetter( j, constraints.get( j ).get( rand.nextInt( constraints.get( j ).size() ) ) );
-                    }
-
-                }
-            }
-            try {
-                // This guess is correct and we can stop
-                if ( nextGen.compareToSolution() ) {
-                    population.add( nextGen );
-                    return i;
-                }
-                // We should constrain the domains after each guess (will make
-                // subsequent guesses more reliable although it will slow down
-                // the guess process)
-                constrainDomainOneWord( nextGen );
-            }
-            catch ( final WordLengthMismatchException e ) {
-                e.printStackTrace();
-            }
-            // Add the guess to the population
-            population.add( nextGen );
-        }
-
-        return -1;
-    }
-
-    /**
-     * Constrain the domain of the given word i
-     *
-     * @param w
-     *            the word being used to constrain the domain
-     * @param idx
-     *            the index of this word in the population
-     */
-    private void constrainDomainOneWord ( final Word w ) {
-        for ( int i = 0; i < w.getLength(); i++ ) {
-            final Letter currentLetter = w.getLetterAt( i );
-            final LetterStatus status = currentLetter.getStatus();
-
-            switch ( status ) {
-                case GREEN_CORRECT:
-                    correctLetters[i] = currentLetter;
-                    constraints.get( i ).clear();
-                    break;
-                case GRAY_NONEXISTENT: // if the letter is gray, remove from
-                                       // all domains
-                    // TODO UPDATE TO BE CORRECT
-                    final int size = w.getLetters().length;
-                    for ( int k = 0; k < size; k++ ) { //
-                        final int constraintSize = constraints.get( k ).size();
-                        /**
-                         * THIS COULD BE AN ISSUE. FOR EXAMPLE IF THERE WAS
-                         * ALREADY A GREEN T in PLACE 1, THEN IT GUESSES A T FOR
-                         * POSITION 4 IT WILL REMOVE THE T FROM ALL INDEXES,
-                         * INCLUDING THIS CORRECT INDEX.
-                         */
-                        for ( int j = 0; j < constraintSize; j++ ) {
-                            if ( constraints.get( k ).get( j ).equals( currentLetter ) ) {
-                                constraints.get( k ).remove( j );
-                                break;
-                            }
-
-                        }
-
-                    }
-                    break;
-                case YELLOW_MISPLACED: // if the letter is yellow, remove
-                                       // from current domain
-                    constraints.get( i ).remove( currentLetter );
-                    // final int constraintSize = constraints.get( i ).size();
-                    // for ( int j = 0; j < constraintSize; j++ ) {
-                    // if ( constraints.get( i ).get( j ).equals( currentLetter
-                    // ) ) {
-                    // constraints.get( i ).remove( j );
-                    // break;
-                    // }
-                    //
-                    // }
-                    break;
-                case UNKNOWN: // Throw an exception if the letter has not
-                              // been evaluated
-                    throw new RuntimeException( "Letter has not been evaluated." );
-                default: // Throw an exception for unsupported statuses
-                    throw new RuntimeException( "RED and ORANGE status not yet supported." );
-
-            }
-
-        }
-
-    }
+					}
+					break;
+				case YELLOW_MISPLACED: // if the letter is yellow, remove
+					// from current domain
+					constraints.get(i).remove(currentLetter);
+					// final int constraintSize = constraints.get( i ).size();
+					// for ( int j = 0; j < constraintSize; j++ ) {
+					// if ( constraints.get( i ).get( j ).equals( currentLetter
+					// ) ) {
+					// constraints.get( i ).remove( j );
+					// break;
+					// }
+					//
+					// }
+					break;
+				case UNKNOWN: // Throw an exception if the letter has not
+					// been evaluated
+					throw new RuntimeException("Letter has not been evaluated.");
+				default: // Throw an exception for unsupported statuses
+					throw new RuntimeException("RED and ORANGE status not yet supported.");
+			}
+		}
+	}
 
 }

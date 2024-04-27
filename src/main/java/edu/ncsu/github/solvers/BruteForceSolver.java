@@ -7,7 +7,9 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Parent class of the 2 brute force solvers. Any logic common to both of them should be here.
+/**
+ * Parent class of the 2 brute force solvers. Any logic common to both of them should be here.
+ */
 public abstract class BruteForceSolver implements Solver {
 
 	// All letters that have not been eliminated as possibly being in the solution
@@ -86,12 +88,22 @@ public abstract class BruteForceSolver implements Solver {
 		}
 	}
 
-	// Shared logic for GRAY_NONEXISTENT status
+	/**
+	 * Shared logic for handling letters with GRAY_NONEXISTENT status.
+	 *
+	 * @param guessLetter The Letter object representing the current letter.
+	 * @param letterIndex The index of the letter in the guess word.
+	 */
 	protected void handleGrayNonExistent(Letter guessLetter, int letterIndex) {
 		replaceLetter(guessLetter, letterIndex);
 	}
 
-	// Replace the letter with the next valid character
+	/**
+	 * Replace the letter with the next valid character.
+	 *
+	 * @param guessLetter The Letter object representing the current letter.
+	 * @param letterIndex The index of the letter in the guess word.
+	 */
 	protected void replaceLetter(Letter guessLetter, int letterIndex) {
 		Letter replacement = new Letter(nextValidChar(guessLetter.getCharacter()));
 		guess.setLetter(letterIndex, replacement);
@@ -115,11 +127,11 @@ public abstract class BruteForceSolver implements Solver {
 				nextChar++;
 			} while (!alphabet.contains(nextChar));
 
-//			System.out.print("Alphabet: ");
-//			for (char c : alphabet) {
-//				System.out.print(c);
-//			}
-//			System.out.println();
+//            System.out.print("Alphabet: ");
+//            for (char c : alphabet) {
+//                System.out.print(c);
+//            }
+//            System.out.println();
 
 			return nextChar;
 		}
