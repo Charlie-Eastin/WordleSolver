@@ -1,7 +1,7 @@
 package edu.ncsu.github.wordle;
 
 /**
- * Represents a letter in a Word.
+ * Represents a letter in a word.
  */
 public class Letter {
 
@@ -18,28 +18,40 @@ public class Letter {
 	// Actual alphabetic character
 	private char character;
 
-	// Status of the Letter
+	// Status of the letter
 	private LetterStatus status;
 
-	// Default constructor
+	/**
+	 * Default constructor.
+	 * Initializes the character to 'A' and status to UNKNOWN.
+	 */
 	public Letter() {
 		super();
-		this.character = 'A'; // Initialize character to 'A'
-		this.status = LetterStatus.UNKNOWN; // Initialize with unknown status
+		this.character = 'A';
+		this.status = LetterStatus.UNKNOWN;
 	}
 
-	// Constructor without status
+	/**
+	 * Constructor with character parameter.
+	 *
+	 * @param character The character value to initialize.
+	 */
 	public Letter(final char character) {
 		super();
-		this.character = character; // Initialize character with provided value
-		this.status = LetterStatus.UNKNOWN; // Initialize with unknown status
+		this.character = character;
+		this.status = LetterStatus.UNKNOWN;
 	}
 
-	// Constructor with status
+	/**
+	 * Constructor with character and status parameters.
+	 *
+	 * @param character The character value to initialize.
+	 * @param status    The status to initialize.
+	 */
 	public Letter(final char character, final LetterStatus status) {
 		super();
-		this.character = character; // Initialize character with provided value
-		this.status = status; // Initialize status with provided value
+		this.character = character;
+		this.status = status;
 	}
 
 	/**
@@ -65,23 +77,35 @@ public class Letter {
 		return status;
 	}
 
-	// Package access so only the Word can change it
+	/**
+	 * Sets the status of this Letter.
+	 * Package access so only the Word class can change it.
+	 *
+	 * @param status the status to set for this Letter
+	 */
 	void setStatus(final LetterStatus status) {
 		this.status = status;
 	}
 
-	// Package access so only the Word can change it
+	/**
+	 * Resets the status of this Letter to UNKNOWN.
+	 * Package access so only the Word class can change it.
+	 */
 	void resetStatus() {
-		this.status = LetterStatus.UNKNOWN; // Reset the status to WHITE
+		this.status = LetterStatus.UNKNOWN;
 	}
 
-	// Print the character of the letter in its associated color.
+
+	/**
+	 * Print the character of the letter in its associated color.
+	 */
 	void printInColor() {
 		System.out.print(BG_BLACK);
 
 		switch (this.status) {
 			case UNKNOWN:
-				// This shouldn't happen because guesses should be evaluated before printing.
+				// This shouldn't happen because guesses should be evaluated
+				// before printing.
 				System.out.print(TEXT_WHITE);
 				break;
 			case GREEN_CORRECT:
@@ -103,4 +127,24 @@ public class Letter {
 
 		System.out.print(getCharacter() + TEXT_RESET);
 	}
+
+	/**
+	 * Checks if this Letter object is equal to another object.
+	 *
+	 * @param o the object to compare to this Letter
+	 * @return true if the objects are equal, false otherwise
+	 */
+	@Override
+	public boolean equals(final Object o) {
+		// Check if the object is an instance of Letter
+		if (o instanceof Letter) {
+			// Cast the object to a Letter
+			Letter other = (Letter) o;
+			// Compare the characters of the two letters
+			return other.getCharacter() == this.character;
+		}
+		// If the object is not a Letter, return false
+		return false;
+	}
+
 }
