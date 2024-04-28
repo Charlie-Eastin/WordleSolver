@@ -1,9 +1,7 @@
 package edu.ncsu.github.solvers;
 
-import edu.ncsu.github.wordle.Letter;
-import edu.ncsu.github.wordle.LetterStatus;
-import edu.ncsu.github.wordle.Word;
-import edu.ncsu.github.wordle.WordLengthMismatchException;
+import edu.ncsu.github.OutputGUI;
+import edu.ncsu.github.wordle.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +41,13 @@ public class GeneticAlgSolver implements Solver {
 
         initializeConstraints( solutionLength );
 
-        System.out.println( "Population 1" );
+        output("Population 1", true);
         initializePopulation( POPULATION_SIZE, solutionLength );
         if ( done ) {
             return;
         }
 
-        System.out.println( "Propogation 1" );
+        output("Population 1", true);
         guess = prop();
         done = guess.compareToSolution();
         if ( done ) {
@@ -60,7 +58,9 @@ public class GeneticAlgSolver implements Solver {
             constrainDomainOneWord( guess );
             // The mutate method will constrain the domains of variables as it
             // goes and makes intermediate guesses
-            System.out.println( "Population " + popCount );
+
+            output("Population " + popCount, true);
+
             final int check = mutate();
             if ( popCount == 50 ) {
                 break;
@@ -73,7 +73,8 @@ public class GeneticAlgSolver implements Solver {
                 break;
             }
             // constrainDomain();
-            System.out.println( "Propogation " + popCount );
+
+            output("Propagation " + popCount, true);
             guess = prop();
             // print();
             done = guess.compareToSolution();
@@ -84,11 +85,11 @@ public class GeneticAlgSolver implements Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-            System.out.println( "Concluded initial search portion: still looking for orange letters? " + !done );
+            output("Concluded initial search portion: still looking for orange letters? " + !done, true);
             handleOrange( guess );
         }
-        System.out.println( "Guesses: " + Word.guesses );
-
+        output("Guesses: " + Word.guesses, false);
+        output("Concluded initial search portion: still looking for orange letters? " + !done, true);
     }
 
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
@@ -156,9 +157,9 @@ public class GeneticAlgSolver implements Solver {
     void print () {
         for ( int i = 0; i < constraints.size(); i++ ) {
             for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
-                System.out.print( constraints.get( i ).get( j ).getCharacter() + "," );
+                output(constraints.get( i ).get( j ).getCharacter() + ",", false);
             }
-            System.out.print( "\n" );
+            output("", true);
         }
     }
 
@@ -425,5 +426,17 @@ public class GeneticAlgSolver implements Solver {
     // }
     // }
     // }
+
+    void output(String output, boolean printLn) {
+        if (Config.getUsingGUI()) {
+            OutputGUI.getInstance().addToOutput(output, printLn);
+        } else {
+            if (printLn) {
+                System.out.println(output);
+            } else {
+                System.out.print(output);
+            }
+        }
+    }
 
 }
