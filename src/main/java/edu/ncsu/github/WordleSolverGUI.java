@@ -23,6 +23,10 @@ import java.awt.event.ItemListener;
  * WordleSolverGUI class represents the graphical user interface for a Wordle solver application.
  */
 public class WordleSolverGUI {
+
+	private static WordleSolverGUI instance;
+
+	private static JFrame frame;
 	// GUI components
 	private JButton solveButton;
 	private JCheckBox mutationsCheckBox;
@@ -34,6 +38,7 @@ public class WordleSolverGUI {
 	private JTextField lengthTextField;
 	private JTextField solutionTextField;
 	private JPanel mainPanel;
+	private JPanel centerPanel;
 	private JPanel solutionPanel;
 	private JPanel algPanel;
 	private JPanel mutationsPanel;
@@ -42,7 +47,7 @@ public class WordleSolverGUI {
 	 * Constructor for WordleSolverGUI class.
 	 * Sets the look and feel to Windows and adds item listeners to check boxes.
 	 */
-	public WordleSolverGUI() {
+	private WordleSolverGUI() {
 		try {
 			// Set the look and feel to Windows
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -51,42 +56,31 @@ public class WordleSolverGUI {
 			// Print error message if look and feel setting fails
 			System.out.println("Error while setting GUI look and feel: " + e);
 		}
+	}
 
-		// Add item listener to the generate check box
-		generateCheckBox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// Enable/disable text field editing based on check box selection
-				switch (e.getStateChange()) {
-					case ItemEvent.SELECTED:
-						lengthTextField.setEditable(true);
-						solutionTextField.setEditable(false);
-						updateSolution();
-						break;
-					case ItemEvent.DESELECTED:
-						lengthTextField.setEditable(false);
-						solutionTextField.setEditable(true);
-						break;
-				}
-			}
-		});
+	public static WordleSolverGUI getInstance() {
+		if (instance == null) {
+			instance = new WordleSolverGUI();
+		}
+		return instance;
+	}
 
-		// Add item listener to the mutations check box
-		mutationsCheckBox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// Enable/disable interval text field based on check box selection
-				switch (e.getStateChange()) {
-					case ItemEvent.SELECTED:
-						intervalTextField.setEditable(true);
-						break;
-					case ItemEvent.DESELECTED:
-						intervalTextField.setEditable(false);
-						break;
-				}
-			}
-		});
+	/**
+	 * Displays the Wordle Solver GUI.
+	 */
+	public static void display() {
+		// Create and configure the JFrame
+		frame = new JFrame("Wordle Solver"); // Set the window title to "Wordle Solver"
+		getInstance();
+		frame.setContentPane(getInstance().mainPanel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		getInstance().setup();
+	}
 
+	private void setup() {
 		// Add document filter to the lengthTextField to allow only numbers
 		((AbstractDocument) lengthTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
 			@Override
@@ -157,6 +151,41 @@ public class WordleSolverGUI {
 			}
 		});
 
+		// Add item listener to the generate check box
+		generateCheckBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// Enable/disable text field editing based on check box selection
+				switch (e.getStateChange()) {
+					case ItemEvent.SELECTED:
+						lengthTextField.setEditable(true);
+						solutionTextField.setEditable(false);
+						updateSolution();
+						break;
+					case ItemEvent.DESELECTED:
+						lengthTextField.setEditable(false);
+						solutionTextField.setEditable(true);
+						break;
+				}
+			}
+		});
+
+		// Add item listener to the mutations check box
+		mutationsCheckBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// Enable/disable interval text field based on check box selection
+				switch (e.getStateChange()) {
+					case ItemEvent.SELECTED:
+						intervalTextField.setEditable(true);
+						break;
+					case ItemEvent.DESELECTED:
+						intervalTextField.setEditable(false);
+						break;
+				}
+			}
+		});
+
 		// Add action listener to the solveButton
 		solveButton.addActionListener(new ActionListener() {
 			@Override
@@ -164,19 +193,6 @@ public class WordleSolverGUI {
 				solve();
 			}
 		});
-	}
-
-	/**
-	 * Displays the Wordle Solver GUI.
-	 */
-	public static void display() {
-		// Create and configure the JFrame
-		JFrame frame = new JFrame("Wordle Solver"); // Set the window title to "Wordle Solver"
-		frame.setContentPane(new WordleSolverGUI().mainPanel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
 	}
 
 	// Helper method to update the solution text field
