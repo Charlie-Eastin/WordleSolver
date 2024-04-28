@@ -16,6 +16,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -94,6 +96,17 @@ public class MainGUI extends JFrame {
 				updateSolution();
 			}
 		});
+		solveButton.addActionListener(new ActionListener() {
+			/**
+			 * Invoked when an action occurs.
+			 *
+			 * @param e the event to be processed
+			 */
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				solve();
+			}
+		});
 	}
 
 	/**
@@ -138,7 +151,7 @@ public class MainGUI extends JFrame {
 
 	// Solve the Wordle
 	private void solve() {
-		Solver solver = null;
+		Solver solver;
 
 		if (basicBruteRadio.isSelected()) {
 			solver = new BasicBruteForceSolver();
