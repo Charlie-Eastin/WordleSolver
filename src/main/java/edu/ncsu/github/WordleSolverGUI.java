@@ -189,6 +189,7 @@ public class WordleSolverGUI {
 			return;
 		}
 		String solution = Config.generateRandomWord(length);
+		Config.setSolution(solution);
 		solutionTextField.setText(solution);
 	}
 

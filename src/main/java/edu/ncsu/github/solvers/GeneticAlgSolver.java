@@ -94,6 +94,11 @@ public class GeneticAlgSolver implements Solver {
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
+
+        if (idx == -1) {
+            return;
+        }
+
         for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
             if ( nextIdx != -1 && orangeHelper( w, nextIdx ) ) {
                 return;
