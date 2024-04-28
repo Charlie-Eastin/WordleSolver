@@ -58,6 +58,11 @@ public class WordleSolverGUI {
 		}
 	}
 
+	/**
+	 * Returns the singleton instance of WordleSolverGUI.
+	 *
+	 * @return The singleton instance of WordleSolverGUI.
+	 */
 	public static WordleSolverGUI getInstance() {
 		if (instance == null) {
 			instance = new WordleSolverGUI();
@@ -80,6 +85,9 @@ public class WordleSolverGUI {
 		getInstance().setup();
 	}
 
+	/**
+	 * Setup method to initialize GUI components and add listeners.
+	 */
 	private void setup() {
 		// Add document filter to the lengthTextField to allow only numbers
 		((AbstractDocument) lengthTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
@@ -214,7 +222,7 @@ public class WordleSolverGUI {
 		solveButton.setEnabled(!solutionTextField.getText().trim().isEmpty());
 	}
 
-	// Method to solve the Wordle
+	// Solve the Wordle
 	private void solve() {
 		Solver solver = null;
 
