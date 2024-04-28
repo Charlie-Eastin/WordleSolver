@@ -84,10 +84,10 @@ public class GeneticAlgSolver implements Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-            System.out.println( "Concluded intial search portion: still looking for orange letters " + !done );
+            System.out.println( "Concluded initial search portion: still looking for orange letters? " + !done );
             handleOrange( guess );
         }
-        System.out.println( Word.guesses );
+        System.out.println( "Guesses: " + Word.guesses );
 
     }
 
