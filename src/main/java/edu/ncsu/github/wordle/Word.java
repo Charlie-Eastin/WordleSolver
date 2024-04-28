@@ -162,7 +162,7 @@ public class Word {
         }
 
         if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().addToOutput("\n");
+            OutputGUI.getInstance().addToOutput("", true);
         } else {
             System.out.println( "\u001B[0m" ); // Move to the next line after
                                                // printing the word
@@ -185,11 +185,10 @@ public class Word {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
             final String formatted = String.format( "%5d", guessCount );
-
             if (Config.getUsingGUI()) {
                 System.out.print( formatted + ": " );
             } else {
-                OutputGUI.getInstance().addToOutput(formatted);
+                OutputGUI.getInstance().addToOutput(formatted, false);
             }
 
             for ( int i = 0; i < letterIndex; i++ ) {

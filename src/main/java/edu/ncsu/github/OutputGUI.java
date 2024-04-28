@@ -1,7 +1,14 @@
 package edu.ncsu.github;
 
+import edu.ncsu.github.wordle.LetterStatus;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Locale;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.*;
+import javax.swing.text.html.HTMLDocument;
 
 public class OutputGUI extends JFrame {
 
@@ -15,7 +22,6 @@ public class OutputGUI extends JFrame {
 	}
 
 	private OutputGUI() {
-
 	}
 
 	/**
@@ -35,17 +41,59 @@ public class OutputGUI extends JFrame {
 		setContentPane(mainPanel);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		pack();
-		setSize(getWidth(), 600);
+		setSize(225, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
+		textPane.setBackground(Color.decode("#383838"));
 	}
 
-	public void addToOutput(String str) {
-		textPane.setText(textPane.getText() + str);
+	public void addToOutput(String str, LetterStatus color, boolean printLn) {
+		// Get the document of JTextPane
+		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
+
+		String colorName = "";
+		switch (color) {
+			case UNKNOWN:
+				colorName = "white";
+				break;
+			case GREEN_CORRECT:
+				colorName = "#4CBB17";
+				break;
+			case YELLOW_MISPLACED:
+				colorName = "yellow";
+				break;
+			case ORANGE_OBSCURED:
+				colorName = "orange";
+				break;
+			case RED_SHIFTED:
+				colorName = "red";
+				break;
+			case GRAY_NONEXISTENT:
+				colorName = "A9A9A9";
+				break;
+		}
+
+		try {
+			// Insert HTML content with different colors
+			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<font color='" + colorName + "'>" + str + "</font>");
+			if (printLn) {
+				doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<br>");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void addToOutput(char c) {
-		addToOutput(String.valueOf(c));
+	public void addToOutput(char c, LetterStatus color, boolean printLn) {
+		addToOutput(String.valueOf(c), color, printLn);
+	}
+
+	public void addToOutput(String str, boolean printLn) {
+		addToOutput(str, LetterStatus.UNKNOWN, printLn);
+	}
+
+	public void addToOutput(char c, boolean printLn) {
+		addToOutput(String.valueOf(c), printLn);
 	}
 
 	public void clearOutput() {
@@ -73,17 +121,71 @@ public class OutputGUI extends JFrame {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridBagLayout());
 		final JScrollPane scrollPane1 = new JScrollPane();
+		scrollPane1.setForeground(new Color(-8355712));
 		GridBagConstraints gbc;
 		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridx = 1;
+		gbc.gridy = 1;
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(scrollPane1, gbc);
 		textPane = new JTextPane();
+		textPane.setContentType("text/html");
 		textPane.setEditable(false);
+		textPane.setEnabled(true);
+		Font textPaneFont = this.$$$getFont$$$(null, -1, 14, textPane.getFont());
+		if (textPaneFont != null) textPane.setFont(textPaneFont);
+		textPane.setForeground(new Color(-8749952));
+		textPane.putClientProperty("html.disable", Boolean.TRUE);
 		scrollPane1.setViewportView(textPane);
+		final JPanel spacer1 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(spacer1, gbc);
+		final JPanel spacer2 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(spacer2, gbc);
+		final JPanel spacer3 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridheight = 2;
+		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(spacer3, gbc);
+		final JPanel spacer4 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(spacer4, gbc);
+	}
+
+	/**
+	 * @noinspection ALL
+	 */
+	private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+		if (currentFont == null) return null;
+		String resultName;
+		if (fontName == null) {
+			resultName = currentFont.getName();
+		} else {
+			Font testFont = new Font(fontName, Font.PLAIN, 10);
+			if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+				resultName = fontName;
+			} else {
+				resultName = currentFont.getName();
+			}
+		}
+		Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+		boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+		Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+		return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
 	}
 
 	/**

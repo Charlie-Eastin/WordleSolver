@@ -41,13 +41,13 @@ public class GeneticAlgSolver implements Solver {
 
         initializeConstraints( solutionLength );
 
-        output("Population 1\n");
+        output("Population 1", true);
         initializePopulation( POPULATION_SIZE, solutionLength );
         if ( done ) {
             return;
         }
 
-        output("Population 1\n");
+        output("Population 1", true);
         guess = prop();
         done = guess.compareToSolution();
         if ( done ) {
@@ -59,7 +59,7 @@ public class GeneticAlgSolver implements Solver {
             // The mutate method will constrain the domains of variables as it
             // goes and makes intermediate guesses
 
-            output("Population " + popCount + "\n");
+            output("Population " + popCount, true);
 
             final int check = mutate();
             if ( popCount == 50 ) {
@@ -74,7 +74,7 @@ public class GeneticAlgSolver implements Solver {
             }
             // constrainDomain();
 
-            output("Propagation " + popCount + "\n");
+            output("Propagation " + popCount, true);
             guess = prop();
             // print();
             done = guess.compareToSolution();
@@ -85,11 +85,11 @@ public class GeneticAlgSolver implements Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-            output("Concluded initial search portion: still looking for orange letters? " + !done + "\n");
+            output("Concluded initial search portion: still looking for orange letters? " + !done, true);
             handleOrange( guess );
         }
-        output("Guesses: " + Word.guesses);
-        output("Concluded initial search portion: still looking for orange letters? " + !done + "\n");
+        output("Guesses: " + Word.guesses, false);
+        output("Concluded initial search portion: still looking for orange letters? " + !done, true);
     }
 
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
@@ -157,9 +157,9 @@ public class GeneticAlgSolver implements Solver {
     void print () {
         for ( int i = 0; i < constraints.size(); i++ ) {
             for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
-                output(constraints.get( i ).get( j ).getCharacter() + ",");
+                output(constraints.get( i ).get( j ).getCharacter() + ",", false);
             }
-            output("\n");
+            output("", true);
         }
     }
 
@@ -427,11 +427,15 @@ public class GeneticAlgSolver implements Solver {
     // }
     // }
 
-    void output(String output) {
+    void output(String output, boolean printLn) {
         if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().addToOutput(output);
+            OutputGUI.getInstance().addToOutput(output, printLn);
         } else {
-            System.out.print(output);
+            if (printLn) {
+                System.out.println(output);
+            } else {
+                System.out.print(output);
+            }
         }
     }
 

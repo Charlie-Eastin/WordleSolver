@@ -2,6 +2,8 @@ package edu.ncsu.github.wordle;
 
 import edu.ncsu.github.OutputGUI;
 
+import java.awt.*;
+
 /**
  * Represents a letter in a word.
  */
@@ -102,9 +104,8 @@ public class Letter {
 	 * Print the character of the letter in its associated color.
 	 */
 	void printInColor() {
-
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(getCharacter());
+			OutputGUI.getInstance().addToOutput(getCharacter(), this.status, false);
 		} else {
 			System.out.print(BG_BLACK);
 
