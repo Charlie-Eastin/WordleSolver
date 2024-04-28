@@ -304,6 +304,11 @@ public class MainGUI extends JFrame {
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(spacer6, gbc);
+		ButtonGroup buttonGroup;
+		buttonGroup = new ButtonGroup();
+		buttonGroup.add(basicBruteRadio);
+		buttonGroup.add(advBruteRadio);
+		buttonGroup.add(geneticRadio);
 	}
 
 	/**
@@ -312,4 +317,5 @@ public class MainGUI extends JFrame {
 	public JComponent $$$getRootComponent$$$() {
 		return mainPanel;
 	}
+
 }

@@ -203,4 +203,11 @@
       </vspacer>
     </children>
   </grid>
+  <buttonGroups>
+    <group name="algbuttonGroup">
+      <member id="f2da8"/>
+      <member id="de352"/>
+      <member id="74cb0"/>
+    </group>
+  </buttonGroups>
 </form>
