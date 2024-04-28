@@ -9,6 +9,12 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -51,6 +57,41 @@ public class MainGUI extends JFrame {
 						solutionTextField.setEditable(true);
 						break;
 				}
+			}
+		});
+
+		// Add document filter to the lengthTextField to allow only numbers
+		((AbstractDocument) lengthTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				// Keep only numeric characters
+				String newText = text.replaceAll("\\D", "");
+				super.replace(fb, offset, length, newText, attrs);
+			}
+
+			@Override
+			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+				// Keep only numeric characters
+				String newText = string.replaceAll("\\D", "");
+				super.insertString(fb, offset, newText, attr);
+			}
+		});
+
+		// Add document listener to the lengthTextField
+		lengthTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSolution();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSolution();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateSolution();
 			}
 		});
 	}
