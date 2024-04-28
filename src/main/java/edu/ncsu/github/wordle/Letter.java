@@ -104,30 +104,7 @@ public class Letter {
 	void printInColor() {
 
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(String.valueOf(getCharacter()));
-
-//			switch (this.status) {
-//				case UNKNOWN:
-//					// This shouldn't happen because guesses should be evaluated
-//					// before printing.
-//
-//					break;
-//				case GREEN_CORRECT:
-//					System.out.print(TEXT_GREEN);
-//					break;
-//				case YELLOW_MISPLACED:
-//					System.out.print(TEXT_YELLOW);
-//					break;
-//				case ORANGE_OBSCURED:
-//					System.out.print(TEXT_ORANGE);
-//					break;
-//				case RED_SHIFTED:
-//					System.out.print(TEXT_RED);
-//					break;
-//				case GRAY_NONEXISTENT:
-//					System.out.print(TEXT_GRAY);
-//					break;
-//			}
+			OutputGUI.getInstance().addToOutput(getCharacter());
 		} else {
 			System.out.print(BG_BLACK);
 
