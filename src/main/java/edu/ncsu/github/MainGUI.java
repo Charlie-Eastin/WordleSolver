@@ -225,7 +225,7 @@ public class MainGUI extends JFrame {
 		lengthTextField.setColumns(3);
 		lengthTextField.setEditable(false);
 		lengthTextField.setHorizontalAlignment(11);
-		lengthTextField.setText("8");
+		lengthTextField.setText("6");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 4;
 		gbc.gridy = 0;
@@ -241,7 +241,7 @@ public class MainGUI extends JFrame {
 		gbc.insets = new Insets(0, 0, 0, 5);
 		solutionPanel.add(label2, gbc);
 		solutionTextField = new JTextField();
-		solutionTextField.setText("AAAAAAAA");
+		solutionTextField.setText("WORDLE");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 1;

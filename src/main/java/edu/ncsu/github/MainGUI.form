@@ -52,7 +52,7 @@
               <columns value="3"/>
               <editable value="false"/>
               <horizontalAlignment value="11"/>
-              <text value="8"/>
+              <text value="6"/>
             </properties>
           </component>
           <component id="75908" class="javax.swing.JLabel">
@@ -72,7 +72,7 @@
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <text value="AAAAAAAA"/>
+              <text value="WORDLE"/>
             </properties>
           </component>
         </children>
