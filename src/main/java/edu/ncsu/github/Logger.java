@@ -3,6 +3,9 @@ package edu.ncsu.github;
 import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.LetterStatus;
 
+/**
+ * Utility class for logging output to console or GUI.
+ */
 public class Logger {
 
 	// ANSI escape codes for colors
@@ -15,6 +18,12 @@ public class Logger {
 	private static final String TEXT_RED = "\u001B[31m";
 	private static final String TEXT_GRAY = "\u001B[37m";
 
+	/**
+	 * Returns the ANSI escape code for the specified LetterStatus.
+	 *
+	 * @param status The status of the letter.
+	 * @return The ANSI escape code corresponding to the status.
+	 */
 	private static String consoleColorCode(LetterStatus status) {
 		switch (status) {
 			case UNKNOWN:
@@ -34,10 +43,20 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Prints a character to the output stream.
+	 *
+	 * @param c The character to print.
+	 */
 	public static void print(char c) {
 		print(String.valueOf(c));
 	}
 
+	/**
+	 * Prints a string to the output stream.
+	 *
+	 * @param str The string to print.
+	 */
 	public static void print(String str) {
 		if (Config.getUsingGUI()) {
 			OutputGUI.getInstance().addToOutput(str, false);
@@ -46,6 +65,11 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Prints a string followed by a newline to the output stream.
+	 *
+	 * @param str The string to print.
+	 */
 	public static void println(String str) {
 		if (Config.getUsingGUI()) {
 			OutputGUI.getInstance().addToOutput(str, true);
@@ -54,6 +78,12 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Prints a character with specified color to the output stream.
+	 *
+	 * @param c     The character to print.
+	 * @param color The color of the character.
+	 */
 	public static void print(char c, LetterStatus color) {
 		if (Config.getUsingGUI()) {
 			OutputGUI.getInstance().addToOutput(c, color, false);
@@ -62,6 +92,12 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Prints a string with specified color to the output stream.
+	 *
+	 * @param str   The string to print.
+	 * @param color The color of the string.
+	 */
 	public static void print(String str, LetterStatus color) {
 		if (Config.getUsingGUI()) {
 			OutputGUI.getInstance().addToOutput(str, true);

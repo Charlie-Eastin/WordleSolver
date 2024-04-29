@@ -10,10 +10,24 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 
+/**
+ * Singleton class for displaying the output GUI.
+ */
 public class OutputGUI extends JFrame {
 
 	private static OutputGUI instance;
 
+	/**
+	 * Private constructor to prevent instantiation from outside.
+	 */
+	private OutputGUI() {
+	}
+
+	/**
+	 * Returns the instance of OutputGUI.
+	 *
+	 * @return the instance of OutputGUI
+	 */
 	public static OutputGUI getInstance() {
 		if (instance == null) {
 			instance = new OutputGUI();
@@ -21,11 +35,8 @@ public class OutputGUI extends JFrame {
 		return instance;
 	}
 
-	private OutputGUI() {
-	}
-
 	/**
-	 * Displays the main Wordle Solver GUI.
+	 * Displays the main Output GUI.
 	 */
 	public void display() {
 		try {
@@ -47,6 +58,13 @@ public class OutputGUI extends JFrame {
 		textPane.setBackground(Color.decode("#383838"));
 	}
 
+	/**
+	 * Adds a string to the output with specified color and whether to print a new line.
+	 *
+	 * @param str     the string to add
+	 * @param color   the color of the string
+	 * @param printLn whether to print a new line after the string
+	 */
 	public void addToOutput(String str, LetterStatus color, boolean printLn) {
 		// Get the document of JTextPane
 		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
@@ -62,27 +80,54 @@ public class OutputGUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Adds a character to the output with specified color and whether to print a new line.
+	 *
+	 * @param c       the character to add
+	 * @param color   the color of the character
+	 * @param printLn whether to print a new line after the character
+	 */
 	public void addToOutput(char c, LetterStatus color, boolean printLn) {
 		addToOutput(String.valueOf(c), color, printLn);
 	}
 
+	/**
+	 * Adds a string to the output with default color and whether to print a new line.
+	 *
+	 * @param str     the string to add
+	 * @param printLn whether to print a new line after the string
+	 */
 	public void addToOutput(String str, boolean printLn) {
 		addToOutput(str, LetterStatus.UNKNOWN, printLn);
 	}
 
+	/**
+	 * Adds a character to the output with default color and whether to print a new line.
+	 *
+	 * @param c       the character to add
+	 * @param printLn whether to print a new line after the character
+	 */
 	public void addToOutput(char c, boolean printLn) {
 		addToOutput(String.valueOf(c), printLn);
 	}
 
+	/**
+	 * Clears the output.
+	 */
 	public void clearOutput() {
 		textPane.setText("");
 	}
 
+	/**
+	 * Returns the HTML color code corresponding to the specified LetterStatus.
+	 *
+	 * @param color the LetterStatus to get the HTML color for
+	 * @return the HTML color code
+	 */
 	private String htmlColor(LetterStatus color) {
 		switch (color) {
-
 			case GREEN_CORRECT:
-				return  "#4CBB17";
+				return "#4CBB17";
 			case YELLOW_MISPLACED:
 				return "yellow";
 			case ORANGE_OBSCURED:
