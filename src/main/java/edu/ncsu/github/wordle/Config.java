@@ -1,5 +1,6 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.solvers.Algorithm;
 
 import java.util.Random;
@@ -19,6 +20,11 @@ public class Config {
     static Word         solution;
 
     final static double ORANGE_WORD_SPAN = 5;
+
+	public static void reset() {
+		Word.guesses = 0;
+		Logger.clear();
+	}
   
   	/**
 	 * Retrieves the flag indicating whether the GUI is being used.

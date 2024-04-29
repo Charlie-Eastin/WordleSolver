@@ -35,6 +35,8 @@ public class GeneticAlgSolver implements Solver {
 
     @Override
     public void solve ( final int solutionLength ) throws WordLengthMismatchException {
+        Solver.super.solve(solutionLength);
+
         guess = new Word( solutionLength );
         orangeLetters = new boolean[solutionLength];
         allButOrange = false;
@@ -97,9 +99,9 @@ public class GeneticAlgSolver implements Solver {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
 
-//        if (idx == -1) {
-//            return;
-//        }
+        if (idx == -1) {
+            return;
+        }
 
         for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
             if ( nextIdx != -1 && orangeHelper( w, nextIdx ) ) {

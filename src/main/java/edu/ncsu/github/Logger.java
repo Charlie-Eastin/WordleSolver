@@ -43,6 +43,14 @@ public class Logger {
 		}
 	}
 
+	public static void clear() {
+		if (Config.getUsingGUI()) {
+			OutputGUI.getInstance().clearOutput();
+		} else {
+			System.out.println("\n");
+		}
+	}
+
 	/**
 	 * Prints a character to the output stream.
 	 *

@@ -46,6 +46,7 @@ public abstract class BruteForceSolver implements Solver {
      */
     @Override
     public void solve ( final int solutionLength ) throws WordLengthMismatchException {
+        Solver.super.solve(solutionLength);
         // Make an array orangeIdx that will be true on orange indexes
         orangeIdx = new boolean[solutionLength];
 
