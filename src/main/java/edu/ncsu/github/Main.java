@@ -1,69 +1,99 @@
 package edu.ncsu.github;
 
-import edu.ncsu.github.solvers.*;
+import java.util.Scanner;
+
+import edu.ncsu.github.solvers.AdvBruteForceSolver;
+import edu.ncsu.github.solvers.Algorithm;
+import edu.ncsu.github.solvers.BasicBruteForceSolver;
+import edu.ncsu.github.solvers.GeneticAlgSolver;
+import edu.ncsu.github.solvers.Solver;
 import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
-
-import java.util.Scanner;
 
 /**
  * The main Wordle Solver class.
  */
 public class Main {
 
-	/**
-	 * The entry point of the program.
-	 *
-	 * @param args The command line arguments.
-	 */
-	public static void main(String[] args) {
-		try (Scanner scanner = new Scanner(System.in)) {
-			// Create a solution Word based on user input or generate a random one
-			int solutionLength = Config.makeSolution(scanner);
+    /**
+     * The entry point of the program.
+     *
+     * @param args
+     *            The command line arguments.
+     */
+    public static void main ( final String[] args ) {
+        if (Config.getUsingGUI()) {
+            MainGUI gui = new MainGUI();
+            gui.display();
+            return;
+        }
 
-			// Ask the user which algorithm they want to use
-			Algorithm algorithm = Config.chooseAlg(scanner);
+        try ( Scanner scanner = new Scanner( System.in ) ) {
+            // Create a solution Word based on user input or generate a random
+            // one
+            final int solutionLength = Config.makeSolution( scanner );
 
-			Solver solver = null;
+            // Ask the user which algorithm they want to use
+            final Algorithm algorithm = Config.chooseAlg( scanner );
 
-			// Instantiate the appropriate solver based on the chosen algorithm
-			switch (algorithm) {
-				case BRUTE_FORCE_BASIC:
-					solver = new BasicBruteForceSolver();
-					break;
-				case BRUTE_FORCE_ADVANCED:
-					solver = new AdvBruteForceSolver();
-					break;
-				case GENETIC:
-					solver = new GeneticAlgSolver();
-					break;
-			}
+            // Ask the user if they would like to use environment changes like mutation of the word
+            // and hiding of the letters
+            final boolean envChanges = Config.chooseEnvChanges(scanner);
 
-			// start the timer for the stochastic mutation
-			Timer t = new Timer(new MyRunnable(), 5);
-			t.start();
+            Solver solver = null;
 
-			// Solve the Wordle problem using the selected solver
-			solver.solve(solutionLength);
+            // Instantiate the appropriate solver based on the chosen algorithm
+            switch ( algorithm ) {
+                case BRUTE_FORCE_BASIC:
+                    solver = new BasicBruteForceSolver();
+                    break;
+                case BRUTE_FORCE_ADVANCED:
+                    solver = new AdvBruteForceSolver();
+                    break;
+                case GENETIC:
+                    solver = new GeneticAlgSolver();
+                    break;
+            }
 
-			// print time taken to solve and stop the timer
-			System.out.println("Time taken: " + t.getTime() + "ms");
-			t.stop();
-		} catch (WordLengthMismatchException e) {
-			System.err.println("Error: Word length mismatch.");
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			System.err.println("Error: Illegal argument.");
-			e.printStackTrace();
-		}
-	}
+            Config.randomOrangeIndex();
+            //  create timer object, use a task to mutate every x milliseconds if that option is wanted.
+            Timer t = getTimer(envChanges);
 
-	private static class MyRunnable implements Runnable {
+            t.start();
+            // Solve the Wordle problem using the selected solver
+            solver.solve( solutionLength );
 
-		@Override
-		public void run() {
-			Config.hideLetter();
-		}
-	}
+            t.stop();
+        }
+        catch ( final WordLengthMismatchException e ) {
+            System.err.println( "Error: Word length mismatch." );
+            e.printStackTrace();
+        }
+        catch ( final IllegalArgumentException e ) {
+            System.err.println( "Error: Illegal argument." );
+            e.printStackTrace();
+        }
+    }
+
+    private static Timer getTimer(boolean envChanges) {
+        Timer t;
+        if (envChanges) {
+            // create a timer object with a task that may
+            // mutate the word every x milliseconds
+            t = new Timer(new SolutionMutator(), Config.getTimerInterval());
+        } else {
+            // otherwise, skip the hidden indices, and don't run a mutation task every x seconds.
+            t = new Timer(null, Config.getTimerInterval());
+        }
+        return t;
+    }
+
+    private static class SolutionMutator implements Runnable {
+
+        @Override
+        public void run() {
+            Config.mutateSolution();
+        }
+    }
 
 }

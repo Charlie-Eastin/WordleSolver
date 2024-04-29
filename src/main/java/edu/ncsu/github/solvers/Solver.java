@@ -1,5 +1,6 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 /**
@@ -15,5 +16,6 @@ public interface Solver {
 	 * @param solutionLength The length of the solution needed.
 	 */
 	default void solve(int solutionLength) throws WordLengthMismatchException {
+		Config.reset();
 	}
 }

@@ -1,9 +1,18 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
+import edu.ncsu.github.OutputGUI;
+
+/**
+ * Represents a word in the Wordle game, consisting of an array of letters.
+ * This class provides methods to manipulate and compare words.
+ */
 public class Word {
 
-    private Letter[] letters;  // Array to store the letters of the word
-    private String   asString; // String representation of the word
+    private Letter[]  letters;    // Array to store the letters of the word
+    private String    asString;   // String representation of the word
+
+    public static int guesses = 0;
 
     /**
      * Constructor for creating a Word object with a specified length.
@@ -130,16 +139,36 @@ public class Word {
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
-        boolean wordIsSolution = true;
+        guesses++;
+        // boolean wordIsSolution = true;
 
         for ( int i = 0; i < Config.solution.getLength(); i++ ) {
             if ( !compareLetterToSolution( i, -1 ) ) {
-                wordIsSolution = false;
+                // wordIsSolution = false;
             }
         }
-        System.out.println( "\u001B[0m" ); // Move to the next line after
-                                           // printing the word
-        return wordIsSolution;
+
+        if ( Config.solution.toString().equals( asString ) ) {
+            for ( int i = 0; i < Config.solution.getLength(); i++ ) {
+                final Letter l = this.getLetterAt( i );
+                l.setStatus( LetterStatus.GREEN_CORRECT );
+                l.printInColor();
+            }
+        }
+        else {
+            for ( int i = 0; i < Config.solution.getLength(); i++ ) {
+                final Letter l = this.getLetterAt( i );
+                l.printInColor();
+            }
+        }
+
+        if (Config.getUsingGUI()) {
+            OutputGUI.getInstance().println("");
+        } else {
+            System.out.println( "\u001B[0m" ); // Move to the next line after
+                                               // printing the word
+        }
+        return Config.solution.toString().equals( asString );
     }
 
     /**
@@ -156,8 +185,8 @@ public class Word {
     public boolean compareLetterToSolution ( final int letterIndex, final int guessCount ) {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
-            final String formatted = String.format( "%5d", guessCount );
-            System.out.print( formatted + ": " );
+            final String guessCountRightAligned = String.format( "%5d", guessCount );
+            Logger.print(guessCountRightAligned + ": ");
 
             for ( int i = 0; i < letterIndex; i++ ) {
                 getLetterAt( i ).printInColor();
@@ -168,7 +197,15 @@ public class Word {
         boolean letterIsCorrect = true;
         final String solution = Config.solution.toString();
 
-        if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
+        if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED
+                && Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
+            guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
+            letterIsCorrect = true;
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED ) {
+            guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
             // Character is in the right position
             guessLetter.setStatus( LetterStatus.GREEN_CORRECT );
             // } else if
@@ -197,14 +234,14 @@ public class Word {
             letterIsCorrect = false;
         }
 
-        guessLetter.printInColor();
+        // guessLetter.printInColor();
 
-        if ( guessCount > 0 ) {
-            for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
-                getLetterAt( i ).printInColor();
-            }
-            System.out.println();
-        }
+        // if ( guessCount > 0 ) {
+        // for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
+        // getLetterAt( i ).printInColor();
+        // }
+        // System.out.println();
+        // }
 
         return letterIsCorrect;
     }
@@ -261,4 +298,5 @@ public class Word {
     public String toString () {
         return asString;
     }
+
 }
