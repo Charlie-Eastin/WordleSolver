@@ -48,6 +48,10 @@ public class Config {
     // instance of Random object for environment changes.
     private static final Random r = new Random();
 
+    public static Random getRandom () {
+        return r;
+    }
+
     /**
      * Retrieves the maximum length allowed for the solution word.
      *
@@ -66,6 +70,10 @@ public class Config {
     public static void setSolution ( String solutionStr ) {
         solutionStr = solutionStr.trim().toUpperCase();
         solution = new Word( solutionStr );
+    }
+
+    public static Word getSolution ( ) {
+        return solution;
     }
 
     /**

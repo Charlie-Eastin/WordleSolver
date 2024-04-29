@@ -2,6 +2,7 @@ package edu.ncsu.github.wordle;
 
 import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
+import java.util.Random;
 
 /**
  * Represents a word in the Wordle game, consisting of an array of letters. This
@@ -11,7 +12,9 @@ public class Word {
 
     private Letter[]  letters;    // Array to store the letters of the word
     private String    asString;   // String representation of the word
-
+    
+    private static boolean mutated = false;
+   
     public static int guesses = 0;
 
     /**
@@ -136,17 +139,13 @@ public class Word {
      *             If the word length is not equal to the solution length.
      */
     public boolean compareToSolution () throws WordLengthMismatchException {
+        if (!mutated) {
+            mutateSolution();
+        }
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
         guesses++;
-        // boolean wordIsSolution = true;
-
-        for ( int i = 0; i < Config.solution.getLength(); i++ ) {
-            if ( !compareLetterToSolution( i, -1 ) ) {
-                // wordIsSolution = false;
-            }
-        }
 
         if ( Config.solution.toString().equals( asString ) ) {
             for ( int i = 0; i < Config.solution.getLength(); i++ ) {
@@ -266,15 +265,6 @@ public class Word {
             letterIsCorrect = false;
         }
 
-        // guessLetter.printInColor();
-
-        // if ( guessCount > 0 ) {
-        // for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
-        // getLetterAt( i ).printInColor();
-        // }
-        // System.out.println();
-        // }
-
         return letterIsCorrect;
     }
 
@@ -329,6 +319,52 @@ public class Word {
     @Override
     public String toString () {
         return asString;
+    }
+
+
+    public static void mutate() {
+        mutated = true;
+    }
+
+    /**
+     * Mutates the solution based on a randomly generated number being greater
+     * than the probability. Only mutates a letter if it is black, yellow, or
+     * grey. Mutation means making the letter a random letter from the alphabet.
+     */
+    public static void mutateSolution () {
+        Word solution = Config.getSolution();
+        Random r = Config.getRandom();
+        
+        // get a random probability and check if it is greater/less than the
+        // chance to mutate.
+        final double probability = 0.2828;
+        final double randProb = r.nextDouble();
+        // if it is, mutate a state that is grey, black, or yellow only, and
+        // change the status to red.
+        // if it is not, or the status is not grey, black, or yellow, do
+        // nothing.
+        if ( randProb <= probability ) {
+            return;
+        }
+        final int randIdx = r.nextInt( solution.getLength() );
+        final Letter l = solution.getLetterAt( randIdx );
+        switch ( l.getStatus() ) {
+            case UNKNOWN:
+            case YELLOW_MISPLACED:
+            case GRAY_NONEXISTENT:
+                final int randLetter = r.nextInt( 26 );
+                l.setCharacter( (char) ( randLetter + 64 ) );
+                l.setStatus( LetterStatus.RED_SHIFTED );
+                solution.setLetter( randIdx, l );
+                mutated = false;
+                System.out.println("Set False");
+                Config.setSolution(solution.toString());
+            case GREEN_CORRECT:
+            case ORANGE_OBSCURED:
+            case RED_SHIFTED:
+            default:
+                break;
+        }
     }
 
 }
