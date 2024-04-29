@@ -3,6 +3,7 @@ package edu.ncsu.github.solvers;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
@@ -45,10 +46,10 @@ public abstract class BruteForceSolver implements Solver {
      */
     @Override
     public void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        // Make an array orangeIdxthat will be true on orange indexes
+        // Make an array orangeIdx that will be true on orange indexes
         orangeIdx = new boolean[solutionLength];
 
-        orangeCount = Math.round( solutionLength / 5 );
+        orangeCount = Math.round( solutionLength / 5.f );
         // Initialize the guess word with the given length
         guess = new Word( solutionLength );
         // Call the function to generate combinations and check against the
@@ -57,7 +58,7 @@ public abstract class BruteForceSolver implements Solver {
 
         // If no solution is found, print a message
         if ( !solutionFound ) {
-            System.out.println( "Solution not found" );
+            Logger.println("Solution not found");
         }
     }
 

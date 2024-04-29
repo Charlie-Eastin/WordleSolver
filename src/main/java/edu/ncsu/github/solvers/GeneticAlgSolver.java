@@ -1,5 +1,6 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
 import edu.ncsu.github.wordle.*;
 
@@ -41,13 +42,13 @@ public class GeneticAlgSolver implements Solver {
 
         initializeConstraints( solutionLength );
 
-        output("Population 1", true);
+        Logger.println("Population 1");
         initializePopulation( POPULATION_SIZE, solutionLength );
         if ( done ) {
             return;
         }
 
-        output("Population 1", true);
+        Logger.println("Population 1");
         guess = prop();
         done = guess.compareToSolution();
         if ( done ) {
@@ -59,7 +60,7 @@ public class GeneticAlgSolver implements Solver {
             // The mutate method will constrain the domains of variables as it
             // goes and makes intermediate guesses
 
-            output("Population " + popCount, true);
+            Logger.println("Population " + popCount);
 
             final int check = mutate();
             if ( popCount == 50 ) {
@@ -67,14 +68,14 @@ public class GeneticAlgSolver implements Solver {
             }
             popCount++;
             // If an intermediate guess is correct we will stop and be done, no
-            // need to constrain domain or propogate
+            // need to constrain domain or propagate
             if ( check != -1 ) {
                 guess = population.get( check );
                 break;
             }
             // constrainDomain();
 
-            output("Propagation " + popCount, true);
+            Logger.println("Propagation " + popCount);
             guess = prop();
             // print();
             done = guess.compareToSolution();
@@ -85,20 +86,20 @@ public class GeneticAlgSolver implements Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-            output("Concluded initial search portion: still looking for orange letters? " + !done, true);
+            Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
             handleOrange( guess );
         }
-        output("Guesses: " + Word.guesses, false);
-        output("Concluded initial search portion: still looking for orange letters? " + !done, true);
+        Logger.println("Guesses: " + Word.guesses);
+        Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
     }
 
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
 
-        if (idx == -1) {
-            return;
-        }
+//        if (idx == -1) {
+//            return;
+//        }
 
         for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
             if ( nextIdx != -1 && orangeHelper( w, nextIdx ) ) {
@@ -157,9 +158,9 @@ public class GeneticAlgSolver implements Solver {
     void print () {
         for ( int i = 0; i < constraints.size(); i++ ) {
             for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
-                output(constraints.get( i ).get( j ).getCharacter() + ",", false);
+                Logger.print(constraints.get( i ).get( j ).getCharacter() + ",");
             }
-            output("", true);
+            Logger.println("");
         }
     }
 
@@ -342,7 +343,6 @@ public class GeneticAlgSolver implements Solver {
 
             switch ( status ) {
                 case GREEN_CORRECT:
-
                     constraints.get( i ).clear();
                     constraints.get( i ).add( currentLetter );
                     break;
@@ -426,17 +426,5 @@ public class GeneticAlgSolver implements Solver {
     // }
     // }
     // }
-
-    void output(String output, boolean printLn) {
-        if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().addToOutput(output, printLn);
-        } else {
-            if (printLn) {
-                System.out.println(output);
-            } else {
-                System.out.print(output);
-            }
-        }
-    }
 
 }

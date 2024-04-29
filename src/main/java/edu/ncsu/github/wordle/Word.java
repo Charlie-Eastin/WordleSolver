@@ -1,5 +1,6 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
 
 /**
@@ -184,12 +185,8 @@ public class Word {
     public boolean compareLetterToSolution ( final int letterIndex, final int guessCount ) {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
-            final String formatted = String.format( "%5d", guessCount );
-            if (Config.getUsingGUI()) {
-                System.out.print( formatted + ": " );
-            } else {
-                OutputGUI.getInstance().addToOutput(formatted, false);
-            }
+            final String guessCountRightAligned = String.format( "%5d", guessCount );
+            Logger.print(guessCountRightAligned + ": ");
 
             for ( int i = 0; i < letterIndex; i++ ) {
                 getLetterAt( i ).printInColor();

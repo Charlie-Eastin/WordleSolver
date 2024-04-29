@@ -51,31 +51,9 @@ public class OutputGUI extends JFrame {
 		// Get the document of JTextPane
 		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
 
-		String colorName = "";
-		switch (color) {
-			case UNKNOWN:
-				colorName = "white";
-				break;
-			case GREEN_CORRECT:
-				colorName = "#4CBB17";
-				break;
-			case YELLOW_MISPLACED:
-				colorName = "yellow";
-				break;
-			case ORANGE_OBSCURED:
-				colorName = "orange";
-				break;
-			case RED_SHIFTED:
-				colorName = "red";
-				break;
-			case GRAY_NONEXISTENT:
-				colorName = "A9A9A9";
-				break;
-		}
-
 		try {
 			// Insert HTML content with different colors
-			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<font color='" + colorName + "'>" + str + "</font>");
+			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<font color='" + htmlColor(color) + "'>" + str + "</font>");
 			if (printLn) {
 				doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<br>");
 			}
@@ -98,6 +76,25 @@ public class OutputGUI extends JFrame {
 
 	public void clearOutput() {
 		textPane.setText("");
+	}
+
+	private String htmlColor(LetterStatus color) {
+		switch (color) {
+
+			case GREEN_CORRECT:
+				return  "#4CBB17";
+			case YELLOW_MISPLACED:
+				return "yellow";
+			case ORANGE_OBSCURED:
+				return "orange";
+			case RED_SHIFTED:
+				return "red";
+			case GRAY_NONEXISTENT:
+				return "A9A9A9";
+			case UNKNOWN:
+			default:
+				return "white";
+		}
 	}
 
 	private JTextPane textPane;
