@@ -96,6 +96,25 @@ public class MainGUI extends JFrame {
 				updateSolution();
 			}
 		});
+
+		// Add document listener to the solutionTextField
+		solutionTextField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateSolveButton();
+			}
+		});
+
 		solveButton.addActionListener(new ActionListener() {
 			/**
 			 * Invoked when an action occurs.
