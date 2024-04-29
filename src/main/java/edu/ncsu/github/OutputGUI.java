@@ -225,15 +225,16 @@ public class OutputGUI extends JFrame {
 		scrollPane1.setViewportView(textPane);
 		final JPanel spacer1 = new JPanel();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
+		gbc.gridx = 0;
 		gbc.gridy = 8;
+		gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(spacer1, gbc);
 		final JPanel spacer2 = new JPanel();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.gridheight = 7;
+		gbc.gridy = 0;
+		gbc.gridheight = 8;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(spacer2, gbc);
 		button1 = new JButton();
@@ -300,16 +301,17 @@ public class OutputGUI extends JFrame {
 		helpPanel.add(spacer7, gbc);
 		final JPanel spacer8 = new JPanel();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
 		helpPanel.add(spacer8, gbc);
 		final JPanel spacer9 = new JPanel();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
+		gbc.gridx = 2;
 		gbc.gridy = 0;
+		gbc.gridheight = 8;
 		gbc.fill = GridBagConstraints.BOTH;
-		helpPanel.add(spacer9, gbc);
+		mainPanel.add(spacer9, gbc);
 	}
 
 	/**
