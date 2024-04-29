@@ -43,6 +43,9 @@ public class Logger {
 		}
 	}
 
+	/**
+	 * Clears the output stream, either console or GUI.
+	 */
 	public static void clear() {
 		if (Config.getUsingGUI()) {
 			OutputGUI.getInstance().clearOutput();
@@ -83,6 +86,32 @@ public class Logger {
 			OutputGUI.getInstance().addToOutput(str, true);
 		} else {
 			System.out.println(str);
+		}
+	}
+
+	/**
+	 * Prints an integer followed by a newline to the output stream.
+	 *
+	 * @param integer The integer to print.
+	 */
+	public static void println(int integer) {
+		if (Config.getUsingGUI()) {
+			OutputGUI.getInstance().addToOutput(String.valueOf(integer), true);
+		} else {
+			System.out.println(integer);
+		}
+	}
+
+	/**
+	 * Prints an integer to the output stream.
+	 *
+	 * @param integer The integer to print.
+	 */
+	public static void print(int integer) {
+		if (Config.getUsingGUI()) {
+			OutputGUI.getInstance().addToOutput(String.valueOf(integer), false);
+		} else {
+			System.out.print(integer);
 		}
 	}
 

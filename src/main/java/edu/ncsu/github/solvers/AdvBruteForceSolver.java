@@ -1,5 +1,6 @@
 package edu.ncsu.github.solvers;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
@@ -23,7 +24,7 @@ public class AdvBruteForceSolver extends BruteForceSolver {
     protected boolean generateGuesses ( final int solutionLength ) throws WordLengthMismatchException {
         final Word temp = new Word( solutionLength );
         if ( temp.compareToSolution() ) {
-            System.out.println( Word.guesses );
+            Logger.println("Guesses: " + Word.guesses);
             return true;
         }
         locateOrangeIdx( temp );
@@ -35,12 +36,12 @@ public class AdvBruteForceSolver extends BruteForceSolver {
                 temp.setLetter( j, i );
             }
             if ( temp.compareToSolution() ) {
-                System.out.println( Word.guesses );
+                Logger.println("Guesses: " + Word.guesses);
                 return true;
             }
         }
         handleOrangeLetters( temp );
-        System.out.println( Word.guesses );
+        Logger.println("Guesses: " + Word.guesses);
         return true;
         /**
          * // Print the right-aligned guess number final String formatted =
