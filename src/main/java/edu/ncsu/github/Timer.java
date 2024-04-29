@@ -37,8 +37,8 @@ public class Timer {
                     try {
                         Thread.sleep( interval ); // Sleep for the specified
                                                   // interval
-                        if (task != null) {
-                            System.out.println( "RUNNING TASK" );
+                        if ( task != null ) {
+                            // System.out.println( "RUNNING TASK" );
                             task.run(); // Execute the task
                         }
                     }
@@ -57,7 +57,7 @@ public class Timer {
      */
     public synchronized void stop () {
         if ( isRunning ) {
-            System.out.println("Time taken: " + getTime() + "ms");
+            System.out.println( "Time taken: " + getTime() + "ms" );
             isRunning = false;
             thread.interrupt(); // Interrupt the thread to stop it
         }
