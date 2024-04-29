@@ -3,11 +3,11 @@ package edu.ncsu.github;
 import edu.ncsu.github.wordle.LetterStatus;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.util.Locale;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.*;
-import javax.swing.text.html.HTMLDocument;
 
 /**
  * Singleton class for displaying the output GUI.
@@ -15,6 +15,8 @@ import javax.swing.text.html.HTMLDocument;
 public class OutputGUI extends JFrame {
 
 	private static OutputGUI instance;
+	HTMLDocument textPaneDocument;
+
 
 	/**
 	 * Private constructor to prevent instantiation from outside.
@@ -58,18 +60,27 @@ public class OutputGUI extends JFrame {
 	}
 
 	/**
+	 * Retrieves the document of the text pane.
+	 *
+	 * @return the HTML document of the text pane
+	 */
+	HTMLDocument getTextPaneDocument() {
+		if (textPaneDocument == null) {
+			textPaneDocument = (HTMLDocument) textPane.getDocument();
+		}
+		return textPaneDocument;
+	}
+
+	/**
 	 * Adds a string to the output with specified color and whether to print a new line.
 	 *
-	 * @param str     the string to add
-	 * @param color   the color of the string
+	 * @param str   the string to add
+	 * @param color the color of the string
 	 */
 	public void print(String str, LetterStatus color) {
-		// Get the document of JTextPane
-		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
-
 		try {
 			// Insert HTML content with different colors
-			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<font color='" + htmlColor(color) + "'>" + str + "</font>");
+			getTextPaneDocument().insertAfterEnd(getTextPaneDocument().getCharacterElement(getTextPaneDocument().getLength()), "<font color='" + htmlColor(color) + "'>" + str + "</font>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,11 +88,9 @@ public class OutputGUI extends JFrame {
 
 	public void println(String str, LetterStatus color) {
 		print(str, color);
-		// Get the document of JTextPane
-		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
 
 		try {
-			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<br>");
+			getTextPaneDocument().insertAfterEnd(getTextPaneDocument().getCharacterElement(getTextPaneDocument().getLength()), "<br>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,8 +99,8 @@ public class OutputGUI extends JFrame {
 	/**
 	 * Adds a character to the output with specified color and whether to print a new line.
 	 *
-	 * @param c       the character to add
-	 * @param color   the color of the character
+	 * @param c     the character to add
+	 * @param color the color of the character
 	 */
 	public void print(char c, LetterStatus color) {
 		print(String.valueOf(c), color);
@@ -104,7 +113,7 @@ public class OutputGUI extends JFrame {
 	/**
 	 * Adds a string to the output with default color and whether to print a new line.
 	 *
-	 * @param str     the string to add
+	 * @param str the string to add
 	 */
 	public void print(String str) {
 		print(str, LetterStatus.UNKNOWN);
@@ -117,7 +126,7 @@ public class OutputGUI extends JFrame {
 	/**
 	 * Adds a character to the output with default color and whether to print a new line.
 	 *
-	 * @param c       the character to add
+	 * @param c the character to add
 	 */
 	public void print(char c) {
 		print(String.valueOf(c));
