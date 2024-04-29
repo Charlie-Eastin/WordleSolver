@@ -1,68 +1,72 @@
 package edu.ncsu.github.wordle;
 
-import edu.ncsu.github.Logger;
-import edu.ncsu.github.solvers.Algorithm;
-
 import java.util.Random;
 import java.util.Scanner;
+
+import edu.ncsu.github.Logger;
+import edu.ncsu.github.solvers.Algorithm;
 
 /**
  * Contains methods for initial setup of the Wordle game.
  */
 public class Config {
 
-  	// Flag indicating whether the GUI is being used
-    final static boolean USING_GUI = true;
-  
+    // Flag indicating whether the GUI is being used
+    final static boolean USING_GUI        = false;
+
     // Maximum length allowed for the solution word
-    final static int    MAX_WORD_LENGTH  = 100;
+    final static int     MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
-    static Word         solution;
+    static Word          solution;
 
-    final static double ORANGE_WORD_SPAN = 5;
+    final static double  ORANGE_WORD_SPAN = 5;
 
-    final static int TIMER_INTERVAL = 15;
+    final static int     TIMER_INTERVAL   = 15;
 
+    public static void reset () {
+        Word.guesses = 0;
+        Logger.clear();
+    }
 
-	public static void reset() {
-		Word.guesses = 0;
-		Logger.clear();
-	}
+    /**
+     * Retrieves the flag indicating whether the GUI is being used.
+     *
+     * @return True if the GUI is being used, false otherwise.
+     */
+    public static boolean getUsingGUI () {
+        return USING_GUI;
+    }
 
-  	/**
-	 * Retrieves the flag indicating whether the GUI is being used.
-	 *
-	 * @return True if the GUI is being used, false otherwise.
-	 */
-	public static boolean getUsingGUI() {
-		return USING_GUI;
-	}
-
-    public static int getTimerInterval() {
+    /**
+     *
+     * @return
+     */
+    public static int getTimerInterval () {
         return TIMER_INTERVAL;
     }
 
-	// instance of Random object for environment changes.
-	private static final Random r = new Random();
+    // instance of Random object for environment changes.
+    private static final Random r = new Random();
 
-	/**
-	 * Retrieves the maximum length allowed for the solution word.
-	 *
-	 * @return The maximum length allowed for the solution word.
-	 */
-	public static int getMaxWordLength() {
-		return MAX_WORD_LENGTH;
-	}
+    /**
+     * Retrieves the maximum length allowed for the solution word.
+     *
+     * @return The maximum length allowed for the solution word.
+     */
+    public static int getMaxWordLength () {
+        return MAX_WORD_LENGTH;
+    }
 
-	/**
-	 * Sets the solution word for the game.
-	 *
-	 * @param solutionStr The solution word to set.
-	 */
-	public static void setSolution(String solutionStr) {
-		solutionStr = solutionStr.trim().toUpperCase();
-		solution = new Word(solutionStr);
-	}
+    /**
+     * Sets the solution word for the game.
+     *
+     * @param solutionStr
+     *            The solution word to set.
+     */
+    public static void setSolution ( String solutionStr ) {
+        solutionStr = solutionStr.trim().toUpperCase();
+        solution = new Word( solutionStr );
+    }
 
     /**
      * Prompts the user to choose between entering a solution word manually or
@@ -101,7 +105,7 @@ public class Config {
             solutionStr = generateRandomWord( scanner );
         }
 
-        setSolution(solutionStr);
+        setSolution( solutionStr );
         System.out.println( "Word object created with the solution word: " + solution );
         return solution.getLength();
     }
@@ -189,28 +193,30 @@ public class Config {
             }
         }
 
-		return generateRandomWord(length);
+        return generateRandomWord( length );
     }
-  
-  	/**
-	 * Generates a random word of the specified length.
-	 *
-	 * @param length The length of the word to generate.
-	 * @return String representing the randomly generated word.
-	 */
-	public static String generateRandomWord(final int length) {
-		if (length > MAX_WORD_LENGTH) {
-			System.out.println("Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + " letters.");
-			return null;
-		}
 
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < length; i++) {
-			final char randomChar = (char) ('A' + Math.random() * ('Z' - 'A' + 1));
-			sb.append(randomChar);
-		}
-		return sb.toString();
-	}
+    /**
+     * Generates a random word of the specified length.
+     *
+     * @param length
+     *            The length of the word to generate.
+     * @return String representing the randomly generated word.
+     */
+    public static String generateRandomWord ( final int length ) {
+        if ( length > MAX_WORD_LENGTH ) {
+            System.out
+                    .println( "Can't generate a word longer than the max length of " + MAX_WORD_LENGTH + " letters." );
+            return null;
+        }
+
+        final StringBuilder sb = new StringBuilder();
+        for ( int i = 0; i < length; i++ ) {
+            final char randomChar = (char) ( 'A' + Math.random() * ( 'Z' - 'A' + 1 ) );
+            sb.append( randomChar );
+        }
+        return sb.toString();
+    }
 
     /**
      * Prompts the user to choose an algorithm for solving Wordle and returns
@@ -252,40 +258,46 @@ public class Config {
         }
     }
 
-	/**
-	 * Mutates the solution based on a randomly generated number being greater than the probability. Only mutates a
-	 * letter if it is black, yellow, or grey. Mutation means making the letter a random letter from the alphabet.
-	 */
-	public static void mutateSolution() {
-		// get a random probability and check if it is greater/less than the chance to mutate.
-		double probability = 0.2828;
-		double randProb = r.nextDouble();
-		// if it is, mutate a state that is grey, black, or yellow only, and change the status to red.
-		// if it is not, or the status is not grey, black, or yellow, do nothing.
-		if (randProb <= probability) {
-			return;
-		}
-        int randIdx = r.nextInt(solution.getLength());
-        Letter l = solution.getLetterAt(randIdx);
-        switch (l.getStatus()) {
+    /**
+     * Mutates the solution based on a randomly generated number being greater
+     * than the probability. Only mutates a letter if it is black, yellow, or
+     * grey. Mutation means making the letter a random letter from the alphabet.
+     */
+    public static void mutateSolution () {
+        // get a random probability and check if it is greater/less than the
+        // chance to mutate.
+        final double probability = 0.2828;
+        final double randProb = r.nextDouble();
+        // if it is, mutate a state that is grey, black, or yellow only, and
+        // change the status to red.
+        // if it is not, or the status is not grey, black, or yellow, do
+        // nothing.
+        if ( randProb <= probability ) {
+            return;
+        }
+        final int randIdx = r.nextInt( solution.getLength() );
+        final Letter l = solution.getLetterAt( randIdx );
+        switch ( l.getStatus() ) {
             case UNKNOWN:
             case YELLOW_MISPLACED:
             case GRAY_NONEXISTENT:
-                int randLetter = r.nextInt(26);
-                l.setCharacter((char)(randLetter + 64));
-                l.setStatus(LetterStatus.RED_SHIFTED);
+                final int randLetter = r.nextInt( 26 );
+                l.setCharacter( (char) ( randLetter + 64 ) );
+                l.setStatus( LetterStatus.RED_SHIFTED );
+                solution.setLetter( randIdx, l );
             case GREEN_CORRECT:
             case ORANGE_OBSCURED:
             case RED_SHIFTED:
             default:
                 break;
         }
-	}
+    }
 
-    public static boolean chooseEnvChanges(Scanner scanner) {
+    public static boolean chooseEnvChanges ( final Scanner scanner ) {
         String bool;
         while ( true ) {
-            System.out.println( "Would you like to use environment changes (hiding of some letter statuses and letter mutations)?" );
+            System.out.println(
+                    "Would you like to use environment changes (hiding of some letter statuses and letter mutations)?" );
             System.out.print( "Enter your choice (T or F): " );
 
             bool = scanner.nextLine().trim();
@@ -297,7 +309,7 @@ public class Config {
                 System.out.println( "Invalid choice! Please enter T or F." );
             }
         }
-        return bool.equals("T");
+        return bool.equals( "T" );
 
     }
 }
