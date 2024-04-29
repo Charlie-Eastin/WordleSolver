@@ -115,6 +115,19 @@ public class MainGUI extends JFrame {
 			}
 		});
 
+		// Add document filter to the solutionTextField to allow only letters and convert lowercase to uppercase
+		((AbstractDocument) solutionTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+				super.insertString(fb, offset, string.toUpperCase().replaceAll("[^A-Z]", ""), attr);
+			}
+
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				super.replace(fb, offset, length, text.toUpperCase().replaceAll("[^A-Z]", ""), attrs);
+			}
+		});
+
 		solveButton.addActionListener(new ActionListener() {
 			/**
 			 * Invoked when an action occurs.
