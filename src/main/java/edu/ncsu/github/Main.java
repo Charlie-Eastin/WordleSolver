@@ -23,7 +23,8 @@ public class Main {
      */
     public static void main ( final String[] args ) {
         if (Config.getUsingGUI()) {
-            WordleSolverGUI.display();
+            MainGUI gui = new MainGUI();
+            gui.display();
             return;
         }
 

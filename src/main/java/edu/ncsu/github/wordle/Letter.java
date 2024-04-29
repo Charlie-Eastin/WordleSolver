@@ -1,5 +1,10 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
+import edu.ncsu.github.OutputGUI;
+
+import java.awt.*;
+
 /**
  * Represents a letter in a word.
  */
@@ -95,37 +100,11 @@ public class Letter {
 		this.status = LetterStatus.UNKNOWN;
 	}
 
-
 	/**
 	 * Print the character of the letter in its associated color.
 	 */
 	void printInColor() {
-		System.out.print(BG_BLACK);
-
-		switch (this.status) {
-			case UNKNOWN:
-				// This shouldn't happen because guesses should be evaluated
-				// before printing.
-				System.out.print(TEXT_WHITE);
-				break;
-			case GREEN_CORRECT:
-				System.out.print(TEXT_GREEN);
-				break;
-			case YELLOW_MISPLACED:
-				System.out.print(TEXT_YELLOW);
-				break;
-			case ORANGE_OBSCURED:
-				System.out.print(TEXT_ORANGE);
-				break;
-			case RED_SHIFTED:
-				System.out.print(TEXT_RED);
-				break;
-			case GRAY_NONEXISTENT:
-				System.out.print(TEXT_GRAY);
-				break;
-		}
-
-		System.out.print(getCharacter() + TEXT_RESET);
+		Logger.print(getCharacter(), this.status);
 	}
 
 	/**

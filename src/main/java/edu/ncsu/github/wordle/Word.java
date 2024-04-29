@@ -1,5 +1,8 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
+import edu.ncsu.github.OutputGUI;
+
 /**
  * Represents a word in the Wordle game, consisting of an array of letters.
  * This class provides methods to manipulate and compare words.
@@ -159,8 +162,12 @@ public class Word {
             }
         }
 
-        System.out.println( "\u001B[0m" ); // Move to the next line after
-                                           // printing the word
+        if (Config.getUsingGUI()) {
+            OutputGUI.getInstance().println("");
+        } else {
+            System.out.println( "\u001B[0m" ); // Move to the next line after
+                                               // printing the word
+        }
         return Config.solution.toString().equals( asString );
     }
 
@@ -178,8 +185,8 @@ public class Word {
     public boolean compareLetterToSolution ( final int letterIndex, final int guessCount ) {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
-            final String formatted = String.format( "%5d", guessCount );
-            System.out.print( formatted + ": " );
+            final String guessCountRightAligned = String.format( "%5d", guessCount );
+            Logger.print(guessCountRightAligned + ": ");
 
             for ( int i = 0; i < letterIndex; i++ ) {
                 getLetterAt( i ).printInColor();

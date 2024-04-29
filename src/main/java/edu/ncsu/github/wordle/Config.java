@@ -1,5 +1,6 @@
 package edu.ncsu.github.wordle;
 
+import edu.ncsu.github.Logger;
 import edu.ncsu.github.solvers.Algorithm;
 
 import java.util.Random;
@@ -11,8 +12,8 @@ import java.util.Scanner;
 public class Config {
 
   	// Flag indicating whether the GUI is being used
-    final static boolean USING_GUI = false;
-
+    final static boolean USING_GUI = true;
+  
     // Maximum length allowed for the solution word
     final static int    MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
@@ -21,6 +22,12 @@ public class Config {
     final static double ORANGE_WORD_SPAN = 5;
 
     final static int TIMER_INTERVAL = 15;
+
+
+	public static void reset() {
+		Word.guesses = 0;
+		Logger.clear();
+	}
 
   	/**
 	 * Retrieves the flag indicating whether the GUI is being used.
@@ -184,7 +191,7 @@ public class Config {
 
 		return generateRandomWord(length);
     }
-
+  
   	/**
 	 * Generates a random word of the specified length.
 	 *
