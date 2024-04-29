@@ -70,7 +70,7 @@ public class Logger {
 	 */
 	public static void print(String str) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(str, false);
+			OutputGUI.getInstance().print(str);
 		} else {
 			System.out.print(str);
 		}
@@ -83,7 +83,7 @@ public class Logger {
 	 */
 	public static void println(String str) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(str, true);
+			OutputGUI.getInstance().println(str);
 		} else {
 			System.out.println(str);
 		}
@@ -96,7 +96,7 @@ public class Logger {
 	 */
 	public static void println(int integer) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(String.valueOf(integer), true);
+			OutputGUI.getInstance().println(String.valueOf(integer));
 		} else {
 			System.out.println(integer);
 		}
@@ -109,7 +109,7 @@ public class Logger {
 	 */
 	public static void print(int integer) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(String.valueOf(integer), false);
+			OutputGUI.getInstance().print(String.valueOf(integer));
 		} else {
 			System.out.print(integer);
 		}
@@ -123,7 +123,7 @@ public class Logger {
 	 */
 	public static void print(char c, LetterStatus color) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(c, color, false);
+			OutputGUI.getInstance().print(c, color);
 		} else {
 			print(String.valueOf(c), color);
 		}
@@ -137,7 +137,7 @@ public class Logger {
 	 */
 	public static void print(String str, LetterStatus color) {
 		if (Config.getUsingGUI()) {
-			OutputGUI.getInstance().addToOutput(str, true);
+			OutputGUI.getInstance().println(str);
 		} else {
 			System.out.print(BG_BLACK);
 			System.out.print(consoleColorCode(color));

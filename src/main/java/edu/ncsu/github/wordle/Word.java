@@ -163,7 +163,7 @@ public class Word {
         }
 
         if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().addToOutput("", true);
+            OutputGUI.getInstance().println("");
         } else {
             System.out.println( "\u001B[0m" ); // Move to the next line after
                                                // printing the word

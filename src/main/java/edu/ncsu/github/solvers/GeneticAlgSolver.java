@@ -88,11 +88,11 @@ public class GeneticAlgSolver implements Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-            Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
+//            Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
             handleOrange( guess );
         }
         Logger.println("Guesses: " + Word.guesses);
-        Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
+//        Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
     }
 
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {

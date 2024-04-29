@@ -4,7 +4,6 @@ import edu.ncsu.github.wordle.LetterStatus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Locale;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.*;
@@ -55,7 +54,7 @@ public class OutputGUI extends JFrame {
 		setSize(225, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		textPane.setBackground(Color.decode("#383838"));
+		textPane.setBackground(Color.decode("#1a1a1a"));
 	}
 
 	/**
@@ -63,18 +62,26 @@ public class OutputGUI extends JFrame {
 	 *
 	 * @param str     the string to add
 	 * @param color   the color of the string
-	 * @param printLn whether to print a new line after the string
 	 */
-	public void addToOutput(String str, LetterStatus color, boolean printLn) {
+	public void print(String str, LetterStatus color) {
 		// Get the document of JTextPane
 		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
 
 		try {
 			// Insert HTML content with different colors
 			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<font color='" + htmlColor(color) + "'>" + str + "</font>");
-			if (printLn) {
-				doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<br>");
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void println(String str, LetterStatus color) {
+		print(str, color);
+		// Get the document of JTextPane
+		HTMLDocument doc = (HTMLDocument) textPane.getDocument();
+
+		try {
+			doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), "<br>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,30 +92,39 @@ public class OutputGUI extends JFrame {
 	 *
 	 * @param c       the character to add
 	 * @param color   the color of the character
-	 * @param printLn whether to print a new line after the character
 	 */
-	public void addToOutput(char c, LetterStatus color, boolean printLn) {
-		addToOutput(String.valueOf(c), color, printLn);
+	public void print(char c, LetterStatus color) {
+		print(String.valueOf(c), color);
+	}
+
+	public void println(char c, LetterStatus color) {
+		println(String.valueOf(c), color);
 	}
 
 	/**
 	 * Adds a string to the output with default color and whether to print a new line.
 	 *
 	 * @param str     the string to add
-	 * @param printLn whether to print a new line after the string
 	 */
-	public void addToOutput(String str, boolean printLn) {
-		addToOutput(str, LetterStatus.UNKNOWN, printLn);
+	public void print(String str) {
+		print(str, LetterStatus.UNKNOWN);
+	}
+
+	public void println(String str) {
+		println(str, LetterStatus.UNKNOWN);
 	}
 
 	/**
 	 * Adds a character to the output with default color and whether to print a new line.
 	 *
 	 * @param c       the character to add
-	 * @param printLn whether to print a new line after the character
 	 */
-	public void addToOutput(char c, boolean printLn) {
-		addToOutput(String.valueOf(c), printLn);
+	public void print(char c) {
+		print(String.valueOf(c));
+	}
+
+	public void println(char c) {
+		println(String.valueOf(c));
 	}
 
 	/**
