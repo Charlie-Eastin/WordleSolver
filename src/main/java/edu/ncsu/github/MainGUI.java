@@ -291,7 +291,8 @@ public class MainGUI extends JFrame {
 		algPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Algorithm", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		basicBruteRadio = new JRadioButton();
 		basicBruteRadio.setSelected(true);
-		basicBruteRadio.setText("Basic Brute Force");
+		basicBruteRadio.setText("Isolated Brute Force");
+		basicBruteRadio.setToolTipText("Exhaustively tests characters one at a time");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -299,7 +300,8 @@ public class MainGUI extends JFrame {
 		gbc.anchor = GridBagConstraints.WEST;
 		algPanel.add(basicBruteRadio, gbc);
 		advBruteRadio = new JRadioButton();
-		advBruteRadio.setText("Advanced Brute Force");
+		advBruteRadio.setText("Mass Brute Force");
+		advBruteRadio.setToolTipText("Shifts guesses for all characters simultaneously");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -308,6 +310,7 @@ public class MainGUI extends JFrame {
 		algPanel.add(advBruteRadio, gbc);
 		geneticRadio = new JRadioButton();
 		geneticRadio.setText("Genetic Algorithm (CSP)");
+		geneticRadio.setToolTipText("Optimizes solutions through a modified genetic algorithm while treating Wordle as a Constraint Satisfaction Problem");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;

@@ -92,7 +92,8 @@
             </constraints>
             <properties>
               <selected value="true"/>
-              <text value="Basic Brute Force"/>
+              <text value="Isolated Brute Force"/>
+              <toolTipText value="Exhaustively tests characters one at a time"/>
             </properties>
           </component>
           <component id="de352" class="javax.swing.JRadioButton" binding="advBruteRadio">
@@ -101,7 +102,8 @@
               <gridbag weightx="1.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <text value="Advanced Brute Force"/>
+              <text value="Mass Brute Force"/>
+              <toolTipText value="Shifts guesses for all characters simultaneously"/>
             </properties>
           </component>
           <component id="74cb0" class="javax.swing.JRadioButton" binding="geneticRadio">
@@ -111,6 +113,7 @@
             </constraints>
             <properties>
               <text value="Genetic Algorithm (CSP)"/>
+              <toolTipText value="Optimizes solutions through a modified genetic algorithm while treating Wordle as a Constraint Satisfaction Problem"/>
             </properties>
           </component>
         </children>
