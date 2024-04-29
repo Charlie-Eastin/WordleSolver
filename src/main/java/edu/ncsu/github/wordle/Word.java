@@ -4,8 +4,8 @@ import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
 
 /**
- * Represents a word in the Wordle game, consisting of an array of letters.
- * This class provides methods to manipulate and compare words.
+ * Represents a word in the Wordle game, consisting of an array of letters. This
+ * class provides methods to manipulate and compare words.
  */
 public class Word {
 
@@ -162,9 +162,10 @@ public class Word {
             }
         }
 
-        if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().println("");
-        } else {
+        if ( Config.getUsingGUI() ) {
+            OutputGUI.getInstance().println( "" );
+        }
+        else {
             System.out.println( "\u001B[0m" ); // Move to the next line after
                                                // printing the word
         }
@@ -186,7 +187,7 @@ public class Word {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
             final String guessCountRightAligned = String.format( "%5d", guessCount );
-            Logger.print(guessCountRightAligned + ": ");
+            Logger.print( guessCountRightAligned + ": " );
 
             for ( int i = 0; i < letterIndex; i++ ) {
                 getLetterAt( i ).printInColor();
@@ -204,6 +205,37 @@ public class Word {
         }
         else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED ) {
             guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.RED_SHIFTED
+                && guessLetter.getStatus() == LetterStatus.RED_SHIFTED ) {
+
+            Config.solution.getLetterAt( letterIndex ).resetStatus();
+            guessLetter.resetStatus();
+
+            if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
+                guessLetter.setStatus( LetterStatus.GREEN_CORRECT );
+            }
+            else if ( solution.contains( Character.toString( guessLetter.getCharacter() ) ) ) {
+                // If the char is in the word but not in the right position
+                final int totalLetter = countLetter( solution, guessLetter.getCharacter() );
+                final int totalCorrect = countCorrect( guessLetter.getCharacter() );
+
+                if ( totalLetter > totalCorrect ) {
+                    guessLetter.setStatus( LetterStatus.YELLOW_MISPLACED );
+                }
+                else {
+                    guessLetter.setStatus( LetterStatus.GRAY_NONEXISTENT );
+                }
+                letterIsCorrect = false;
+            }
+            else {
+                guessLetter.setStatus( LetterStatus.GRAY_NONEXISTENT );
+                letterIsCorrect = false;
+            }
+
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.RED_SHIFTED ) {
+            guessLetter.setStatus( LetterStatus.RED_SHIFTED );
         }
         else if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
             // Character is in the right position
