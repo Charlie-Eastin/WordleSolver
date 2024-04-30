@@ -57,7 +57,7 @@ public class Timer {
      */
     public synchronized void stop () {
         if ( isRunning ) {
-            System.out.println( "Time taken: " + getTime() + "ms" );
+            Logger.println( "Time taken: " + getTime() + "ms" );
             isRunning = false;
             thread.interrupt(); // Interrupt the thread to stop it
         }
