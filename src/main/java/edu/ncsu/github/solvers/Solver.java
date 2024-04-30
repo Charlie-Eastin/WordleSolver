@@ -11,11 +11,13 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 public class Solver {
 
 	/**
-	 * Solve the problem using a specific strategy.
+	 * Solve the problem using a specific strategy. NOTE: Don't call this directly. Use Launcher.launch() instead.
 	 *
 	 * @param solutionLength The length of the solution needed.
+	 * @throws WordLengthMismatchException if the solution length doesn't match the word length.
 	 */
 	void solve(int solutionLength) throws WordLengthMismatchException {
 		Config.reset();
 	}
+
 }

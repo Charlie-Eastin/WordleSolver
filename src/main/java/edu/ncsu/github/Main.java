@@ -1,12 +1,10 @@
 package edu.ncsu.github;
 
-import java.util.Scanner;
-
 import edu.ncsu.github.solvers.Algorithm;
-import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.solvers.Launcher;
-import edu.ncsu.github.wordle.Word;
-import edu.ncsu.github.wordle.WordLengthMismatchException;;
+import edu.ncsu.github.wordle.Config;
+
+import java.util.Scanner;
 
 /**
  * The main Wordle Solver class.
