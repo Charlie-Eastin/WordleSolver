@@ -161,13 +161,8 @@ public class Word {
                 l.printInColor();
             }
         }
-
-        if (Config.getUsingGUI()) {
-            OutputGUI.getInstance().println("");
-        } else {
-            System.out.println( "\u001B[0m" ); // Move to the next line after
-                                               // printing the word
-        }
+        // Move to the next line after printing the word
+        Logger.println("");
         return Config.solution.toString().equals( asString );
     }
 
@@ -240,7 +235,7 @@ public class Word {
         // for ( int i = letterIndex + 1; i < this.getLength(); i++ ) {
         // getLetterAt( i ).printInColor();
         // }
-        // System.out.println();
+        // Logger.println();
         // }
 
         return letterIsCorrect;

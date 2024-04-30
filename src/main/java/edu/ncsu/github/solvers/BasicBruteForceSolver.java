@@ -42,7 +42,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
                 }
                 temp.setLetter( i, c );
                 if ( temp.compareToSolution() ) {
-                    // System.out.println( "Exits here" );
+                    // Logger.println( "Exits here" );
                     Logger.println("Guesses: " + Word.guesses);
                     return true;
                 }
@@ -75,8 +75,8 @@ public class BasicBruteForceSolver extends BruteForceSolver {
     private void handleOrangeLetters ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
-        // System.out.println( idx );
-        // System.out.println( nextIdx );
+        // Logger.println( idx );
+        // Logger.println( nextIdx );
         for ( char i = 'A'; i <= 'Z'; i++ ) {
             if ( nextIdx != -1 ) {
                 if ( orangeHelper( w, nextIdx ) ) {

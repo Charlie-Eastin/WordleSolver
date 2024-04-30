@@ -12,8 +12,7 @@ import java.util.Scanner;
 public class Config {
 
   	// Flag indicating whether the GUI is being used
-    final static boolean USING_GUI = true;
-  
+    final static boolean USING_GUI = false;
     // Maximum length allowed for the solution word
     final static int    MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
