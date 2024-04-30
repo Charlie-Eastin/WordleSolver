@@ -8,16 +8,16 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 /**
  * Solver implementing the basic brute force algorithm, described as "Isolated
- * Brute Force" in the project proposal.
- * NOTE: Any logic that is shared by this class and the advanced version should
- * appear in the abstract parent class.
+ * Brute Force" in the project proposal. NOTE: Any logic that is shared by this
+ * class and the advanced version should appear in the abstract parent class.
  */
 public class BasicBruteForceSolver extends BruteForceSolver {
 
     /**
      * Generates guesses by brute force method
      *
-     * @param solutionLength the length of the solution word
+     * @param solutionLength
+     *            the length of the solution word
      * @return true if guesses are successfully generated, false otherwise
      * @throws WordLengthMismatchException
      *             if the length of the guess does not match the length of the
@@ -28,7 +28,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
 
         final Word temp = new Word( solutionLength );
         if ( temp.compareToSolution() ) {
-            Logger.println("Guesses: " + Word.guesses);
+            Logger.println( "Guesses: " + Word.guesses );
             return true;
         }
         locateOrangeIdx( temp );
@@ -40,13 +40,16 @@ public class BasicBruteForceSolver extends BruteForceSolver {
 
             for ( char c = 'B'; c <= 'Z'; c++ ) {
                 final Letter l = temp.getLetterAt( i );
+                if ( l.getStatus() == LetterStatus.RED_SHIFTED ) {
+                    c = 'B';
+                }
                 if ( l.getStatus() == LetterStatus.GREEN_CORRECT ) {
                     break;
                 }
                 temp.setLetter( i, c );
                 if ( temp.compareToSolution() ) {
                     // Logger.println( "Exits here" );
-                    Logger.println("Guesses: " + Word.guesses);
+                    Logger.println( "Guesses: " + Word.guesses );
                     return true;
                 }
 
@@ -63,7 +66,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
          * guess.compareLetterToSolution( i, ++guessCount ); handleLetterAt( i
          * ); } while ( !letterIsCorrect ); }
          */
-        Logger.println("Guesses: " + Word.guesses);
+        Logger.println( "Guesses: " + Word.guesses );
         return true;
     }
 

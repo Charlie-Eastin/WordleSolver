@@ -3,7 +3,6 @@ package edu.ncsu.github.wordle;
 import java.util.Random;
 
 import edu.ncsu.github.Logger;
-import edu.ncsu.github.OutputGUI;
 
 /**
  * Represents a word in the Wordle game, consisting of an array of letters. This
@@ -174,7 +173,7 @@ public class Word {
             }
         }
         // Move to the next line after printing the word
-        Logger.println("");
+        Logger.println( "" );
         return Config.solution.toString().equals( asString );
     }
 
@@ -386,6 +385,9 @@ public class Word {
             case UNKNOWN:
             case YELLOW_MISPLACED:
             case GRAY_NONEXISTENT:
+                if ( Config.solution.getLetterAt( randIdx ).getStatus() == LetterStatus.ORANGE_OBSCURED ) {
+                    break;
+                }
                 System.out.println( "before solution: " + solution );
                 final int randLetter = r.nextInt( 26 );
 
