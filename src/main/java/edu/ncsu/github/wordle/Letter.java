@@ -10,16 +10,6 @@ import java.awt.*;
  */
 public class Letter {
 
-	// ANSI escape codes for colors
-	public static final String BG_BLACK = "\u001B[40m";
-	public static final String TEXT_RESET = "\u001B[0m";
-	public static final String TEXT_WHITE = "\u001B[97m";
-	public static final String TEXT_GREEN = "\u001B[32m";
-	public static final String TEXT_YELLOW = "\u001B[33m";
-	public static final String TEXT_ORANGE = "\u001B[38;5;208m";
-	public static final String TEXT_RED = "\u001B[31m";
-	public static final String TEXT_GRAY = "\u001B[37m";
-
 	// Actual alphabetic character
 	private char character;
 
