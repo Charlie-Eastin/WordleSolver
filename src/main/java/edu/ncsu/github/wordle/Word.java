@@ -378,17 +378,24 @@ public class Word {
         }
 
         final int randIdx = r.nextInt( solution.getLength() );
-        final Letter l = letters[randIdx];
-        switch ( l.getStatus() ) {
+        final Letter guessLetter = letters[randIdx];
+        switch ( guessLetter.getStatus() ) {
             case UNKNOWN:
             case YELLOW_MISPLACED:
             case GRAY_NONEXISTENT:
+                System.out.println( "before solution: " + solution );
                 final int randLetter = r.nextInt( 26 );
-                l.setCharacter( (char) ( randLetter + 65 ) );
-                l.setStatus( LetterStatus.RED_SHIFTED );
-                solution.setLetter( randIdx, l );
+
+                // Config.solution.setCharacter( );
+                final Letter solLetter = Config.solution.getLetterAt( randIdx );
+                solLetter.setStatus( LetterStatus.RED_SHIFTED );
+                solLetter.setCharacter( (char) ( randLetter + 65 ) );
+
+                // l.setStatus( LetterStatus.RED_SHIFTED );
+                solution.setLetter( randIdx, solLetter );
 
                 mutated = false;
+                System.out.println( "after solution:  " + solution );
                 // Config.setSolution( solution);
                 mutationCount++;
             case GREEN_CORRECT:
