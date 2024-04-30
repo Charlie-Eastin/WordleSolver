@@ -132,12 +132,8 @@ public class MainGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-
-				solve();
-
-
 				OutputGUI.getInstance().display();
+				solve();
 			}
 		});
 	}
@@ -187,6 +183,8 @@ public class MainGUI extends JFrame {
 		String solutionStr = solutionTextField.getText();
 		Config.setSolution(solutionStr);
 		boolean useEnvChanges = mutationsCheckBox.isSelected();
+
+
 
 		if (basicBruteRadio.isSelected()) {
 			Launcher.launch(Algorithm.BRUTE_FORCE_BASIC, useEnvChanges, solutionStr.length());
