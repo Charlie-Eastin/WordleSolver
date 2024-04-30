@@ -10,20 +10,19 @@ import edu.ncsu.github.solvers.Algorithm;
  * Contains methods for initial setup of the Wordle game.
  */
 public class Config {
+
     // Flag indicating whether the GUI is being used
-    final static boolean USING_GUI        = true;
+    final static boolean USING_GUI        = false;
+
     // Maximum length allowed for the solution word
     final static int     MAX_WORD_LENGTH  = 100;
     // Package access so Solvers can't see it
     static Word          solution;
-	// Span within which the obscured letters are generated
+
     final static double  ORANGE_WORD_SPAN = 5;
-	// Timer interval for the game
+
     final static int     TIMER_INTERVAL   = 15;
 
-	/**
-	 * Resets the game state by clearing the number of guesses and the log.
-	 */
     public static void reset () {
         Word.guesses = 0;
         Logger.clear();
@@ -38,11 +37,10 @@ public class Config {
         return USING_GUI;
     }
 
-	/**
-	 * Retrieves the timer interval for the game.
-	 *
-	 * @return The timer interval.
-	 */
+    /**
+     *
+     * @return
+     */
     public static int getTimerInterval () {
         return TIMER_INTERVAL;
     }
@@ -50,18 +48,12 @@ public class Config {
     // instance of Random object for environment changes.
     private static final Random r = new Random();
 
-	/**
-	 * Retrieves the random number generator used for various operations.
-	 *
-	 * @return Random number generator instance.
-	 */
     public static Random getRandom () {
         return r;
     }
 
-    /**
+    /*
      * Retrieves the maximum length allowed for the solution word.
-     *
      * @return The maximum length allowed for the solution word.
      */
     public static int getMaxWordLength () {
@@ -79,12 +71,7 @@ public class Config {
         solution = new Word( solutionStr );
     }
 
-	/**
-	 * Retrieves the solution word for the game.
-	 *
-	 * @return The solution word as a Word object.
-	 */
-    public static Word getSolution ( ) {
+    public static Word getSolution () {
         return solution;
     }
 
@@ -278,11 +265,11 @@ public class Config {
         }
     }
 
-	/**
-	 * Mutates the solution based on a randomly generated number being greater than the probability.
-	 * Only mutates a letter if it is black, yellow, or grey.
-	 * Mutation means making the letter a random letter from the alphabet.
-	 */
+    /**
+     * Mutates the solution based on a randomly generated number being greater
+     * than the probability. Only mutates a letter if it is black, yellow, or
+     * grey. Mutation means making the letter a random letter from the alphabet.
+     */
     public static void mutateSolution () {
         // get a random probability and check if it is greater/less than the
         // chance to mutate.
@@ -313,12 +300,6 @@ public class Config {
         }
     }
 
-	/**
-	 * Prompts the user to choose whether to use environment changes (hiding of some letter statuses and letter mutations).
-	 *
-	 * @param scanner Scanner object for user input
-	 * @return True if environment changes are chosen, false otherwise.
-	 */
     public static boolean chooseEnvChanges ( final Scanner scanner ) {
         String bool;
         while ( true ) {
@@ -326,7 +307,7 @@ public class Config {
                     "Would you like to use environment changes (hiding of some letter statuses and letter mutations)?" );
             System.out.print( "Enter your choice (T or F): " );
 
-            bool = scanner.nextLine().trim().toUpperCase();
+            bool = scanner.nextLine().trim();
 
             if ( bool.equals( "T" ) || bool.equals( "F" ) ) {
                 break; // Valid choice, exit the loop

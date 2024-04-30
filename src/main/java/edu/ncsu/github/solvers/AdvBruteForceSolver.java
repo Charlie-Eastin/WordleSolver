@@ -1,5 +1,9 @@
 package edu.ncsu.github.solvers;
 
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import edu.ncsu.github.Logger;
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
@@ -24,33 +28,46 @@ public class AdvBruteForceSolver extends BruteForceSolver {
     protected boolean generateGuesses ( final int solutionLength ) throws WordLengthMismatchException {
         final Word temp = new Word( solutionLength );
         if ( temp.compareToSolution() ) {
-            Logger.println("Guesses: " + Word.guesses);
+            Logger.println( "Guesses: " + Word.guesses );
             return true;
         }
         locateOrangeIdx( temp );
+        final Set<Integer> redLetters = new LinkedHashSet<Integer>();
         for ( char i = 'B'; i <= 'Z'; i++ ) {
             for ( int j = 0; j < temp.getLength(); j++ ) {
+                if ( temp.getLetterAt( j ).getStatus() == LetterStatus.RED_SHIFTED ) {
+                    redLetters.add( j );
+                }
                 if ( orangeIdx[j] || temp.getLetterAt( j ).getStatus() == LetterStatus.GREEN_CORRECT ) {
                     continue;
                 }
                 temp.setLetter( j, i );
             }
             if ( temp.compareToSolution() ) {
-                Logger.println("Guesses: " + Word.guesses);
+                Logger.println( "Guesses: " + Word.guesses );
                 return true;
             }
         }
+
+        final Iterator<Integer> iterator = redLetters.iterator();
+        while ( iterator.hasNext() ) {
+            final int tempLetter = iterator.next();
+            if ( temp.getLetterAt( tempLetter ).getStatus() == LetterStatus.GREEN_CORRECT ) {
+                iterator.remove();
+            }
+        }
+        handleRedLetters( temp, redLetters );
         handleOrangeLetters( temp );
-        Logger.println("Guesses: " + Word.guesses);
+        Logger.println( "Guesses: " + Word.guesses );
         return true;
         /**
          * // Print the right-aligned guess number final String formatted =
-         * String.format( "%5d", ++guessCount ); Logger.print( formatted +
-         * ": " );
+         * String.format( "%5d", ++guessCount ); Logger.print( formatted + ": "
+         * );
          *
          * // Check if the current guess matches the solution and give each
-         * Letter // a status if ( guess.compareToSolution() ) {
-         * Logger.println( "Solution found: " + guess ); return true; }
+         * Letter // a status if ( guess.compareToSolution() ) { Logger.println(
+         * "Solution found: " + guess ); return true; }
          *
          * // Iterate through each letter in the guess for ( int i = 0; i <
          * guess.getLength(); i++ ) { handleLetterAt( i ); } // Recursive call
@@ -100,6 +117,28 @@ public class AdvBruteForceSolver extends BruteForceSolver {
             if ( w.compareToSolution() ) {
                 return;
             }
+        }
+
+    }
+
+    private void handleRedLetters ( final Word w, final Set<Integer> redLetters ) throws WordLengthMismatchException {
+
+        for ( char i = 'A'; i <= 'Z'; i++ ) {
+            if ( redLetters.size() == 0 ) {
+                return;
+            }
+            Iterator<Integer> iterator = redLetters.iterator();
+            while ( iterator.hasNext() ) {
+                w.setLetter( iterator.next(), i );
+            }
+            w.compareToSolution();
+            iterator = redLetters.iterator();
+            while ( iterator.hasNext() ) {
+                if ( w.getLetterAt( iterator.next() ).getStatus() == LetterStatus.GREEN_CORRECT ) {
+                    iterator.remove();
+                }
+            }
+
         }
 
     }
@@ -156,6 +195,23 @@ public class AdvBruteForceSolver extends BruteForceSolver {
      * @return the index of the orangeIdx array containing true;
      */
     private int locateNextUnknown ( final int idx ) {
+        for ( int i = idx; i < orangeIdx.length; i++ ) {
+            if ( orangeIdx[i] ) {
+
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Locates the next orange index from idx to the end of the array
+     *
+     * @param idx
+     *            the starting index of search
+     * @return the index of the orangeIdx array containing true;
+     */
+    private int locateNextRed ( final int idx ) {
         for ( int i = idx; i < orangeIdx.length; i++ ) {
             if ( orangeIdx[i] ) {
 

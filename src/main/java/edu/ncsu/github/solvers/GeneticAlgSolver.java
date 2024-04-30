@@ -1,14 +1,14 @@
 package edu.ncsu.github.solvers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import edu.ncsu.github.Logger;
 import edu.ncsu.github.wordle.Letter;
 import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 // Solver implementing the genetic algorithm treating the problem as a CSP
 public class GeneticAlgSolver extends Solver {
@@ -37,7 +37,7 @@ public class GeneticAlgSolver extends Solver {
 
     @Override
     void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        super.solve(solutionLength);
+        super.solve( solutionLength );
 
         guess = new Word( solutionLength );
         orangeLetters = new boolean[solutionLength];
@@ -46,13 +46,13 @@ public class GeneticAlgSolver extends Solver {
 
         initializeConstraints( solutionLength );
 
-        Logger.println("Population 1");
+        Logger.println( "Population 1" );
         initializePopulation( POPULATION_SIZE, solutionLength );
         if ( done ) {
             return;
         }
 
-        Logger.println("Population 1");
+        Logger.println( "Population 1" );
         guess = prop();
         done = guess.compareToSolution();
         if ( done ) {
@@ -64,7 +64,7 @@ public class GeneticAlgSolver extends Solver {
             // The mutate method will constrain the domains of variables as it
             // goes and makes intermediate guesses
 
-            Logger.println("Population " + popCount);
+            Logger.println( "Population " + popCount );
 
             final int check = mutate();
             if ( popCount == 50 ) {
@@ -79,7 +79,7 @@ public class GeneticAlgSolver extends Solver {
             }
             // constrainDomain();
 
-            Logger.println("Propagation " + popCount);
+            Logger.println( "Propagation " + popCount );
             guess = prop();
             // print();
             done = guess.compareToSolution();
@@ -90,24 +90,28 @@ public class GeneticAlgSolver extends Solver {
 
         // By this point all that will be left will be the orange indexes
         if ( onlyOrange( guess ) && !done ) {
-//            Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
+            // Logger.println("Concluded initial search portion: still looking
+            // for orange letters? " + !done);
             handleOrange( guess );
         }
-        Logger.println("Guesses: " + Word.guesses);
-//        Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
+        Logger.println( "Guesses: " + Word.guesses );
+        // Logger.println("Concluded initial search portion: still looking for
+        // orange letters? " + !done);
     }
 
-	/**
-	 * Handles the orange letters in the word.
-	 *
-	 * @param w the word containing orange letters
-	 * @throws WordLengthMismatchException if there is a mismatch in word length
-	 */
+    /**
+     * Handles the orange letters in the word.
+     *
+     * @param w
+     *            the word containing orange letters
+     * @throws WordLengthMismatchException
+     *             if there is a mismatch in word length
+     */
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
 
-        if (idx == -1) {
+        if ( idx == -1 ) {
             return;
         }
 
@@ -124,14 +128,17 @@ public class GeneticAlgSolver extends Solver {
 
     }
 
-	/**
-	 * Helper method for handling orange letters.
-	 *
-	 * @param w   the word containing orange letters
-	 * @param idx the index of the next unknown letter
-	 * @return true if orange letters are found, false otherwise
-	 * @throws WordLengthMismatchException if there is a mismatch in word length
-	 */
+    /**
+     * Helper method for handling orange letters.
+     *
+     * @param w
+     *            the word containing orange letters
+     * @param idx
+     *            the index of the next unknown letter
+     * @return true if orange letters are found, false otherwise
+     * @throws WordLengthMismatchException
+     *             if there is a mismatch in word length
+     */
     private boolean orangeHelper ( final Word w, final int idx ) throws WordLengthMismatchException {
         final int nextIdx = locateNextUnknown( idx + 1 );
         for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
@@ -176,9 +183,9 @@ public class GeneticAlgSolver extends Solver {
     void print () {
         for ( int i = 0; i < constraints.size(); i++ ) {
             for ( int j = 0; j < constraints.get( i ).size(); j++ ) {
-                Logger.print(constraints.get( i ).get( j ).getCharacter() + ",");
+                Logger.print( constraints.get( i ).get( j ).getCharacter() + "," );
             }
-            Logger.println("");
+            Logger.println( "" );
         }
     }
 
@@ -342,16 +349,20 @@ public class GeneticAlgSolver extends Solver {
         return true;
     }
 
-	/**
-	 * Constrain the domain of the given word.
-	 * This method updates the domain constraints based on the status of each letter in the word.
-	 * If a letter is correctly placed (GREEN_CORRECT), it updates the correct letters array and clears the constraints for that position.
-	 * If a letter is marked as non-existent (GRAY_NONEXISTENT), it removes the letter from all domain constraints.
-	 * If a letter is misplaced (YELLOW_MISPLACED), it removes the letter from the domain constraint of its position.
-	 * Throws a RuntimeException if the letter status is UNKNOWN, indicating it has not been evaluated, or if the status is unsupported (RED or ORANGE).
-	 *
-	 * @param w the word whose domain is being constrained
-   */
+    /**
+     * Constrain the domain of the given word. This method updates the domain
+     * constraints based on the status of each letter in the word. If a letter
+     * is correctly placed (GREEN_CORRECT), it updates the correct letters array
+     * and clears the constraints for that position. If a letter is marked as
+     * non-existent (GRAY_NONEXISTENT), it removes the letter from all domain
+     * constraints. If a letter is misplaced (YELLOW_MISPLACED), it removes the
+     * letter from the domain constraint of its position. Throws a
+     * RuntimeException if the letter status is UNKNOWN, indicating it has not
+     * been evaluated, or if the status is unsupported (RED or ORANGE).
+     *
+     * @param w
+     *            the word whose domain is being constrained
+     */
     private void constrainDomainOneWord ( final Word w ) {
         for ( int i = 0; i < w.getLength(); i++ ) {
             final Letter currentLetter = w.getLetterAt( i );
@@ -390,6 +401,12 @@ public class GeneticAlgSolver extends Solver {
                     constraints.get( i ).remove( currentLetter );
                     break;
                 case ORANGE_OBSCURED:
+                    break;
+                case RED_SHIFTED:
+                    constraints.get( i ).clear();
+                    for ( int j = 0; j < 26; j++ ) {
+                        constraints.get( i ).add( new Letter( (char) ( j + 65 ) ) );
+                    }
                     break;
                 case UNKNOWN: // Throw an exception if the letter has not
                               // been evaluated
