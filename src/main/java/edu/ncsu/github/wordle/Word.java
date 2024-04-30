@@ -1,8 +1,9 @@
 package edu.ncsu.github.wordle;
 
+import java.util.Random;
+
 import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
-import java.util.Random;
 
 /**
  * Represents a word in the Wordle game, consisting of an array of letters. This
@@ -10,12 +11,13 @@ import java.util.Random;
  */
 public class Word {
 
-    private Letter[]  letters;    // Array to store the letters of the word
-    private String    asString;   // String representation of the word
-    
+    private Letter[]       letters;        // Array to store the letters of the
+                                           // word
+    private String         asString;       // String representation of the word
+
     private static boolean mutated = false;
-   
-    public static int guesses = 0;
+
+    public static int      guesses = 0;
 
     /**
      * Constructor for creating a Word object with a specified length.
@@ -139,13 +141,20 @@ public class Word {
      *             If the word length is not equal to the solution length.
      */
     public boolean compareToSolution () throws WordLengthMismatchException {
-        if (!mutated) {
+        if ( !mutated ) {
             mutateSolution();
         }
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
         guesses++;
+        // boolean wordIsSolution = true;
+
+        for ( int i = 0; i < Config.solution.getLength(); i++ ) {
+            if ( !compareLetterToSolution( i, -1 ) ) {
+                // wordIsSolution = false;
+            }
+        }
 
         if ( Config.solution.toString().equals( asString ) ) {
             for ( int i = 0; i < Config.solution.getLength(); i++ ) {
@@ -321,8 +330,7 @@ public class Word {
         return asString;
     }
 
-
-    public static void mutate() {
+    public static void mutate () {
         mutated = true;
     }
 
@@ -332,9 +340,9 @@ public class Word {
      * grey. Mutation means making the letter a random letter from the alphabet.
      */
     public static void mutateSolution () {
-        Word solution = Config.getSolution();
-        Random r = Config.getRandom();
-        
+        final Word solution = Config.getSolution();
+        final Random r = Config.getRandom();
+
         // get a random probability and check if it is greater/less than the
         // chance to mutate.
         final double probability = 0.2828;
@@ -356,15 +364,20 @@ public class Word {
                 l.setCharacter( (char) ( randLetter + 64 ) );
                 l.setStatus( LetterStatus.RED_SHIFTED );
                 solution.setLetter( randIdx, l );
-                mutated = false;
-                System.out.println("Set False");
-                Config.setSolution(solution.toString());
+
+                System.out.println( solution );
+                // Config.setSolution( solution);
             case GREEN_CORRECT:
             case ORANGE_OBSCURED:
             case RED_SHIFTED:
             default:
+                if ( mutated ) {
+                    mutated = false;
+                    System.out.println( "Set False" );
+                }
                 break;
         }
+
     }
 
 }
