@@ -1,9 +1,6 @@
 package edu.ncsu.github;
 
-import edu.ncsu.github.solvers.AdvBruteForceSolver;
-import edu.ncsu.github.solvers.BasicBruteForceSolver;
-import edu.ncsu.github.solvers.GeneticAlgSolver;
-import edu.ncsu.github.solvers.Solver;
+import edu.ncsu.github.solvers.*;
 import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
@@ -30,7 +27,6 @@ public class MainGUI extends JFrame {
 	private JRadioButton advBruteRadio;
 	private JRadioButton geneticRadio;
 	private JCheckBox mutationsCheckBox;
-	private JTextField intervalTextField;
 	private JPanel mainPanel;
 	private JPanel solutionPanel;
 	private JPanel algPanel;
@@ -136,7 +132,11 @@ public class MainGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+
 				solve();
+
+
 				OutputGUI.getInstance().display();
 			}
 		});
@@ -184,25 +184,25 @@ public class MainGUI extends JFrame {
 
 	// Solve the Wordle
 	private void solve() {
-		Solver solver;
+		String solutionStr = solutionTextField.getText();
+		Config.setSolution(solutionStr);
+		boolean useEnvChanges = mutationsCheckBox.isSelected();
 
 		if (basicBruteRadio.isSelected()) {
-			solver = new BasicBruteForceSolver();
+			Launcher.launch(Algorithm.BRUTE_FORCE_BASIC, useEnvChanges, solutionStr.length());
 		} else if (advBruteRadio.isSelected()) {
-			solver = new AdvBruteForceSolver();
+			Launcher.launch(Algorithm.BRUTE_FORCE_ADVANCED, useEnvChanges, solutionStr.length());
 		} else if (geneticRadio.isSelected()) {
-			solver = new GeneticAlgSolver();
+			Launcher.launch(Algorithm.GENETIC, useEnvChanges, solutionStr.length());
 		} else {
 			throw new RuntimeException("No algorithm selected. Can't solve Wordle.");
 		}
 
-		String solutionStr = solutionTextField.getText();
-		Config.setSolution(solutionStr);
-		try {
-			solver.solve(solutionStr.length());
-		} catch (WordLengthMismatchException e) {
-			System.err.println("Word length mismatch: " + e);
-		}
+//		try {
+//			solver.solve(solutionStr.length());
+//		} catch (WordLengthMismatchException e) {
+//			System.err.println("Word length mismatch: " + e);
+//		}
 	}
 
 	{
@@ -319,7 +319,7 @@ public class MainGUI extends JFrame {
 		algPanel.add(geneticRadio, gbc);
 		mutationsPanel = new JPanel();
 		mutationsPanel.setLayout(new GridBagLayout());
-		mutationsPanel.setEnabled(false);
+		mutationsPanel.setEnabled(true);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 3;
@@ -327,73 +327,47 @@ public class MainGUI extends JFrame {
 		mainPanel.add(mutationsPanel, gbc);
 		mutationsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Mutations", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		mutationsCheckBox = new JCheckBox();
-		mutationsCheckBox.setEnabled(false);
+		mutationsCheckBox.setEnabled(true);
 		mutationsCheckBox.setText("Enable mutations");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		gbc.weightx = 1.0;
 		gbc.anchor = GridBagConstraints.WEST;
 		mutationsPanel.add(mutationsCheckBox, gbc);
-		final JPanel spacer2 = new JPanel();
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		mutationsPanel.add(spacer2, gbc);
-		final JLabel label3 = new JLabel();
-		label3.setEnabled(false);
-		label3.setText("Interval (milliseconds):");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(0, 0, 0, 5);
-		mutationsPanel.add(label3, gbc);
-		intervalTextField = new JTextField();
-		intervalTextField.setColumns(3);
-		intervalTextField.setEditable(false);
-		intervalTextField.setEnabled(false);
-		intervalTextField.setHorizontalAlignment(11);
-		intervalTextField.setText("500");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		mutationsPanel.add(intervalTextField, gbc);
 		solveButton = new JButton();
 		solveButton.setText("Solve Wordle");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 4;
 		mainPanel.add(solveButton, gbc);
-		final JPanel spacer3 = new JPanel();
+		final JPanel spacer2 = new JPanel();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 5;
 		gbc.gridheight = 3;
 		gbc.fill = GridBagConstraints.BOTH;
+		mainPanel.add(spacer2, gbc);
+		final JPanel spacer3 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.gridheight = 7;
+		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(spacer3, gbc);
 		final JPanel spacer4 = new JPanel();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
+		gbc.gridx = 2;
 		gbc.gridy = 1;
 		gbc.gridheight = 7;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(spacer4, gbc);
 		final JPanel spacer5 = new JPanel();
 		gbc = new GridBagConstraints();
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-		gbc.gridheight = 7;
-		gbc.fill = GridBagConstraints.BOTH;
-		mainPanel.add(spacer5, gbc);
-		final JPanel spacer6 = new JPanel();
-		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.BOTH;
-		mainPanel.add(spacer6, gbc);
+		mainPanel.add(spacer5, gbc);
 		ButtonGroup buttonGroup;
 		buttonGroup = new ButtonGroup();
 		buttonGroup.add(basicBruteRadio);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 // Solver implementing the genetic algorithm treating the problem as a CSP
-public class GeneticAlgSolver implements Solver {
+public class GeneticAlgSolver extends Solver {
 
     // Represents the List of characters for each section of the words
 
@@ -34,8 +34,8 @@ public class GeneticAlgSolver implements Solver {
     boolean                      done            = false;
 
     @Override
-    public void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        Solver.super.solve(solutionLength);
+    void solve ( final int solutionLength ) throws WordLengthMismatchException {
+        super.solve(solutionLength);
 
         guess = new Word( solutionLength );
         orangeLetters = new boolean[solutionLength];

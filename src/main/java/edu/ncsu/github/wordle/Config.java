@@ -12,7 +12,7 @@ import edu.ncsu.github.solvers.Algorithm;
 public class Config {
 
     // Flag indicating whether the GUI is being used
-    final static boolean USING_GUI        = false;
+    final static boolean USING_GUI        = true;
 
     // Maximum length allowed for the solution word
     final static int     MAX_WORD_LENGTH  = 100;
@@ -308,7 +308,7 @@ public class Config {
                     "Would you like to use environment changes (hiding of some letter statuses and letter mutations)?" );
             System.out.print( "Enter your choice (T or F): " );
 
-            bool = scanner.nextLine().trim();
+            bool = scanner.nextLine().trim().toUpperCase();
 
             if ( bool.equals( "T" ) || bool.equals( "F" ) ) {
                 break; // Valid choice, exit the loop
