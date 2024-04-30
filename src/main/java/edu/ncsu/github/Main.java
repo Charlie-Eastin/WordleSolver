@@ -9,6 +9,7 @@ import edu.ncsu.github.solvers.GeneticAlgSolver;
 import edu.ncsu.github.solvers.Solver;
 import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
+import edu.ncsu.github.wordle.Word;;
 
 /**
  * The main Wordle Solver class.
@@ -92,7 +93,7 @@ public class Main {
 
         @Override
         public void run() {
-            Config.mutateSolution();
+            Word.mutate();
         }
     }
 
