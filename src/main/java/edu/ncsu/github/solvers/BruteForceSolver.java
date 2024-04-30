@@ -157,5 +157,4 @@ public abstract class BruteForceSolver extends Solver {
             return nextChar;
         }
     }
-
 }

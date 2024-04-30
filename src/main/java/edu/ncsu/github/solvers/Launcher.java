@@ -5,8 +5,18 @@ import edu.ncsu.github.wordle.Config;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
+/**
+ * The Launcher class provides a method to launch the Wordle solving algorithm.
+ */
 public class Launcher {
 
+	/**
+	 * Launches the Wordle solving algorithm.
+	 *
+	 * @param algorithm      The algorithm to use for solving Wordle.
+	 * @param useEnvChanges  Indicates whether environmental changes should be used for solving.
+	 * @param solutionLength The length of the Wordle solution.
+	 */
 	public static void launch(Algorithm algorithm, boolean useEnvChanges, int solutionLength) {
 		Solver solver = null;
 		// Instantiate the appropriate solver based on the chosen algorithm
@@ -37,6 +47,12 @@ public class Launcher {
 		t.stop();
 	}
 
+	/**
+	 * Gets the timer object based on the specified environmental changes setting.
+	 *
+	 * @param envChanges Indicates whether environmental changes should be used.
+	 * @return The timer object.
+	 */
 	private static Timer getTimer(boolean envChanges) {
 		Timer t;
 		if (envChanges) {
@@ -50,8 +66,14 @@ public class Launcher {
 		return t;
 	}
 
+	/**
+	 * A runnable implementation for mutating the solution word.
+	 */
 	private static class SolutionMutator implements Runnable {
 
+		/**
+		 * Runs the mutation process on the Wordle solution word.
+		 */
 		@Override
 		public void run() {
 			Word.mutate();
