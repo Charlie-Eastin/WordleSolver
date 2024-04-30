@@ -6,15 +6,18 @@ import edu.ncsu.github.wordle.LetterStatus;
 import edu.ncsu.github.wordle.Word;
 import edu.ncsu.github.wordle.WordLengthMismatchException;
 
-// Solver implementing the basic brute force algorithm, described as "Isolated
-// Brute Force" in the project proposal
-// NOTE: Any logic that is shared by this class and the advanced version should
-// appear in the abstract parent class.
+/**
+ * Solver implementing the basic brute force algorithm, described as "Isolated
+ * Brute Force" in the project proposal.
+ * NOTE: Any logic that is shared by this class and the advanced version should
+ * appear in the abstract parent class.
+ */
 public class BasicBruteForceSolver extends BruteForceSolver {
 
     /**
      * Generates guesses by brute force method
      *
+     * @param solutionLength the length of the solution word
      * @return true if guesses are successfully generated, false otherwise
      * @throws WordLengthMismatchException
      *             if the length of the guess does not match the length of the
@@ -42,7 +45,7 @@ public class BasicBruteForceSolver extends BruteForceSolver {
                 }
                 temp.setLetter( i, c );
                 if ( temp.compareToSolution() ) {
-                    // System.out.println( "Exits here" );
+                    // Logger.println( "Exits here" );
                     Logger.println("Guesses: " + Word.guesses);
                     return true;
                 }
@@ -75,8 +78,8 @@ public class BasicBruteForceSolver extends BruteForceSolver {
     private void handleOrangeLetters ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
-        // System.out.println( idx );
-        // System.out.println( nextIdx );
+        // Logger.println( idx );
+        // Logger.println( nextIdx );
         for ( char i = 'A'; i <= 'Z'; i++ ) {
             if ( nextIdx != -1 ) {
                 if ( orangeHelper( w, nextIdx ) ) {

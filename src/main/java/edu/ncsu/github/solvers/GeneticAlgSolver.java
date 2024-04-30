@@ -1,15 +1,17 @@
 package edu.ncsu.github.solvers;
 
 import edu.ncsu.github.Logger;
-import edu.ncsu.github.OutputGUI;
-import edu.ncsu.github.wordle.*;
+import edu.ncsu.github.wordle.Letter;
+import edu.ncsu.github.wordle.LetterStatus;
+import edu.ncsu.github.wordle.Word;
+import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 // Solver implementing the genetic algorithm treating the problem as a CSP
-public class GeneticAlgSolver implements Solver {
+public class GeneticAlgSolver extends Solver {
 
     // Represents the List of characters for each section of the words
 
@@ -34,8 +36,8 @@ public class GeneticAlgSolver implements Solver {
     boolean                      done            = false;
 
     @Override
-    public void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        Solver.super.solve(solutionLength);
+    void solve ( final int solutionLength ) throws WordLengthMismatchException {
+        super.solve(solutionLength);
 
         guess = new Word( solutionLength );
         orangeLetters = new boolean[solutionLength];
@@ -95,6 +97,12 @@ public class GeneticAlgSolver implements Solver {
 //        Logger.println("Concluded initial search portion: still looking for orange letters? " + !done);
     }
 
+	/**
+	 * Handles the orange letters in the word.
+	 *
+	 * @param w the word containing orange letters
+	 * @throws WordLengthMismatchException if there is a mismatch in word length
+	 */
     private void handleOrange ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
@@ -116,6 +124,14 @@ public class GeneticAlgSolver implements Solver {
 
     }
 
+	/**
+	 * Helper method for handling orange letters.
+	 *
+	 * @param w   the word containing orange letters
+	 * @param idx the index of the next unknown letter
+	 * @return true if orange letters are found, false otherwise
+	 * @throws WordLengthMismatchException if there is a mismatch in word length
+	 */
     private boolean orangeHelper ( final Word w, final int idx ) throws WordLengthMismatchException {
         final int nextIdx = locateNextUnknown( idx + 1 );
         for ( int i = 0; i < constraints.get( idx ).size(); i++ ) {
@@ -246,13 +262,11 @@ public class GeneticAlgSolver implements Solver {
 
     }
 
-    // TODO Add private helper methods below
-
     /**
-     * Propogate all correct letters from the previous population into a new
+     * Propagate all correct letters from the previous population into a new
      * Word, this word will become the basis of the next generation
      *
-     * @return the propogated word choice
+     * @return the propagated word choice
      */
     private Word prop () {
         final Word temp = new Word( population.get( 0 ).getLength() );
@@ -276,7 +290,7 @@ public class GeneticAlgSolver implements Solver {
 
     /**
      * Mutates the guess word into a new population which will then be
-     * propogated, and have the domain
+     * propagated, and have the domain
      *
      * @return the index of a correct guess if one exists, or -1 if one does not
      */

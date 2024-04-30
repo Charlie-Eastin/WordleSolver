@@ -45,12 +45,12 @@ public class AdvBruteForceSolver extends BruteForceSolver {
         return true;
         /**
          * // Print the right-aligned guess number final String formatted =
-         * String.format( "%5d", ++guessCount ); System.out.print( formatted +
+         * String.format( "%5d", ++guessCount ); Logger.print( formatted +
          * ": " );
          *
          * // Check if the current guess matches the solution and give each
          * Letter // a status if ( guess.compareToSolution() ) {
-         * System.out.println( "Solution found: " + guess ); return true; }
+         * Logger.println( "Solution found: " + guess ); return true; }
          *
          * // Iterate through each letter in the guess for ( int i = 0; i <
          * guess.getLength(); i++ ) { handleLetterAt( i ); } // Recursive call
@@ -84,8 +84,8 @@ public class AdvBruteForceSolver extends BruteForceSolver {
     private void handleOrangeLetters ( final Word w ) throws WordLengthMismatchException {
         final int idx = locateNextUnknown( 0 );
         final int nextIdx = locateNextUnknown( idx + 1 );
-        // System.out.println( idx );
-        // System.out.println( nextIdx );
+        // Logger.println( idx );
+        // Logger.println( nextIdx );
         for ( char i = 'A'; i <= 'Z'; i++ ) {
             if ( nextIdx != -1 ) {
                 if ( orangeHelper( w, nextIdx ) ) {

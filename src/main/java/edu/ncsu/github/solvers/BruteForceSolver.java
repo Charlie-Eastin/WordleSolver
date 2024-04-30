@@ -10,7 +10,7 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
 
 // Parent class of the 2 brute force solvers. Any logic common to both of them
 // should be here.
-public abstract class BruteForceSolver implements Solver {
+public abstract class BruteForceSolver extends Solver {
 
     // All letters that have not been eliminated as possibly being in the
     // solution
@@ -45,8 +45,8 @@ public abstract class BruteForceSolver implements Solver {
      *             the solution word.
      */
     @Override
-    public void solve ( final int solutionLength ) throws WordLengthMismatchException {
-        Solver.super.solve(solutionLength);
+    void solve ( final int solutionLength ) throws WordLengthMismatchException {
+        super.solve(solutionLength);
         // Make an array orangeIdx that will be true on orange indexes
         orangeIdx = new boolean[solutionLength];
 
@@ -148,14 +148,13 @@ public abstract class BruteForceSolver implements Solver {
             }
             while ( !alphabet.contains( nextChar ) );
 
-            // System.out.print("Alphabet: ");
+            // Logger.print("Alphabet: ");
             // for (char c : alphabet) {
-            // System.out.print(c);
+            // Logger.print(c);
             // }
-            // System.out.println();
+            // Logger.println();
 
             return nextChar;
         }
     }
-
 }
