@@ -1,18 +1,27 @@
 package edu.ncsu.github.wordle;
 
+import java.util.Random;
+
 import edu.ncsu.github.Logger;
 import edu.ncsu.github.OutputGUI;
 
 /**
- * Represents a word in the Wordle game, consisting of an array of letters.
- * This class provides methods to manipulate and compare words.
+ * Represents a word in the Wordle game, consisting of an array of letters. This
+ * class provides methods to manipulate and compare words.
  */
 public class Word {
 
-    private Letter[]  letters;    // Array to store the letters of the word
-    private String    asString;   // String representation of the word
+    private Letter[]       letters;              // Array to store the letters
+                                                 // of the
+                                                 // word
+    private String         asString;             // String representation of the
+                                                 // word
 
-    public static int guesses = 0;
+    private static boolean mutated       = false;
+
+    public static int      guesses       = 0;
+
+    private int            mutationCount = 0;
 
     /**
      * Constructor for creating a Word object with a specified length.
@@ -136,6 +145,9 @@ public class Word {
      *             If the word length is not equal to the solution length.
      */
     public boolean compareToSolution () throws WordLengthMismatchException {
+        if ( !mutated ) {
+            mutateSolution();
+        }
         if ( null == Config.solution || this.getLength() != Config.solution.getLength() ) {
             throw new WordLengthMismatchException( "Word length must be equal to solution length" );
         }
@@ -181,7 +193,7 @@ public class Word {
         if ( guessCount > 0 ) {
             // Print the right-aligned guess number
             final String guessCountRightAligned = String.format( "%5d", guessCount );
-            Logger.print(guessCountRightAligned + ": ");
+            Logger.print( guessCountRightAligned + ": " );
 
             for ( int i = 0; i < letterIndex; i++ ) {
                 getLetterAt( i ).printInColor();
@@ -200,6 +212,43 @@ public class Word {
         else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.ORANGE_OBSCURED ) {
             guessLetter.setStatus( LetterStatus.ORANGE_OBSCURED );
         }
+        // else if ( Config.solution.getLetterAt( letterIndex ).getStatus() ==
+        // LetterStatus.RED_SHIFTED
+        // && guessLetter.getStatus() == LetterStatus.RED_SHIFTED ) {
+        //
+        // Config.solution.getLetterAt( letterIndex ).resetStatus();
+        // guessLetter.resetStatus();
+        //
+        // if ( Config.solution.getLetterAt( letterIndex ).getCharacter() ==
+        // guessLetter.getCharacter() ) {
+        // guessLetter.setStatus( LetterStatus.GREEN_CORRECT );
+        // }
+        // else if ( solution.contains( Character.toString(
+        // guessLetter.getCharacter() ) ) ) {
+        // // If the char is in the word but not in the right position
+        // final int totalLetter = countLetter( solution,
+        // guessLetter.getCharacter() );
+        // final int totalCorrect = countCorrect( guessLetter.getCharacter() );
+        //
+        // if ( totalLetter > totalCorrect ) {
+        // guessLetter.setStatus( LetterStatus.YELLOW_MISPLACED );
+        // }
+        // else {
+        // guessLetter.setStatus( LetterStatus.GRAY_NONEXISTENT );
+        // }
+        // letterIsCorrect = false;
+        // }
+        // else {
+        // guessLetter.setStatus( LetterStatus.GRAY_NONEXISTENT );
+        // letterIsCorrect = false;
+        // }
+        //
+        // }
+        // else if ( Config.solution.getLetterAt( letterIndex ).getStatus() ==
+        // LetterStatus.RED_SHIFTED ) {
+        // guessLetter.setStatus( LetterStatus.RED_SHIFTED );
+        //
+        // }
         else if ( Config.solution.getLetterAt( letterIndex ).getCharacter() == guessLetter.getCharacter() ) {
             // Character is in the right position
             guessLetter.setStatus( LetterStatus.GREEN_CORRECT );
@@ -209,6 +258,9 @@ public class Word {
             // // If the char is in the word but not in the right position
             // guessLetter.setStatus(LetterStatus.YELLOW_MISPLACED);
             // letterIsCorrect = false;
+        }
+        else if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.RED_SHIFTED ) {
+            this.getLetterAt( letterIndex ).setStatus( LetterStatus.RED_SHIFTED );
         }
         else if ( solution.contains( Character.toString( guessLetter.getCharacter() ) ) ) {
             // If the char is in the word but not in the right position
@@ -229,6 +281,9 @@ public class Word {
             letterIsCorrect = false;
         }
 
+        if ( Config.solution.getLetterAt( letterIndex ).getStatus() == LetterStatus.RED_SHIFTED ) {
+            Config.solution.getLetterAt( letterIndex ).resetStatus();
+        }
         // guessLetter.printInColor();
 
         // if ( guessCount > 0 ) {
@@ -239,6 +294,7 @@ public class Word {
         // }
 
         return letterIsCorrect;
+
     }
 
     private int countLetter ( final String word, final char letter ) {
@@ -292,6 +348,65 @@ public class Word {
     @Override
     public String toString () {
         return asString;
+    }
+
+    public static void mutate () {
+        mutated = true;
+    }
+
+    /**
+     * Mutates the solution based on a randomly generated number being greater
+     * than the probability. Only mutates a letter if it is black, yellow, or
+     * grey. Mutation means making the letter a random letter from the alphabet.
+     */
+    public void mutateSolution () {
+        if ( mutationCount >= getLength() ) {
+            return;
+        }
+
+        final Word solution = Config.getSolution();
+        final Random r = Config.getRandom();
+
+        // get a random probability and check if it is greater/less than the
+        // chance to mutate.
+        final double probability = 0.2828;
+        final double randProb = r.nextDouble();
+        // if it is, mutate a state that is grey, black, or yellow only, and
+        // change the status to red.
+        // if it is not, or the status is not grey, black, or yellow, do
+        // nothing.
+
+        if ( randProb <= probability ) {
+            return;
+        }
+
+        final int randIdx = r.nextInt( solution.getLength() );
+        final Letter guessLetter = letters[randIdx];
+        switch ( guessLetter.getStatus() ) {
+            case UNKNOWN:
+            case YELLOW_MISPLACED:
+            case GRAY_NONEXISTENT:
+                System.out.println( "before solution: " + solution );
+                final int randLetter = r.nextInt( 26 );
+
+                // Config.solution.setCharacter( );
+                final Letter solLetter = Config.solution.getLetterAt( randIdx );
+                solLetter.setStatus( LetterStatus.RED_SHIFTED );
+                solLetter.setCharacter( (char) ( randLetter + 65 ) );
+
+                // l.setStatus( LetterStatus.RED_SHIFTED );
+                solution.setLetter( randIdx, solLetter );
+
+                mutated = false;
+                System.out.println( "after solution:  " + solution );
+                // Config.setSolution( solution);
+                mutationCount++;
+            case GREEN_CORRECT:
+            case ORANGE_OBSCURED:
+            case RED_SHIFTED:
+            default:
+                break;
+        }
     }
 
 }

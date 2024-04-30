@@ -2,13 +2,11 @@ package edu.ncsu.github;
 
 import java.util.Scanner;
 
-import edu.ncsu.github.solvers.AdvBruteForceSolver;
 import edu.ncsu.github.solvers.Algorithm;
-import edu.ncsu.github.solvers.BasicBruteForceSolver;
-import edu.ncsu.github.solvers.GeneticAlgSolver;
-import edu.ncsu.github.solvers.Solver;
 import edu.ncsu.github.wordle.Config;
-import edu.ncsu.github.wordle.WordLengthMismatchException;
+import edu.ncsu.github.solvers.Launcher;
+import edu.ncsu.github.wordle.Word;
+import edu.ncsu.github.wordle.WordLengthMismatchException;;
 
 /**
  * The main Wordle Solver class.
@@ -22,8 +20,8 @@ public class Main {
      *            The command line arguments.
      */
     public static void main ( final String[] args ) {
-        if (Config.getUsingGUI()) {
-            MainGUI gui = new MainGUI();
+        if ( Config.getUsingGUI() ) {
+            final MainGUI gui = new MainGUI();
             gui.display();
             return;
         }
@@ -36,32 +34,14 @@ public class Main {
             // Ask the user which algorithm they want to use
             final Algorithm algorithm = Config.chooseAlg( scanner );
 
-            Solver solver = null;
+            // Ask the user if they would like to use environment changes like
+            // mutation of the word
+            // and hiding of the letters
+            final boolean envChanges = Config.chooseEnvChanges( scanner );
 
-            // Instantiate the appropriate solver based on the chosen algorithm
-            switch ( algorithm ) {
-                case BRUTE_FORCE_BASIC:
-                    Config.randomOrangeIndex();
-                    solver = new BasicBruteForceSolver();
-                    break;
-                case BRUTE_FORCE_ADVANCED:
-                    Config.randomOrangeIndex();
-                    solver = new AdvBruteForceSolver();
-                    break;
-                case GENETIC:
-                    Config.randomOrangeIndex();
-                    solver = new GeneticAlgSolver();
-                    break;
-            }
-
-            // Solve the Wordle problem using the selected solver
-            solver.solve( solutionLength );
-        }
-        catch ( final WordLengthMismatchException e ) {
-            System.err.println( "Error: Word length mismatch." );
-            e.printStackTrace();
-        }
-        catch ( final IllegalArgumentException e ) {
+            // Launch the solver
+            Launcher.launch(algorithm, envChanges, solutionLength);
+        } catch ( final IllegalArgumentException e ) {
             System.err.println( "Error: Illegal argument." );
             e.printStackTrace();
         }

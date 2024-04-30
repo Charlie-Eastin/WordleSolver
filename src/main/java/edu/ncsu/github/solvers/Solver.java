@@ -8,14 +8,14 @@ import edu.ncsu.github.wordle.WordLengthMismatchException;
  * implementation of the solve() method. This design promotes separation of concerns, particularly as algorithms expand
  * in complexity and necessitate private helper methods.
  */
-public interface Solver {
+public class Solver {
 
 	/**
 	 * Solve the problem using a specific strategy.
 	 *
 	 * @param solutionLength The length of the solution needed.
 	 */
-	default void solve(int solutionLength) throws WordLengthMismatchException {
+	void solve(int solutionLength) throws WordLengthMismatchException {
 		Config.reset();
 	}
 }
