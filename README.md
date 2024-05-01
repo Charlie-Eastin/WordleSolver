@@ -20,6 +20,7 @@ Eclipse Enterprise Edition and IntelliJ IDEA: import as a maven project and run
 VS Code: Open folder and run (assuming that Java 17 is configured properly)
 
 **Steps to run**
+
 Follow the prompts displayed in the console to interact with the Wordle solver.
 
 ---
