@@ -258,6 +258,12 @@ public class OutputGUI extends JFrame {
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		mainPanel.add(helpPanel, gbc);
+		final JPanel spacer4 = new JPanel();
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		helpPanel.add(spacer4, gbc);
 		final JEditorPane editorPane1 = new JEditorPane();
 		editorPane1.setBackground(new Color(-15066598));
 		editorPane1.setContentType("text/html");
@@ -268,12 +274,6 @@ public class OutputGUI extends JFrame {
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		helpPanel.add(editorPane1, gbc);
-		final JPanel spacer4 = new JPanel();
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.fill = GridBagConstraints.BOTH;
-		helpPanel.add(spacer4, gbc);
 		final JPanel spacer5 = new JPanel();
 		gbc = new GridBagConstraints();
 		gbc.gridx = 2;
