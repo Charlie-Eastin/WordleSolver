@@ -2,26 +2,41 @@
 <div align="center">Charlie Eastin, Jeremy Hulse, Varun Iyer, Saketh Ruddarraju, Chris Worcester</div>
 
 ---
+
+## Running the Application
+
+**IDE Specific Instructions:**
+
+- Ensure that Java 17 is installed and configured properly.
+- For **Eclipse Enterprise Edition** and **IntelliJ IDEA**:
+  
+  Import as a maven project and run.
+- For **VS Code**:
+
+    Open folder and run (assuming that Java 17 is configured properly).
+
+**There are 2 ways to run the application:**
+
+
+1. **GUI Mode (Default)**
+   - Launch the application using your preferred IDE.
+   - Follow the prompts displayed in the GUI to interact with the Wordle solver.
+
+    *Note*: The GUI may struggle to display all output when testing with solutons with more than 15 letters. If the GUI output window stalls, it will eventually load the output text. To see guesses as they are evaluated, consider switching to Console Mode:
+
+1. **Console Mode**
+   - Open the `Config.java` file.
+   - Set the value of `USING_GUI` to `false`.
+   - Launch the application using your preferred IDE.
+   - Follow the prompts displayed in the console to interact with the Wordle solver.
+
+    Using console mode allows you to see the results in real time, especially when the GUI struggles to display all output.
+
+---
 ## Project Description
 Originating as a single-player game, the New York Times Wordle challenges participants to discern a predetermined word composed of uppercase letters within a limited number of attempts. Each guess provides feedback, highlighting correctly positioned letters in green, misplaced ones in yellow, and absent ones in grey. This project extends the Wordle paradigm by introducing novel complexities and avenues for AI-driven solutions.
 
 This project aims to enhance the classic Wordle puzzle game by implementing artificial intelligence-based algorithms for precise and efficient puzzle-solving. Our modified Wordle game allows users to select a randomized sequence of alphabetic letters as the target word, while an AI agent attempts to deduce this word with unlimited guesses. Notably, the AI has the flexibility to submit arbitrary sequences of alphabetic characters as guesses, regardless of their status as valid dictionary words.
-
----
-## Running the Application
-**THIS CODE WAS ONLY TESTED USING AN IDE**
-
-**IDE Specific Instructions**
-
-Ensure that Java 17 is installed and configured properly
-
-Eclipse Enterprise Edition and IntelliJ IDEA: import as a maven project and run
-
-VS Code: Open folder and run (assuming that Java 17 is configured properly)
-
-**Steps to run**
-
-Follow the prompts displayed in the console to interact with the Wordle solver.
 
 ---
 ## Task Environment Description
