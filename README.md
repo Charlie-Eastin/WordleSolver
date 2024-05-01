@@ -9,6 +9,17 @@ This project aims to enhance the classic Wordle puzzle game by implementing arti
 
 ---
 ## Running the Application
+**THIS CODE WAS ONLY TESTED USING AN IDE**
+
+**IDE Specific Instructions**
+
+Ensure that Java 17 is installed and configured properly
+
+Eclipse Enterprise Edition and IntelliJ IDEA: import as a maven project and run
+
+VS Code: Open folder and run (assuming that Java 17 is configured properly)
+
+**Steps to run**
 Follow the prompts displayed in the console to interact with the Wordle solver.
 
 ---
